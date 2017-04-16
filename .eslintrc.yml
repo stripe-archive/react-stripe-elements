@@ -1,0 +1,25 @@
+---
+extends:
+  - stripe
+  - plugin:flowtype/recommended
+parser: 'babel-eslint'
+plugins:
+  - flowtype
+  - jest
+env:
+  jest/globals: true
+rules:
+  react/jsx-filename-extension: 0 # this is only applicable to Dashboard.
+  no-duplicate-imports: 0 # doesn't support flow imports.
+  no-console: 1 # disable this while undergoing lots of development.
+  func-style: 2
+  arrow-parens: 2
+  consistent-return: 2
+  prefer-arrow-callback:
+    - 2
+    - allowNamedFunctions: false
+      allowUnboundThis: false
+  flowtype/require-valid-file-annotation:
+    - 2
+    - 'always'
+    - annotationStyle: 'line'
