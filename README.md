@@ -10,16 +10,17 @@
 
 Run the demo:
 
-    npm run demo
+    yarn run demo
 
 Run the tests:
-    npm run test
+
+    yarn run test
 
 Build:
 
-    npm run build
+    yarn run build
 
 Checks:
 
-    npm run lint
-    npm run flow
+    yarn run lint
+    yarn run flow
