@@ -9,7 +9,7 @@ plugins:
 env:
   jest/globals: true
 rules:
-  react/jsx-filename-extension: 0 # this is only applicable to Dashboard.
+  react/jsx-filename-extension: 0
   no-duplicate-imports: 0 # doesn't support flow imports.
   no-console: 1 # disable this while undergoing lots of development.
   func-style: 2
