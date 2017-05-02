@@ -103,7 +103,7 @@ const Element = (type: string) => class extends React.Component {
 
   _extractOptions(props: Props): Object {
     const {
-      ref,
+      ref, // eslint-disable-line no-unused-vars
       onError, // eslint-disable-line no-unused-vars
       onComplete, // eslint-disable-line no-unused-vars
       onChange, // eslint-disable-line no-unused-vars

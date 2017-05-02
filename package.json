@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/jest",
-    "build:commonjs": "BABEL_ENV=commonjs babel src --out-dir lib",
-    "build:es": "BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
-    "build:umd:min": "BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js",
-    "lint": "node_modules/.bin/eslint src",
-    "flow": "node_modules/.bin/flow",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js",
+    "lint": "eslint src",
+    "flow": "flow",
     "build": "npm run lint && npm run flow && npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
-    "demo": "node_modules/.bin/webpack-dev-server --content-base dist"
+    "clean": "rimraf lib dist es",
+    "prepublish": "npm run clean && npm run build",
+    "demo": "webpack-dev-server --content-base dist"
   },
   "keywords": [],
   "author": "Stripe (https://www.stripe.com)",
@@ -31,6 +33,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "cross-env": "^4.0.0",
     "enzyme": "^2.8.2",
     "eslint": "^3.19.0",
     "eslint-config-stripe": "^1.0.10",
@@ -42,6 +45,7 @@
     "react": "^15.5.4",
     "react-addons-test-utils": "0.15",
     "react-dom": "^15.5.4",
+    "rimraf": "^2.6.1",
     "webpack-dev-server": "^2.4.5"
   },
   "peerDependencies": {
