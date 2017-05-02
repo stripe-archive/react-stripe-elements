@@ -10,7 +10,9 @@ First, install `react-stripe-elements` :
 
 Load Stripe.js in your application:
 
-    <script src="https://js.stripe.com/v3"></script>
+```html
+<script src="https://js.stripe.com/v3"></script>
+```
 
 You’re good to go!
 
@@ -18,58 +20,64 @@ You’re good to go!
 
 In order for your application to have access to the Stripe object, let's add `StripeProvider` to our root React App component:
 
-    import {StripeProvider} from 'react-stripe-elements';
+```js
+import {StripeProvider} from 'react-stripe-elements';
 
-    const App = () => {
-      return (
-        <StripeProvider apiKey="pk_test_12345">
-          <MyStore />
-        </StripeProvider>
-      );
-    };
-    ReactDOM.render(<App />, document.getElementById('root'));
+const App = () => {
+  return (
+    <StripeProvider apiKey="pk_test_12345">
+      <MyStore />
+    </StripeProvider>
+  );
+};
+ReactDOM.render(<App />, document.getElementById('root'));
+```
 
 ### Element groups
 
 Next, when you're building components for your checkout form, you'll want to use the `Elements` component to wrap your form. This groups the set of Stripe Elements you're using together.
 
-    import {Elements} from 'react-stripe-elements';
+```js
+import {Elements} from 'react-stripe-elements';
 
-    const MyStoreCheckout = (props) => {
-      return (
-        <Elements>
-          <MyCardForm {...props} />
-        </Elements>
-      );
-    }
+const MyStoreCheckout = (props) => {
+  return (
+    <Elements>
+      <MyCardForm {...props} />
+    </Elements>
+  );
+}
+```
 
 ### Building your form
 
 Use the `injectStripe` HOC to build components in the `Elements` tree that need to use the individual `Element` components to create a Source or a Token:
 
-    import {CardElement, injectStripe} from 'react-stripe-elements';
+```js
+import {CardElement, injectStripe} from 'react-stripe-elements';
 
-    const MyStoreCheckout = injectStripe(class extends React.Component {
-      handleSubmit = (ev) => {
-        ev.preventDefault();
+const MyStoreCheckout = injectStripe(class extends React.Component {
+  handleSubmit = (ev) => {
+    ev.preventDefault();
 
-        // This call to createSource knows which Element to sourcify, since there's only one in this group.
-        this.props.stripe.createSource({owner: {name: 'Jenny Rosen'}});
-        // However, this line of code will do the same thing:
-        // this.props.stripe.createSource({type: 'card', owner: {name: 'Jenny Rosen'}});
-      }
+    // This call to createSource knows which Element to sourcify, since there's only one in this group.
+    this.props.stripe.createSource({owner: {name: 'Jenny Rosen'}});
+    // However, this line of code will do the same thing:
+    // this.props.stripe.createSource({type: 'card', owner: {name: 'Jenny Rosen'}});
+  }
 
-      render() {
-        return (
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Card details
-              <CardElement style={{base: {fontSize: '18px'}}} />
-            </label>
-          </form>
-        );
-      }
-    });
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Card details
+          <CardElement style={{base: {fontSize: '18px'}}} />
+        </label>
+      </form>
+    );
+  }
+});
+```
 
 ## Component reference
 
@@ -82,9 +90,11 @@ An integration usually wraps the `<StripeProvider>` around the application’s r
 
 #### Props shape:
 
-    type StripeProviderProps = {
-      apiKey: string,
-    };
+```js
+type StripeProviderProps = {
+  apiKey: string,
+};
+```
 
 
 ### `<Elements>`
@@ -93,11 +103,13 @@ The `Elements` component wraps groups of Elements that belong together. In most 
 
 #### Props shape:
 
-    type ElementsProps = {
-      locale?: string,
-      fonts?: Array<Object>,
-      // The full specification for `elements()` options is here: https://stripe.com/docs/elements/reference#elements-options
-    };
+```js
+type ElementsProps = {
+  locale?: string,
+  fonts?: Array<Object>,
+  // The full specification for `elements()` options is here: https://stripe.com/docs/elements/reference#elements-options
+};
+```
 
 ### `<*Element>` components
 
@@ -105,17 +117,19 @@ These components display the UI for Elements, and must be used within `StripePro
 
 #### Props shape:
 
-    type ElementProps = {
-      ref?: (StripeElement) => void,
+```js
+type ElementProps = {
+  ref?: (StripeElement) => void,
 
-      onChange?: Function,
-      onError?: Function,
-      onComplete?: Function,
+  onChange?: Function,
+  onError?: Function,
+  onComplete?: Function,
 
-      onReady?: Function,
-      onFocus?: Function,
-      onBlur?: Function,
-    };
+  onReady?: Function,
+  onFocus?: Function,
+  onBlur?: Function,
+};
+```
 
 #### Available components
 
@@ -133,20 +147,24 @@ Components that need to initiate Source or Token creations (e.g. a checkout form
 
 #### Example:
 
-    const StripeCheckoutForm = injectStripe(CheckoutForm);
+```js
+const StripeCheckoutForm = injectStripe(CheckoutForm);
+```
 
 The following props will be available to this component:
 
-    type StripeShape = {
-      createToken: Function,
-      createSource: Function,
-      // and other functions available on the `stripe` object,
-      // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
-    };
+```js
+type StripeShape = {
+  createToken: Function,
+  createSource: Function,
+  // and other functions available on the `stripe` object,
+  // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
+};
 
-    type FactoryProps = {
-      stripe: StripeShape,
-    };
+type FactoryProps = {
+  stripe: StripeShape,
+};
+```
 
 
 ## Development
