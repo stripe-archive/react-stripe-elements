@@ -21,15 +21,19 @@ You’re good to go!
 In order for your application to have access to the Stripe object, let's add `StripeProvider` to our root React App component:
 
 ```js
+// index.js
+import React from 'react';
 import {StripeProvider} from 'react-stripe-elements';
+import MyStoreCheckout from './MyStoreCheckout';
 
 const App = () => {
   return (
     <StripeProvider apiKey="pk_test_12345">
-      <MyStore />
+      <MyStoreCheckout />
     </StripeProvider>
   );
 };
+
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
@@ -38,15 +42,22 @@ ReactDOM.render(<App />, document.getElementById('root'));
 Next, when you're building components for your checkout form, you'll want to use the `Elements` component to wrap your form. This groups the set of Stripe Elements you're using together.
 
 ```js
+// MyStoreCheckout.js
+import React from 'react';
 import {Elements} from 'react-stripe-elements';
+import {AddressForm} from './AddressForm';
+import {CardForm} from './CardForm';
 
 const MyStoreCheckout = (props) => {
   return (
     <Elements>
-      <MyCardForm {...props} />
+      <AddressForm />
+      <CardForm />
     </Elements>
   );
 }
+
+export default MyStoreCheckout;
 ```
 
 ### Building your form
@@ -54,14 +65,19 @@ const MyStoreCheckout = (props) => {
 Use the `injectStripe` HOC to build components in the `Elements` tree that need to use the individual `Element` components to create a Source or a Token:
 
 ```js
+// CardForm.js
+import React from 'react';
 import {CardElement, injectStripe} from 'react-stripe-elements';
 
-const MyStoreCheckout = injectStripe(class extends React.Component {
+class CardForm extends React.Component {
   handleSubmit = (ev) => {
+    // We don't want to let default form submission happen here, which would refresh the page.
     ev.preventDefault();
 
-    // This call to createSource knows which Element to sourcify, since there's only one in this group.
+    // Within the context of `Elements`, this call to createSource knows which Element to
+    // sourcify, since there's only one in this group.
     this.props.stripe.createSource({owner: {name: 'Jenny Rosen'}});
+
     // However, this line of code will do the same thing:
     // this.props.stripe.createSource({type: 'card', owner: {name: 'Jenny Rosen'}});
   }
@@ -73,10 +89,13 @@ const MyStoreCheckout = injectStripe(class extends React.Component {
           Card details
           <CardElement style={{base: {fontSize: '18px'}}} />
         </label>
+        <button>Pay</button>
       </form>
     );
   }
-});
+};
+
+export default injectStripe(CardForm);
 ```
 
 ## Component reference
@@ -121,13 +140,17 @@ These components display the UI for Elements, and must be used within `StripePro
 type ElementProps = {
   ref?: (StripeElement) => void,
 
-  onChange?: Function,
-  onError?: Function,
-  onComplete?: Function,
+  // For full documentation on the events and payloads below, see:
+  // https://stripe.com/docs/elements/reference#element-on
+  onChange?: (changeObject: Object) => void,
+  onReady?: () => void,
+  onFocus?: () => void,
+  onBlur?: () => void,
 
-  onReady?: Function,
-  onFocus?: Function,
-  onBlur?: Function,
+  // These events aren't directly available on Elements in Stripe.js --
+  // we're providing these hooks here for your convenience.
+  onError?: (errorObject: Object) => void,
+  onComplete?: () => void,
 };
 ```
 
@@ -154,15 +177,13 @@ const StripeCheckoutForm = injectStripe(CheckoutForm);
 The following props will be available to this component:
 
 ```js
-type StripeShape = {
-  createToken: Function,
-  createSource: Function,
-  // and other functions available on the `stripe` object,
-  // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
-};
-
 type FactoryProps = {
-  stripe: StripeShape,
+  stripe: {
+    createSource: (sourceParameters: {type?: string}) => Promise<{source?: Object, error?: Object}>,
+    createToken: (tokenParameters: {type?: string}) => Promise<{token?: Object, error?: Object}>,
+    // and other functions available on the `stripe` object,
+    // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
+  },
 };
 ```
 
