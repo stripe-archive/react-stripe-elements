@@ -8,6 +8,7 @@ import {
   CardCVCElement,
   PostalCodeElement,
   StripeProvider,
+  Elements,
   injectStripe
 } from '../src/index';
 
@@ -137,19 +138,21 @@ const Checkout = class extends React.Component {
   render() {
     return (
       <div>
-        <StripeProvider apiKey="pk_RXwtgk4Z5VR82S94vtwmam6P8qMXQ">
+        <Elements>
           <CardForm />
-        </StripeProvider>
-        <StripeProvider apiKey="pk_RXwtgk4Z5VR82S94vtwmam6P8qMXQ">
+        </Elements>
+        <Elements>
           <SplitForm />
-        </StripeProvider>
+        </Elements>
       </div>
     );
   }
 };
 const App = (props) => {
   return (
-    <Checkout />
+    <StripeProvider apiKey="pk_RXwtgk4Z5VR82S94vtwmam6P8qMXQ">
+      <Checkout />
+    </StripeProvider>
   );
 };
 ReactDOM.render(<App />, document.querySelector('.App'));

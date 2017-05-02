@@ -16,7 +16,7 @@ type Context = {
   elements: Object,
   registerElement: Function,
   unregisterElement: Function,
-}
+};
 
 const noop = () => {};
 
