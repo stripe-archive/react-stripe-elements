@@ -7,9 +7,14 @@ import PropTypes from 'prop-types';
 const inject = (WrappedComponent: ReactClass<any>) => class extends React.Component {
   static contextTypes = {
     stripe: PropTypes.object.isRequired,
-    registeredElements: PropTypes.arrayOf(PropTypes.object).isRequired,
+    registeredElements: PropTypes.arrayOf(PropTypes.object),
   }
   static displayName = `InjectStripe(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  context: {
+    stripe: Object,
+    registeredElements?: Array<Object>,
+  }
 
   stripeProps() {
     return {
@@ -21,19 +26,26 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
   }
   findElement = (specifiedType: mixed): ?Object => {
     // Find the correct one!
-    // Accounting for things like cardNumber...
     // TODO: does this mean we need to do something elements-side to possibly make this sort of thing easier?
     // e.g. if a type is specified in source creation, passing any element from the element group could suffice.
-    if (specifiedType && typeof specifiedType === 'string') {
+    if (!this.context.registeredElements) {
+      throw new Error(
+        `It looks like you are trying to create a Source or Token outside of an Elements context.
+        Please be sure the component that calls createSource or createToken is within an <Elements> component.`
+      );
+    } else if (specifiedType && typeof specifiedType === 'string') {
+      // Accounting for things like cardNumber...
       const matchingElements = this.context.registeredElements.filter(({type, element}) => type.indexOf(specifiedType) !== -1);
       const elementInfo = matchingElements[0];
-      return elementInfo ? elementInfo.element : undefined;
+      return elementInfo ? elementInfo.element : null;
     } else if (this.context.registeredElements.length === 1) {
       // We can assume, here.
       return this.context.registeredElements[0];
     } else {
-      // TODO: should we throw errors here?
-      return undefined;
+      throw new Error(
+        `You did not specify the type of Source or Token to create.
+        We could not infer which Element you want to use for this operation.`
+      );
     }
   }
   wrappedCreateToken = (userOptions: mixed) => {

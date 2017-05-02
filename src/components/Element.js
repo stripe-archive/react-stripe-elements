@@ -20,7 +20,7 @@ type Context = {
 
 const noop = () => {};
 
-const Element = (type: string) => class extends React.Component {
+const Element = (type: string, options: {sourceType: string} = {}) => class extends React.Component {
   static propTypes = {
     ref: PropTypes.func,
     onError: PropTypes.func,
@@ -57,7 +57,9 @@ const Element = (type: string) => class extends React.Component {
 
   componentDidMount() {
     this._element.mount(this._ref);
-    this.context.registerElement(type, this._element);
+    if (options.sourceType) {
+      this.context.registerElement(options.sourceType, this._element);
+    }
   }
   componentWillReceiveProps(nextProps: Props) {
     const options = this._extractOptions(nextProps);

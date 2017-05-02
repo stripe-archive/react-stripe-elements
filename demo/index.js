@@ -39,7 +39,7 @@ const options = {
   },
 };
 
-const CardForm = injectStripe(class extends React.Component {
+class _CardForm extends React.Component {
   handleSubmit = (ev) => {
     ev.preventDefault();
     this.props.stripe.createToken().then((payload) => console.log(payload));
@@ -62,9 +62,10 @@ const CardForm = injectStripe(class extends React.Component {
       </form>
     );
   }
-});
+}
+const CardForm = injectStripe(_CardForm);
 
-const SplitForm = injectStripe(class extends React.Component {
+class _SplitForm extends React.Component {
   handleChange = (change) => {
     console.log('[change]', change);
   }
@@ -132,9 +133,10 @@ const SplitForm = injectStripe(class extends React.Component {
       </form>
     );
   }
-});
+};
+const SplitForm = injectStripe(_SplitForm);
 
-const Checkout = class extends React.Component {
+class Checkout extends React.Component {
   render() {
     return (
       <div>

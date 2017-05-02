@@ -4,8 +4,8 @@ import injectStripe from './components/inject';
 import Elements from './components/Elements';
 import Element from './components/Element';
 
-const CardElement = Element('card');
-const CardNumberElement = Element('cardNumber');
+const CardElement = Element('card', {sourceType: 'card'});
+const CardNumberElement = Element('cardNumber', {sourceType: 'card'});
 const CardExpiryElement = Element('cardExpiry');
 const CardCVCElement = Element('cardCvc');
 const PostalCodeElement = Element('postalCode');

@@ -39,14 +39,9 @@ export default class Provider extends React.Component {
     };
   }
   componentWillReceiveProps(nextProps: Props) {
-    if (this._didWarn || this.props.apiKey === nextProps.apiKey) {
-      return;
-    } else if (window.console && window.console.error) {
+    if (!this._didWarn && this.props.apiKey !== nextProps.apiKey && window.console && window.console.error) {
       this._didWarn = true;
       console.error('StripeProvider does not support changing the apiKey parameter.'); // eslint-disable-line no-console
-      return;
-    } else {
-      return;
     }
   }
   props: Props
