@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// TODO: contextTypes
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
 const inject = (WrappedComponent: ReactClass<any>) => class extends React.Component {
@@ -41,7 +40,6 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
     const options = userOptions || {};
 
     if (options && typeof options === 'object') {
-      // TODO: errors for if options is not an object.
       const {type: userType, ...rest} = options;
       const elementInfo = this.findElement(userType);
       if (elementInfo) {
@@ -57,7 +55,6 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
     const options = userOptions || {};
 
     if (options && typeof options === 'object') {
-      // TODO: errors for if options is not an object.
       const {type, ...rest} = options; // eslint-disable-line no-unused-vars
       const elementInfo = this.findElement(type);
       if (elementInfo) {
