@@ -9,19 +9,18 @@
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
     "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js",
-    "lint": "eslint src",
+    "lint": "eslint src demo",
     "flow": "flow",
-    "build": "npm run lint && npm run flow && npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "build": "yarn run lint && yarn run flow && yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
     "clean": "rimraf lib dist es",
-    "prepublish": "npm run clean && npm run build",
+    "prepublish": "yarn run clean && yarn run build",
     "demo": "webpack-dev-server --content-base dist"
   },
   "keywords": [],
   "author": "Stripe (https://www.stripe.com)",
   "license": "MIT",
   "dependencies": {
-    "prop-types": "^15.5.8",
-    "webpack": "^2.4.1"
+    "prop-types": "^15.5.8"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -46,6 +45,7 @@
     "react-addons-test-utils": "0.15",
     "react-dom": "^15.5.4",
     "rimraf": "^2.6.1",
+    "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.5"
   },
   "peerDependencies": {

@@ -1,3 +1,5 @@
+/* eslint-disable no-console, react/no-multi-comp */
+// @flow
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -9,7 +11,7 @@ import {
   PostalCodeElement,
   StripeProvider,
   Elements,
-  injectStripe
+  injectStripe,
 } from '../src/index';
 
 const handleChange = (change) => {
@@ -133,7 +135,7 @@ class _SplitForm extends React.Component {
       </form>
     );
   }
-};
+}
 const SplitForm = injectStripe(_SplitForm);
 
 class Checkout extends React.Component {
@@ -149,8 +151,8 @@ class Checkout extends React.Component {
       </div>
     );
   }
-};
-const App = (props) => {
+}
+const App = () => {
   return (
     <StripeProvider apiKey="pk_RXwtgk4Z5VR82S94vtwmam6P8qMXQ">
       <Checkout />
