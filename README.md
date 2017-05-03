@@ -74,12 +74,12 @@ class CardForm extends React.Component {
     // We don't want to let default form submission happen here, which would refresh the page.
     ev.preventDefault();
 
-    // Within the context of `Elements`, this call to createSource knows which Element to
+    // Within the context of `Elements`, this call to createToken knows which Element to
     // sourcify, since there's only one in this group.
-    this.props.stripe.createSource({owner: {name: 'Jenny Rosen'}});
+    this.props.stripe.createToken({owner: {name: 'Jenny Rosen'}});
 
     // However, this line of code will do the same thing:
-    // this.props.stripe.createSource({type: 'card', owner: {name: 'Jenny Rosen'}});
+    // this.props.stripe.createToken({type: 'card', owner: {name: 'Jenny Rosen'}});
   }
 
   render() {
@@ -172,7 +172,7 @@ type ElementProps = {
 
 ### `injectStripe` HOC
 
-Components that need to initiate Source or Token creations (e.g. a checkout form component) can access `stripe.createSource` and `stripe.createToken` via props of any component returned by the `injectStripe` HOC factory.
+Components that need to initiate Source or Token creations (e.g. a checkout form component) can access `stripe.createToken` via props of any component returned by the `injectStripe` HOC factory.
 
 #### Example:
 
@@ -185,7 +185,6 @@ The following props will be available to this component:
 ```js
 type FactoryProps = {
   stripe: {
-    createSource: (sourceParameters: {type?: string}) => Promise<{source?: Object, error?: Object}>,
     createToken: (tokenParameters: {type?: string}) => Promise<{token?: Object, error?: Object}>,
     // and other functions available on the `stripe` object,
     // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
