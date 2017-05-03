@@ -1,4 +1,9 @@
+/* global StripeShape:false, ElementsShape:false, ElementShape:false */
+// ^For https://github.com/gajus/eslint-plugin-flowtype/issues/84
+
 // @flow
+
+
 declare type ElementShape = {
   mount: Function,
   destroy: () => ElementShape,

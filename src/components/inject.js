@@ -2,6 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+type Context = {
+  stripe: StripeShape,
+  registeredElements?: Array<{type: string, element: ElementShape}>,
+};
+
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
 const inject = (WrappedComponent: ReactClass<any>) => class extends React.Component {
@@ -14,7 +19,7 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
   }
   static displayName = `InjectStripe(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 
-  constructor(props, context) {
+  constructor(props: any, context: Context) {
     if (!context || !context.registeredElements) {
       throw new Error(
         `It looks like you are trying to inject Stripe context outside of an Elements context.
@@ -25,10 +30,7 @@ Please be sure the component that calls createSource or createToken is within an
     super(props, context);
   }
 
-  context: {
-    stripe: StripeShape,
-    registeredElements?: Array<{type: string, element: ElementShape}>,
-  }
+  context: Context
 
   stripeProps() {
     return {
