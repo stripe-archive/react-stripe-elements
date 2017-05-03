@@ -7,6 +7,10 @@ type Props = {
   children?: any,
 };
 
+export type StripeContext = {
+  stripe: StripeShape,
+};
+
 export default class Provider extends React.Component {
   // Even though we're using flow, also use PropTypes so we can take advantage of developer warnings.
   static propTypes = {
@@ -31,7 +35,7 @@ export default class Provider extends React.Component {
     this._didWarn = false;
   }
 
-  getChildContext() {
+  getChildContext(): StripeContext {
     return {
       stripe: this._stripe,
     };

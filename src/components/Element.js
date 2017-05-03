@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import shallowEqual from '../utils/shallowEqual';
+import type {ElementContext} from './Elements';
 
 type Props = {
   elementRef: Function,
@@ -9,11 +10,6 @@ type Props = {
   onBlur: Function,
   onFocus: Function,
   onReady: Function,
-};
-type Context = {
-  elements: ElementsShape,
-  registerElement: (type: string, element: ElementShape) => void,
-  unregisterElement: (element: ElementShape) => void,
 };
 
 const noop = () => {};
@@ -40,7 +36,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
     unregisterElement: PropTypes.func.isRequired,
   }
 
-  constructor(props: Props, context: Context) {
+  constructor(props: Props, context: ElementContext) {
     super(props, context);
 
     const options = this._extractOptions(this.props);
@@ -68,7 +64,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
     this.context.unregisterElement(this._element);
   }
   props: Props
-  context: Context
+  context: ElementContext
   _element: ElementShape
   _ref: ?HTMLElement
   _options: Object

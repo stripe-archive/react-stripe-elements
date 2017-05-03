@@ -2,14 +2,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-type Context = {
-  stripe: StripeShape,
-  registeredElements?: Array<{type: string, element: ElementShape}>,
-};
+import type {FormContext} from './Elements';
+import type {StripeContext} from './Provider';
+
+type Context = FormContext & StripeContext;
+
+type StripeProps = {
+  createToken: Function,
+  createSource: Function,
+}
 
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
-const inject = (WrappedComponent: ReactClass<any>) => class extends React.Component {
+const inject = <P: Object>(WrappedComponent: ReactClass<P & StripeProps>): ReactClass<P> => class extends React.Component {
   static contextTypes = {
     stripe: PropTypes.object.isRequired,
     registeredElements: PropTypes.arrayOf(PropTypes.shape({
@@ -19,7 +24,7 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
   }
   static displayName = `InjectStripe(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 
-  constructor(props: any, context: Context) {
+  constructor(props: P, context: Context) {
     if (!context || !context.registeredElements) {
       throw new Error(
         `It looks like you are trying to inject Stripe context outside of an Elements context.
@@ -32,7 +37,7 @@ Please be sure the component that calls createSource or createToken is within an
 
   context: Context
 
-  stripeProps() {
+  stripeProps(): StripeProps {
     return {
       ...this.context.stripe,
       // These are the only functions that take elements.

@@ -1,16 +1,21 @@
 // @flow
 import React from 'react';
 import PropTypes from 'prop-types';
+import type {StripeContext} from './Provider';
 
 type Props = {
   children?: any,
 };
-type State = {
+
+export type ElementContext = {
+  elements: ElementsShape,
+  registerElement: (type: string, element: ElementShape) => void,
+  unregisterElement: (element: ElementShape) => void,
+};
+export type FormContext = {
   registeredElements: Array<{type: string, element: ElementShape}>,
 };
-type Context = {
-  stripe: StripeShape,
-};
+type ElementsContext = ElementContext & FormContext;
 
 export default class Elements extends React.Component {
   static childContextTypes = {
@@ -26,7 +31,7 @@ export default class Elements extends React.Component {
     stripe: PropTypes.object.isRequired,
   }
 
-  constructor(props: Props, context: Context) {
+  constructor(props: Props, context: StripeContext) {
     super(props, context);
 
     const {children, ...options} = this.props;
@@ -36,9 +41,9 @@ export default class Elements extends React.Component {
       registeredElements: [],
     };
   }
-  state: State
+  state: FormContext
 
-  getChildContext() {
+  getChildContext(): ElementsContext {
     return {
       elements: this._elements,
       registerElement: this.handleRegisterElement,
@@ -47,7 +52,7 @@ export default class Elements extends React.Component {
     };
   }
   props: Props
-  context: Context
+  context: StripeContext
   _elements: ElementsShape
 
   handleRegisterElement = (type: string, element: Object) => {
