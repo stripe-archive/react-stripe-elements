@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 type Props = {
   apiKey: string,
-  stripeAccount?: ?string,
   children?: any,
 };
 
@@ -12,7 +11,6 @@ export default class Provider extends React.Component {
   // Even though we're using flow, also use PropTypes so we can take advantage of developer warnings.
   static propTypes = {
     apiKey: PropTypes.string.isRequired,
-    stripeAccount: PropTypes.string,
     children: PropTypes.any,
   }
   static childContextTypes = {
@@ -27,9 +25,9 @@ export default class Provider extends React.Component {
       throw new Error('Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.');
     }
 
-    const {apiKey, stripeAccount} = this.props;
+    const {apiKey, children, ...options} = this.props;
 
-    this._stripe = window.Stripe(apiKey, {stripeAccount});
+    this._stripe = window.Stripe(apiKey, options);
     this._didWarn = false;
   }
 
