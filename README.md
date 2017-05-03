@@ -1,5 +1,11 @@
 # react-stripe-elements
 
+This project is a thin React wrapper around Stripe.js and Stripe Elements that allows you to
+use Elements in React without needing to manage Stripe state and the lifecycle of Elements.
+
+The [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)
+goes in depth on the different customization options for Elements (e.g. styles, fonts).
+
 ## Getting started
 
 ### Installation
@@ -16,14 +22,16 @@ Load Stripe.js in your application:
 
 You’re good to go!
 
-### The Stripe context
+### The Stripe context (`StripeProvider`)
 
-In order for your application to have access to the Stripe object, let's add `StripeProvider` to our root React App component:
+In order for your application to have access to [the Stripe object](https://stripe.com/docs/elements/reference#the-stripe-object),
+let's add `StripeProvider` to our root React App component:
 
 ```js
 // index.js
 import React from 'react';
 import {StripeProvider} from 'react-stripe-elements';
+
 import MyStoreCheckout from './MyStoreCheckout';
 
 const App = () => {
@@ -37,45 +45,52 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'));
 ```
 
-### Element groups
+### Element groups (`Elements`)
 
-Next, when you're building components for your checkout form, you'll want to use the `Elements` component to wrap your form. This groups the set of Stripe Elements you're using together.
+Next, when you're building components for your checkout form, you'll want to wrap the `Elements` component around your `form`.
+This groups the set of Stripe Elements you're using together, so that we're able to pull data from groups of Elements when
+you're tokenizing.
 
 ```js
 // MyStoreCheckout.js
 import React from 'react';
 import {Elements} from 'react-stripe-elements';
-import {AddressForm} from './AddressForm';
-import {CardForm} from './CardForm';
 
-const MyStoreCheckout = (props) => {
-  return (
-    <Elements>
-      <AddressForm />
-      <CardForm />
-    </Elements>
-  );
+import CheckoutForm from './CheckoutForm';
+
+class MyStoreCheckout extends React.Component {
+  render() {
+    return (
+      <Elements>
+        <CheckoutForm />
+      </Elements>
+    );
+  }
 }
 
 export default MyStoreCheckout;
 ```
 
-### Building your form
+### Building your form (`injectStripe`)
 
-Use the `injectStripe` HOC to build components in the `Elements` tree that need to use the individual `Element` components to create a Source or a Token:
+Use the `injectStripe` HOC to build your form components in the `Elements` tree. This HOC injects the `stripe`
+instance used to manage your Elements groups.
 
 ```js
-// CardForm.js
+// CheckoutForm.js
 import React from 'react';
-import {CardElement, injectStripe} from 'react-stripe-elements';
+import {injectStripe} from 'react-stripe-elements';
 
-class CardForm extends React.Component {
+import AddressSection from './AddressSection';
+import CardSection from './CardSection';
+
+class CheckoutForm extends React.Component {
   handleSubmit = (ev) => {
     // We don't want to let default form submission happen here, which would refresh the page.
     ev.preventDefault();
 
     // Within the context of `Elements`, this call to createToken knows which Element to
-    // sourcify, since there's only one in this group.
+    // tokenize, since there's only one in this group.
     this.props.stripe.createToken({owner: {name: 'Jenny Rosen'}});
 
     // However, this line of code will do the same thing:
@@ -85,17 +100,36 @@ class CardForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          Card details
-          <CardElement style={{base: {fontSize: '18px'}}} />
-        </label>
-        <button>Pay</button>
+        <AddressSection />
+        <CardSection />
+        <button>Confirm order</button>
       </form>
+    );
+  }
+}
+
+export default injectStripe(CheckoutForm);
+```
+
+### Using individual `*Element`s
+
+```js
+// CardSection.js
+import React from 'react';
+import {CardElement} from 'react-stripe-elements';
+
+class CardSection extends React.Component {
+  render() {
+    return (
+      <label>
+        Card details
+        <CardElement style={{base: {fontSize: '18px'}}} />
+      </label>
     );
   }
 };
 
-export default injectStripe(CardForm);
+export default CardSection;
 ```
 
 ## Component reference
