@@ -1,10 +1,17 @@
 # react-stripe-elements
 
+![project status](https://img.shields.io/badge/Project%20status-Beta-yellow.svg?style=flat-square)]
+
 This project is a thin React wrapper around Stripe.js and Stripe Elements that allows you to
 use Elements in React without needing to manage Stripe state and the lifecycle of Elements.
 
 The [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)
 goes in depth on the different customization options for Elements (e.g. styles, fonts).
+
+## Project status
+
+This project is currently in beta. While we won't ever break your integration, the API may undergo significant changes until
+we hit a stable release.
 
 ## Getting started
 
@@ -17,7 +24,7 @@ First, install `react-stripe-elements` :
 Load Stripe.js in your application:
 
 ```html
-<script src="https://js.stripe.com/v3"></script>
+<script src="https://js.stripe.com/v3/"></script>
 ```
 
 You’re good to go!
