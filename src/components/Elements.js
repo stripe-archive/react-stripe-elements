@@ -8,11 +8,10 @@ type Props = {
   children?: any,
 };
 type State = {
-  // TODO
-  registeredElements: Array<any>,
+  registeredElements: Array<{type: string, element: ElementShape}>,
 };
 type Context = {
-  stripe: Object,
+  stripe: StripeShape,
 };
 
 export default class Elements extends React.Component {
@@ -66,7 +65,7 @@ export default class Elements extends React.Component {
   }
   props: Props
   context: Context
-  _elements: Object
+  _elements: ElementsShape
 
   handleRegisterElement = (type: string, element: Object) => {
     this.setState({

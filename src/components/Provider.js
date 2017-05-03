@@ -45,8 +45,7 @@ export default class Provider extends React.Component {
     }
   }
   props: Props
-  // TODO: write decls for these.
-  _stripe: Object
+  _stripe: StripeShape
   _didWarn: boolean
 
   render() {

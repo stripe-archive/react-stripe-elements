@@ -7,13 +7,27 @@ import PropTypes from 'prop-types';
 const inject = (WrappedComponent: ReactClass<any>) => class extends React.Component {
   static contextTypes = {
     stripe: PropTypes.object.isRequired,
-    registeredElements: PropTypes.arrayOf(PropTypes.object),
+    registeredElements: PropTypes.arrayOf(PropTypes.shape({
+      element: PropTypes.object.isRequired,
+      type: PropTypes.string.isRequired,
+    })),
   }
   static displayName = `InjectStripe(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 
+  constructor() {
+    super();
+
+    if (!this.context.registeredElements) {
+      throw new Error(
+        `It looks like you are trying to inject Stripe context outside of an Elements context.
+Please be sure the component that calls createSource or createToken is within an <Elements> component.`
+      );
+    }
+  }
+
   context: {
-    stripe: Object,
-    registeredElements?: Array<Object>,
+    stripe: StripeShape,
+    registeredElements?: Array<{type: string, element: ElementShape}>,
   }
 
   stripeProps() {
@@ -24,23 +38,17 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
       createSource: this.wrappedCreateSource,
     };
   }
-  findElement = (specifiedType: mixed): ?Object => {
+  findElement = (specifiedType: mixed) => {
     // Find the correct one!
     // TODO: does this mean we need to do something elements-side to possibly make this sort of thing easier?
     // e.g. if a type is specified in source creation, passing any element from the element group could suffice.
-    if (!this.context.registeredElements) {
-      throw new Error(
-        `It looks like you are trying to create a Source or Token outside of an Elements context.
-        Please be sure the component that calls createSource or createToken is within an <Elements> component.`
-      );
-    } else if (specifiedType && typeof specifiedType === 'string') {
-      // Accounting for things like cardNumber...
-      const matchingElements = this.context.registeredElements.filter(({type, element}) => type.indexOf(specifiedType) !== -1);
-      const elementInfo = matchingElements[0];
-      return elementInfo ? elementInfo.element : null;
-    } else if (this.context.registeredElements.length === 1) {
-      // We can assume, here.
-      return this.context.registeredElements[0];
+    const allElements = this.context.registeredElements || [];
+    const matchingElements = specifiedType && typeof specifiedType === 'string' ?
+      allElements.filter(({type, element}) => type === specifiedType) :
+      allElements;
+
+    if (matchingElements.length === 1) {
+      return matchingElements[0].element;
     } else {
       throw new Error(
         `You did not specify the type of Source or Token to create.
@@ -52,13 +60,9 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
     const options = userOptions || {};
 
     if (options && typeof options === 'object') {
-      const {type: userType, ...rest} = options;
-      const elementInfo = this.findElement(userType);
-      if (elementInfo) {
-        return this.context.stripe.createToken(elementInfo.element, rest);
-      } else {
-        return this.context.stripe.createToken(userType, rest);
-      }
+      const {type, ...rest} = options;
+      const element = this.findElement(type);
+      return this.context.stripe.createToken(element, rest);
     } else {
       throw new Error(`Invalid options passed to createToken. Expected an object, got ${typeof options}.`);
     }
@@ -68,12 +72,8 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
 
     if (options && typeof options === 'object') {
       const {type, ...rest} = options; // eslint-disable-line no-unused-vars
-      const elementInfo = this.findElement(type);
-      if (elementInfo) {
-        return this.context.stripe.createSource(elementInfo.element, rest);
-      } else {
-        return this.context.stripe.createSource(options);
-      }
+      const element = this.findElement(type);
+      return this.context.stripe.createSource(element, rest);
     } else {
       throw new Error(`Invalid options passed to createToken. Expected an object, got ${typeof options}.`);
     }

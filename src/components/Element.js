@@ -13,14 +13,14 @@ type Props = {
   onReady: Function,
 };
 type Context = {
-  elements: Object,
-  registerElement: Function,
-  unregisterElement: Function,
+  elements: ElementsShape,
+  registerElement: (type: string, element: ElementShape) => void,
+  unregisterElement: (element: ElementShape) => void,
 };
 
 const noop = () => {};
 
-const Element = (type: string, options: {sourceType: string} = {}) => class extends React.Component {
+const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class extends React.Component {
   static propTypes = {
     ref: PropTypes.func,
     onError: PropTypes.func,
@@ -57,8 +57,8 @@ const Element = (type: string, options: {sourceType: string} = {}) => class exte
 
   componentDidMount() {
     this._element.mount(this._ref);
-    if (options.sourceType) {
-      this.context.registerElement(options.sourceType, this._element);
+    if (hocOptions.sourceType) {
+      this.context.registerElement(hocOptions.sourceType, this._element);
     }
   }
   componentWillReceiveProps(nextProps: Props) {
@@ -75,7 +75,7 @@ const Element = (type: string, options: {sourceType: string} = {}) => class exte
   }
   props: Props
   context: Context
-  _element: Object
+  _element: ElementShape
   _ref: ?HTMLElement
   _options: Object
 
