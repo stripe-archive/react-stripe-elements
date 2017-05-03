@@ -23,12 +23,6 @@ const handleFocus = () => {
 const handleBlur = () => {
   console.log('[blur]');
 };
-const handleError = (error) => {
-  console.log('[error]', error);
-};
-const handleComplete = () => {
-  console.log('[complete]');
-};
 const handleReady = () => {
   console.log('[ready]');
 };
@@ -54,8 +48,6 @@ class _CardForm extends React.Component {
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            onError={handleError}
-            onComplete={handleComplete}
             onReady={handleReady}
             {...options}
           />
@@ -98,8 +90,6 @@ class _SplitForm extends React.Component {
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            onError={handleError}
-            onComplete={handleComplete}
             onReady={handleReady}
             {...options}
           />
@@ -107,8 +97,6 @@ class _SplitForm extends React.Component {
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            onError={handleError}
-            onComplete={handleComplete}
             onReady={handleReady}
             {...options}
           />
@@ -116,8 +104,6 @@ class _SplitForm extends React.Component {
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            onError={handleError}
-            onComplete={handleComplete}
             onReady={handleReady}
             {...options}
           />
@@ -125,8 +111,6 @@ class _SplitForm extends React.Component {
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}
-            onError={handleError}
-            onComplete={handleComplete}
             onReady={handleReady}
             {...options}
           />

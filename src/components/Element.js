@@ -5,9 +5,7 @@ import shallowEqual from '../utils/shallowEqual';
 
 type Props = {
   elementRef: Function,
-  onError: Function,
   onChange: Function,
-  onComplete: Function,
   onBlur: Function,
   onFocus: Function,
   onReady: Function,
@@ -23,8 +21,6 @@ const noop = () => {};
 const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class extends React.Component {
   static propTypes = {
     elementRef: PropTypes.func,
-    onError: PropTypes.func,
-    onComplete: PropTypes.func,
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
@@ -32,8 +28,6 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
   }
   static defaultProps = {
     elementRef: noop,
-    onError: noop,
-    onComplete: noop,
     onChange: noop,
     onBlur: noop,
     onFocus: noop,
@@ -85,17 +79,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
       this.props.onReady();
     });
 
-    let prevComplete;
-    let prevError;
     this._element.on('change', (change) => {
-      const {error, complete} = change;
-      if (error && prevError !== error) {
-        this.props.onError(error);
-      }
-      if (complete && prevComplete !== complete) {
-        this.props.onComplete();
-      }
-
       this.props.onChange(change);
     });
 
@@ -106,8 +90,6 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
   _extractOptions(props: Props): Object {
     const {
       elementRef,
-      onError,
-      onComplete,
       onChange,
       onFocus,
       onBlur,

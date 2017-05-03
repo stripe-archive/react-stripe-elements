@@ -162,11 +162,6 @@ type ElementProps = {
   onReady?: () => void,
   onFocus?: () => void,
   onBlur?: () => void,
-
-  // These events aren't directly available on Elements in Stripe.js --
-  // we're providing these hooks here for your convenience.
-  onError?: (errorObject: Object) => void,
-  onComplete?: () => void,
 };
 ```
 
