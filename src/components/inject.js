@@ -14,15 +14,15 @@ const inject = (WrappedComponent: ReactClass<any>) => class extends React.Compon
   }
   static displayName = `InjectStripe(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
 
-  constructor() {
-    super();
-
-    if (!this.context.registeredElements) {
+  constructor(props, context) {
+    if (!context || !context.registeredElements) {
       throw new Error(
         `It looks like you are trying to inject Stripe context outside of an Elements context.
 Please be sure the component that calls createSource or createToken is within an <Elements> component.`
       );
     }
+
+    super(props, context);
   }
 
   context: {

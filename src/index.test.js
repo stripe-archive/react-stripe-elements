@@ -38,10 +38,12 @@ describe('index', () => {
 
   const MyCheckout = (props) => {
     return (
-      <form onSubmit={(ev) => {
-        ev.preventDefault();
-        props.stripe.createToken();
-      }}>
+      <form
+        onSubmit={(ev) => {
+          ev.preventDefault();
+          props.stripe.createToken();
+        }}
+      >
         {props.children}
         <button>Pay</button>
       </form>
@@ -80,6 +82,25 @@ describe('index', () => {
     expect(stripeMock.createToken).toHaveBeenCalledWith(elementMock, {});
   });
 
+  it('createToken should be called when set up properly (split)', () => {
+    const app = mount(
+      <StripeProvider apiKey="pk_test_xxx">
+        <Elements>
+          <WrappedCheckout>
+            Hello world
+            <CardNumberElement />
+            <CardExpiryElement />
+            <CardCVCElement />
+            <PostalCodeElement />
+          </WrappedCheckout>
+        </Elements>
+      </StripeProvider>
+    );
+    app.find('form').simulate('submit');
+    expect(stripeMock.createToken).toHaveBeenCalledTimes(1);
+    expect(stripeMock.createToken).toHaveBeenCalledWith(elementMock, {});
+  });
+
   describe('errors', () => {
     it('Provider should throw if Stripe is not loaded', () => {
       window.Stripe = undefined;
@@ -87,7 +108,7 @@ describe('index', () => {
     });
 
     it('createToken should throw when not in Elements', () => {
-      const app = mount(
+      expect(() => mount(
         <StripeProvider apiKey="pk_test_xxx">
           <WrappedCheckout>
             <Elements>
@@ -95,8 +116,7 @@ describe('index', () => {
             </Elements>
           </WrappedCheckout>
         </StripeProvider>
-      );
-      expect(() => app.find('form').simulate('submit')).toThrowError(/Elements/);
+      )).toThrowError('Elements context');
     });
 
     it('createToken should throw when no Element found', () => {
