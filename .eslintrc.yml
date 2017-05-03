@@ -23,3 +23,6 @@ rules:
     - 2
     - 'always'
     - annotationStyle: 'line'
+  no-unused-vars:
+    - 2
+    - ignoreRestSiblings: true

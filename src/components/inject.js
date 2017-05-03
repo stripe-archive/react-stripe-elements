@@ -46,7 +46,7 @@ Please be sure the component that calls createSource or createToken is within an
     // e.g. if a type is specified in source creation, passing any element from the element group could suffice.
     const allElements = this.context.registeredElements || [];
     const matchingElements = specifiedType && typeof specifiedType === 'string' ?
-      allElements.filter(({type, element}) => type === specifiedType) :
+      allElements.filter(({type}) => type === specifiedType) :
       allElements;
 
     if (matchingElements.length === 1) {
@@ -58,20 +58,16 @@ Please be sure the component that calls createSource or createToken is within an
       );
     }
   }
-  wrappedCreateToken = (userOptions: mixed) => {
-    const options = userOptions || {};
-
+  wrappedCreateToken = (options: mixed = {}) => {
     if (options && typeof options === 'object') {
       const {type, ...rest} = options;
       const element = this.findElement(type);
       return this.context.stripe.createToken(element, rest);
     } else {
-      throw new Error(`Invalid options passed to createToken. Expected an object, got ${typeof options}.`);
+      throw new Error(`Invalid options passed to createToken. Expected an object, got ${options === null ? 'null' : typeof options}.`);
     }
   }
-  wrappedCreateSource = (userOptions: mixed) => {
-    const options = userOptions || {};
-
+  wrappedCreateSource = (options: mixed) => {
     if (options && typeof options === 'object') {
       const {type, ...rest} = options; // eslint-disable-line no-unused-vars
       const element = this.findElement(type);

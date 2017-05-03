@@ -51,7 +51,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
 
     const options = this._extractOptions(this.props);
     this._element = this.context.elements.create(type, options);
-    this._setupEventListeners(this.props);
+    this._setupEventListeners();
     this._options = options;
   }
 
@@ -79,7 +79,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
   _ref: ?HTMLElement
   _options: Object
 
-  _setupEventListeners(props: Props) {
+  _setupEventListeners() {
     this._element.on('ready', () => {
       this.props.ref(this._element);
       this.props.onReady();
@@ -105,15 +105,15 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
 
   _extractOptions(props: Props): Object {
     const {
-      ref, // eslint-disable-line no-unused-vars
-      onError, // eslint-disable-line no-unused-vars
-      onComplete, // eslint-disable-line no-unused-vars
-      onChange, // eslint-disable-line no-unused-vars
-      onFocus, // eslint-disable-line no-unused-vars
-      onBlur, // eslint-disable-line no-unused-vars
-      onReady, // eslint-disable-line no-unused-vars
+      ref,
+      onError,
+      onComplete,
+      onChange,
+      onFocus,
+      onBlur,
+      onReady,
       ...options
-    } = this.props;
+    } = props;
     return options;
   }
 

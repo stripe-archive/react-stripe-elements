@@ -3,8 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 type Props = {
-  locale?: ?string,
-  fonts?: ?Array<Object>,
   children?: any,
 };
 type State = {
@@ -15,13 +13,6 @@ type Context = {
 };
 
 export default class Elements extends React.Component {
-  // Even though we're using flow, also use PropTypes so we can take advantage of developer warnings.
-  static propTypes = {
-    // elements() options:
-    locale: PropTypes.string,
-    fonts: PropTypes.array,
-    children: PropTypes.any,
-  }
   static childContextTypes = {
     elements: PropTypes.object.isRequired,
     registerElement: PropTypes.func.isRequired,
@@ -38,15 +29,7 @@ export default class Elements extends React.Component {
   constructor(props: Props, context: Context) {
     super(props, context);
 
-    const {locale, fonts} = this.props;
-    const options = {};
-    if (locale) {
-      options.locale = locale;
-    }
-    if (fonts) {
-      options.fonts = fonts;
-    }
-
+    const {children, ...options} = this.props;
     this._elements = this.context.stripe.elements(options);
 
     this.state = {
@@ -75,7 +58,7 @@ export default class Elements extends React.Component {
 
   handleUnregisterElement = (el: Object) => {
     this.setState({
-      registeredElements: this.state.registeredElements.filter(({type, element}) => element !== el),
+      registeredElements: this.state.registeredElements.filter(({element}) => element !== el),
     });
   }
 

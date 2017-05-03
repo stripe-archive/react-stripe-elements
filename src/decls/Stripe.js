@@ -3,7 +3,6 @@
 
 // @flow
 
-
 declare type ElementShape = {
   mount: Function,
   destroy: () => ElementShape,
