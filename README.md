@@ -103,7 +103,7 @@ export default injectStripe(CardForm);
 ### `<StripeProvider>`
 
 All applications using react-stripe-elements must use the `<StripeProvider>`  component, which sets up the Stripe context for a component tree.
-react-stripe-elements uses the provider pattern (which is also adopted by tools like react-redux and react-intl) to scope a Stripe context to a tree of components. This allows configuration like your API key, the current locale, and common font resources to be proved at the root of a component tree. This context is then made available to the `<*Element>` components that we provide.
+react-stripe-elements uses the provider pattern (which is also adopted by tools like react-redux and react-intl) to scope a Stripe context to a tree of components. This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.
 
 An integration usually wraps the `<StripeProvider>` around the application’s root component. This way, your entire application has the configured Stripe context.
 
