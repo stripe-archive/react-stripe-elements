@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import shallowEqual from '../utils/shallowEqual';
 
 type Props = {
-  ref: Function,
+  elementRef: Function,
   onError: Function,
   onChange: Function,
   onComplete: Function,
@@ -22,7 +22,7 @@ const noop = () => {};
 
 const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class extends React.Component {
   static propTypes = {
-    ref: PropTypes.func,
+    elementRef: PropTypes.func,
     onError: PropTypes.func,
     onComplete: PropTypes.func,
     onChange: PropTypes.func,
@@ -31,7 +31,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
     onReady: PropTypes.func,
   }
   static defaultProps = {
-    ref: noop,
+    elementRef: noop,
     onError: noop,
     onComplete: noop,
     onChange: noop,
@@ -81,7 +81,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
 
   _setupEventListeners() {
     this._element.on('ready', () => {
-      this.props.ref(this._element);
+      this.props.elementRef(this._element);
       this.props.onReady();
     });
 
@@ -105,7 +105,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
 
   _extractOptions(props: Props): Object {
     const {
-      ref,
+      elementRef,
       onError,
       onComplete,
       onChange,

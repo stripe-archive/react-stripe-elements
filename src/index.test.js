@@ -101,6 +101,19 @@ describe('index', () => {
     expect(stripeMock.createToken).toHaveBeenCalledWith(elementMock, {});
   });
 
+  describe('updating props', () => {
+    it('should warn when attempting to update API key', () => {
+      const stripe = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <form />
+        </StripeProvider>
+      );
+      console.error = jest.fn();
+      stripe.setProps({apiKey: 'pk_test_yyy'});
+      expect(console.error).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('errors', () => {
     it('Provider should throw if Stripe is not loaded', () => {
       window.Stripe = undefined;

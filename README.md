@@ -109,6 +109,8 @@ An integration usually wraps the `<StripeProvider>` around the application’s r
 
 #### Props shape:
 
+This component accepts all `options` that can be passed into `Stripe(apiKey, options)` as props.
+
 ```js
 type StripeProviderProps = {
   apiKey: string,
@@ -122,6 +124,8 @@ The `Elements` component wraps groups of Elements that belong together. In most 
 
 #### Props shape:
 
+This component accepts all `options` that can be passed into `stripe.elements(options)` as props.
+
 ```js
 type ElementsProps = {
   locale?: string,
@@ -134,11 +138,23 @@ type ElementsProps = {
 
 These components display the UI for Elements, and must be used within `StripeProvider` and `Elements`.
 
+#### Available components
+
+(More to come!)
+
+- `CardElement`
+- `CardNumberElement`
+- `CardExpiryElement`
+- `CardCVCElement`
+- `PostalCodeElement`
+
 #### Props shape:
+
+These components accept all `options` that can be passed into `elements.create(type, options)` as props.
 
 ```js
 type ElementProps = {
-  ref?: (StripeElement) => void,
+  elementRef?: (StripeElement) => void,
 
   // For full documentation on the events and payloads below, see:
   // https://stripe.com/docs/elements/reference#element-on
@@ -153,16 +169,6 @@ type ElementProps = {
   onComplete?: () => void,
 };
 ```
-
-#### Available components
-
-(More to come!)
-
-- `CardElement`
-- `CardNumberElement`
-- `CardExpiryElement`
-- `CardCVCElement`
-- `PostalCodeElement`
 
 ### `injectStripe` HOC
 
