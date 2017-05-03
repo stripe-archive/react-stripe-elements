@@ -2,7 +2,9 @@
   "name": "react-stripe-elements",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "module": "es/index.js",
+  "jsnext:main": "es/index.js",
   "scripts": {
     "test": "node_modules/.bin/jest",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
@@ -22,6 +24,12 @@
   "dependencies": {
     "prop-types": "^15.5.8"
   },
+  "files": [
+    "dist",
+    "lib",
+    "src",
+    "es"
+  ],
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
