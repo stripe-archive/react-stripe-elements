@@ -1,12 +1,12 @@
 # react-stripe-elements
 
-![project status](https://img.shields.io/badge/Project%20status-Beta-yellow.svg?style=flat-square)]
+![project status](https://img.shields.io/badge/Project%20status-Beta-yellow.svg?style=flat-square)
 
 This project is a thin React wrapper around Stripe.js and Stripe Elements that allows you to
 use Elements in React without needing to manage Stripe state and the lifecycle of Elements.
 
 The [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)
-goes in depth on the different customization options for Elements (e.g. styles, fonts).
+goes into more detail on the various customization options for Elements (e.g. styles, fonts).
 
 ## Project status
 
@@ -17,11 +17,17 @@ we hit a stable release.
 
 ### Installation
 
-First, install `react-stripe-elements` :
+First, install `react-stripe-elements`.
+
+Using yarn:
 
     yarn add react-stripe-elements
 
-Load Stripe.js in your application:
+Using npm:
+
+    npm install --save react-stripe-elements
+
+Then, load Stripe.js in your application:
 
 ```html
 <script src="https://js.stripe.com/v3/"></script>
@@ -78,10 +84,11 @@ class MyStoreCheckout extends React.Component {
 export default MyStoreCheckout;
 ```
 
-### Building your form (`injectStripe`)
+### Setting up your payment form (`injectStripe`)
 
-Use the `injectStripe` HOC to build your form components in the `Elements` tree. This HOC injects the `stripe`
-instance used to manage your Elements groups.
+Use the `injectStripe` HOC to build your payment form components in the `Elements` tree. This HOC injects the `stripe`
+instance that manages your `Elements` groups. You can call `createToken` on the injected `stripe` instance to submit
+payment data to Stripe.
 
 ```js
 // CheckoutForm.js
@@ -98,7 +105,9 @@ class CheckoutForm extends React.Component {
 
     // Within the context of `Elements`, this call to createToken knows which Element to
     // tokenize, since there's only one in this group.
-    this.props.stripe.createToken({owner: {name: 'Jenny Rosen'}});
+    this.props.stripe.createToken({owner: {name: 'Jenny Rosen'}}).then(({token}) => {
+      console.log('Received Stripe token:', token);
+    });
 
     // However, this line of code will do the same thing:
     // this.props.stripe.createToken({type: 'card', owner: {name: 'Jenny Rosen'}});
@@ -119,6 +128,8 @@ export default injectStripe(CheckoutForm);
 ```
 
 ### Using individual `*Element`s
+
+Now, you can use individual `*Element`s, such as `CardElement`, to build your form.
 
 ```js
 // CardSection.js
