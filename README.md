@@ -1,5 +1,8 @@
 # react-stripe-elements
 
+[![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
+[![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
+
 This project is a thin React wrapper around Stripe.js and Stripe Elements that allows you to
 use Elements in React without needing to manage Stripe state and the lifecycle of Elements.
 
