@@ -7,7 +7,7 @@ import type {StripeContext} from './Provider';
 
 type Context = FormContext & StripeContext;
 
-type StripeProps = {
+export type StripeProps = {
   createToken: Function,
   createSource: Function,
 }
