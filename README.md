@@ -1,7 +1,5 @@
 # react-stripe-elements
 
-![project status](https://img.shields.io/badge/Project%20status-Beta-yellow.svg?style=flat-square)
-
 This project is a thin React wrapper around Stripe.js and Stripe Elements that allows you to
 use Elements in React without needing to manage Stripe state and the lifecycle of Elements.
 
@@ -10,7 +8,7 @@ goes into more detail on the various customization options for Elements (e.g. st
 
 ## Project status
 
-This project is currently in beta. While we won't ever break your integration, the API may undergo significant changes until
+This project is currently in beta. The API presented below may undergo significant changes until
 we hit a stable release.
 
 ## Getting started
