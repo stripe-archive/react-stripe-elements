@@ -24,7 +24,6 @@ export default class Provider extends React.Component {
   constructor(props: Props) {
     super(props);
 
-    // TODO: should this library load Stripe.js dynamically automatically?
     if (!window.Stripe) {
       throw new Error('Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.');
     }

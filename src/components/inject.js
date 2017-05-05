@@ -47,8 +47,6 @@ Please be sure the component that calls createSource or createToken is within an
   }
   findElement = (specifiedType: mixed) => {
     // Find the correct one!
-    // TODO: does this mean we need to do something elements-side to possibly make this sort of thing easier?
-    // e.g. if a type is specified in source creation, passing any element from the element group could suffice.
     const allElements = this.context.registeredElements || [];
     const matchingElements = specifiedType && typeof specifiedType === 'string' ?
       allElements.filter(({type}) => type === specifiedType) :

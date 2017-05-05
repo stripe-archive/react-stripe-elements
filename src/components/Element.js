@@ -59,7 +59,6 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
     }
   }
   componentWillUnmount() {
-    // TODO: should we proxy the Element object so that unmount and destroy are inaccessible?
     this._element.destroy();
     this.context.unregisterElement(this._element);
   }
