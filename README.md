@@ -243,6 +243,10 @@ type FactoryProps = {
 
 ## Development
 
+Install dependencies:
+
+    yarn install
+
 Run the demo:
 
     yarn run demo

@@ -24,6 +24,10 @@
   "dependencies": {
     "prop-types": "^15.5.8"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stripe/react-stripe-elements.git"
+  },
   "files": [
     "dist",
     "lib",
