@@ -1,18 +1,18 @@
-# react-stripe-elements
+# Stripe Elements for React
+
+React components that help you quickly add Stripe Elements to your React app.
 
 [![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
 [![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
 
-This project is a thin React wrapper around Stripe.js and Stripe Elements that allows you to
-use Elements in React without needing to manage Stripe state and the lifecycle of Elements.
+This project is a thin React wrapper around [Stripe.js](https://stripe.com/docs/stripe.js)
+and [Stripe Elements](https://stripe.com/docs/elements). It allows you to add Elements
+to any React app, and manages the state and lifecycle of Elements for you.
 
 The [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)
 goes into more detail on the various customization options for Elements (e.g. styles, fonts).
 
-## Project status
-
-This project is currently in beta. The API presented below may undergo significant changes until
-we hit a stable release.
+> This project is currently in beta. The API presented below may undergo significant changes until we hit a stable release.
 
 ## Getting started
 
@@ -34,7 +34,7 @@ Then, load Stripe.js in your application:
 <script src="https://js.stripe.com/v3/"></script>
 ```
 
-You’re good to go!
+You're good to go!
 
 ### The Stripe context (`StripeProvider`)
 
@@ -128,9 +128,9 @@ class CheckoutForm extends React.Component {
 export default injectStripe(CheckoutForm);
 ```
 
-### Using individual `*Element`s
+### Using individual `*Element` components
 
-Now, you can use individual `*Element`s, such as `CardElement`, to build your form.
+Now, you can use individual `*Element` components, such as `CardElement`, to build your form.
 
 ```js
 // CardSection.js
@@ -155,12 +155,12 @@ export default CardSection;
 
 ### `<StripeProvider>`
 
-All applications using react-stripe-elements must use the `<StripeProvider>`  component, which sets up the Stripe context for a component tree.
-react-stripe-elements uses the provider pattern (which is also adopted by tools like react-redux and react-intl) to scope a Stripe context to a tree of components. This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.
+All applications using `react-stripe-elements` must use the `<StripeProvider>`  component, which sets up the Stripe context for a component tree.
+`react-stripe-elements` uses the provider pattern (which is also adopted by tools like [`react-redux`](https://github.com/reactjs/react-redux) and [`react-intl`](https://github.com/yahoo/react-intl)) to scope a Stripe context to a tree of components. This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.
 
 An integration usually wraps the `<StripeProvider>` around the application’s root component. This way, your entire application has the configured Stripe context.
 
-#### Props shape:
+#### Props shape
 
 This component accepts all `options` that can be passed into `Stripe(apiKey, options)` as props.
 
@@ -175,7 +175,7 @@ type StripeProviderProps = {
 
 The `Elements` component wraps groups of Elements that belong together. In most cases, you want to wrap this around your checkout form.
 
-#### Props shape:
+#### Props shape
 
 This component accepts all `options` that can be passed into `stripe.elements(options)` as props.
 
@@ -201,7 +201,7 @@ These components display the UI for Elements, and must be used within `StripePro
 - `CardCVCElement`
 - `PostalCodeElement`
 
-#### Props shape:
+#### Props shape
 
 These components accept all `options` that can be passed into `elements.create(type, options)` as props.
 
@@ -222,7 +222,7 @@ type ElementProps = {
 
 Components that need to initiate Source or Token creations (e.g. a checkout form component) can access `stripe.createToken` via props of any component returned by the `injectStripe` HOC factory.
 
-#### Example:
+#### Example
 
 ```js
 const StripeCheckoutForm = injectStripe(CheckoutForm);
