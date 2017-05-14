@@ -35,6 +35,7 @@
     "es"
   ],
   "devDependencies": {
+    "@types/react": "^15.0.24",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
     "babel-eslint": "^7.2.2",
