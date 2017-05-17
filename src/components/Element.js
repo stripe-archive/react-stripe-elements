@@ -100,7 +100,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
   }
   render() {
     return (
-      <span ref={this.handleRef} className={this.props.className} />
+      <div ref={this.handleRef} className={this.props.className} />
     );
   }
 };
