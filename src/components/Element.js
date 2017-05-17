@@ -99,7 +99,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
   }
   render() {
     return (
-      <span ref={this.handleRef} />
+      <div ref={this.handleRef}  />
     );
   }
 };
