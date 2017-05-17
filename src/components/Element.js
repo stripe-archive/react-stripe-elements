@@ -21,6 +21,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
     onBlur: PropTypes.func,
     onFocus: PropTypes.func,
     onReady: PropTypes.func,
+    className: PropTypes.string,
   }
   static defaultProps = {
     elementRef: noop,
@@ -99,7 +100,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) => class 
   }
   render() {
     return (
-      <span ref={this.handleRef} />
+      <span ref={this.handleRef} className={this.props.className} />
     );
   }
 };
