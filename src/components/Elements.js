@@ -56,15 +56,15 @@ export default class Elements extends React.Component {
   _elements: ElementsShape
 
   handleRegisterElement = (type: string, element: Object) => {
-    this.setState({
-      registeredElements: [...this.state.registeredElements, {type, element}],
-    });
+    this.setState((prevState) => ({
+      registeredElements: [...prevState.registeredElements, {type, element}],
+    }));
   }
 
   handleUnregisterElement = (el: Object) => {
-    this.setState({
-      registeredElements: this.state.registeredElements.filter(({element}) => element !== el),
-    });
+    this.setState((prevState) => ({
+      registeredElements: prevState.registeredElements.filter(({element}) => element !== el),
+    }));
   }
 
   render() {
