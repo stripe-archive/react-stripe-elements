@@ -4,8 +4,11 @@ import PropTypes from 'prop-types';
 
 type Props = {
   apiKey: string,
+  asyncStripeJs: boolean,
   children?: any,
 };
+
+const ASYNC_CHECK_INTERVAL = 250;
 
 export type StripeContext = {
   stripe: StripeShape,
@@ -16,6 +19,7 @@ export default class Provider extends React.Component {
   static propTypes = {
     apiKey: PropTypes.string.isRequired,
     children: PropTypes.any,
+    asyncStripeJs: PropTypes.bool,
   }
   static childContextTypes = {
     stripe: PropTypes.object.isRequired,
@@ -24,14 +28,38 @@ export default class Provider extends React.Component {
   constructor(props: Props) {
     super(props);
 
-    if (!window.Stripe) {
+    const {apiKey, children, asyncStripeJs, ...options} = this.props;
+
+    if (!window.stripe && asyncStripeJs) {
+      this._stripeJsInterval = setInterval(this.checkForStripe.bind(this), ASYNC_CHECK_INTERVAL);
+    } else if (!window.Stripe) {
       throw new Error('Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.');
+    } else {
+      this.createStripeInstance();
     }
+  }
 
-    const {apiKey, children, ...options} = this.props;
+  componentWillUnmount() {
+    if (this._stripeJsInterval) {
+      clearInterval(this._stripeJsInterval);
+      this._stripeJsInterval = null;
+    }
+  }
 
+  checkForStripe() {
+    if (window.Stripe) {
+      this.createStripeInstance();
+      this.forceUpdate();
+    }
+  }
+
+  createStripeInstance() {
     this._stripe = window.Stripe(apiKey, options);
     this._didWarn = false;
+    if (this._stripeJsInterval) {
+      clearInterval(this._stripeJsInterval);
+      this._stripeJsInterval = null;
+    }
   }
 
   getChildContext(): StripeContext {
@@ -48,8 +76,9 @@ export default class Provider extends React.Component {
   props: Props
   _stripe: StripeShape
   _didWarn: boolean
+  _stripeJsInterval: number
 
   render() {
-    return React.Children.only(this.props.children);
+    return this._stripe ? React.Children.only(this.props.children) : false;
   }
 }
