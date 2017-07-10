@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 type Props = {
   apiKey: string,
-  asyncStripeJs: boolean,
+  asyncStripeJs?: boolean,
   children?: any,
 };
 
@@ -53,7 +53,7 @@ export default class Provider extends React.Component {
   componentWillUnmount() {
     if (this._stripeJsInterval) {
       clearInterval(this._stripeJsInterval);
-      this._stripeJsInterval = null;
+      this._stripeJsInterval = 0;
     }
   }
 
@@ -77,11 +77,11 @@ export default class Provider extends React.Component {
     this._didWarn = false;
     if (this._stripeJsInterval) {
       clearInterval(this._stripeJsInterval);
-      this._stripeJsInterval = null;
+      this._stripeJsInterval = 0;
     }
   }
 
   render() {
-    return this._stripe ? React.Children.only(this.props.children) : false;
+    return this._stripe ? React.Children.only(this.props.children) : null;
   }
 }
