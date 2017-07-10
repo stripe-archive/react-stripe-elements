@@ -28,14 +28,25 @@ export default class Provider extends React.Component {
   constructor(props: Props) {
     super(props);
 
-    const {apiKey, children, asyncStripeJs, ...options} = this.props;
-
-    if (!window.stripe && asyncStripeJs) {
+    if (!window.stripe && this.props.asyncStripeJs) {
       this._stripeJsInterval = setInterval(this.checkForStripe.bind(this), ASYNC_CHECK_INTERVAL);
     } else if (!window.Stripe) {
       throw new Error('Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.');
     } else {
       this.createStripeInstance();
+    }
+  }
+
+  getChildContext(): StripeContext {
+    return {
+      stripe: this._stripe,
+    };
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    if (!this._didWarn && this.props.apiKey !== nextProps.apiKey && window.console && window.console.error) {
+      this._didWarn = true;
+      console.error('StripeProvider does not support changing the apiKey parameter.'); // eslint-disable-line no-console
     }
   }
 
@@ -46,6 +57,12 @@ export default class Provider extends React.Component {
     }
   }
 
+  props: Props
+  _stripe: StripeShape
+  _didWarn: boolean
+  _stripeJsInterval: number
+
+
   checkForStripe() {
     if (window.Stripe) {
       this.createStripeInstance();
@@ -54,6 +71,8 @@ export default class Provider extends React.Component {
   }
 
   createStripeInstance() {
+    const {apiKey, children, asyncStripeJs, ...options} = this.props;
+
     this._stripe = window.Stripe(apiKey, options);
     this._didWarn = false;
     if (this._stripeJsInterval) {
@@ -61,22 +80,6 @@ export default class Provider extends React.Component {
       this._stripeJsInterval = null;
     }
   }
-
-  getChildContext(): StripeContext {
-    return {
-      stripe: this._stripe,
-    };
-  }
-  componentWillReceiveProps(nextProps: Props) {
-    if (!this._didWarn && this.props.apiKey !== nextProps.apiKey && window.console && window.console.error) {
-      this._didWarn = true;
-      console.error('StripeProvider does not support changing the apiKey parameter.'); // eslint-disable-line no-console
-    }
-  }
-  props: Props
-  _stripe: StripeShape
-  _didWarn: boolean
-  _stripeJsInterval: number
 
   render() {
     return this._stripe ? React.Children.only(this.props.children) : false;
