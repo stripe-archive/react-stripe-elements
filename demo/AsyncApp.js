@@ -2,9 +2,7 @@
 /* eslint-disable no-console, react/no-multi-comp */
 import React from 'react';
 
-import {
-  CardElement,
-} from '../src/index';
+import {CardElement} from '../src/index';
 
 const createOptions = (fontSize: string) => {
   return {
@@ -25,7 +23,7 @@ const createOptions = (fontSize: string) => {
   };
 };
 
-// We load Stripe immediately, so we'll add some delay.
+// We load Stripe immediately, so we'll add some delay to simulate asynchronous loading.
 const waitForStripe = () => {
   return new Promise((resolve) => {
     setTimeout(
@@ -63,13 +61,14 @@ class Checkout extends React.Component {
     elements?: Object,
     stripe?: Object,
   };
-  _cardElement: ?Object
+  _cardElement: ?Object;
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    this.state.stripe && this.state.stripe
-      .createToken(this._cardElement)
-      .then((payload) => console.log(payload));
+    this.state.stripe &&
+      this.state.stripe
+        .createToken(this._cardElement)
+        .then((payload) => console.log(payload));
   };
 
   saveElementRef = (element) => (this._cardElement = element);
