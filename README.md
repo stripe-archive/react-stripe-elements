@@ -31,10 +31,21 @@ Using npm:
 Then, load Stripe.js in your application:
 
 ```html
-<script src="https://js.stripe.com/v3/"></script>
+<head>
+  <script src="https://js.stripe.com/v3/"></script>
+  <!-- Your other scripts live here. -->
+</head>
 ```
 
 You're good to go!
+
+#### Loading Stripe.js asynchronously (not recommended)
+
+We recommend loading Stripe.js on every page to best leverage Stripe’s advanced fraud functionality.
+This allows Stripe to detect anomalous behavior that may be indicative of fraud as users browse your web site.
+
+However, if you're loading Stripe.js yourself asynchronously, you won't be able to use some of the helpers below, which assume that the `window.Stripe` object is immediately available.
+Instead, you'll want to follow the instructions (here)[#loading-stripejs-asynchronously].
 
 ### The Stripe context (`StripeProvider`)
 
@@ -151,6 +162,77 @@ class CardSection extends React.Component {
 export default CardSection;
 ```
 
+### Check out the demo!
+
+It's (here)[https://github.com/stripe/react-stripe-elements/tree/master/demo].
+
+### Loading Stripe.js asynchronously
+
+If you're loading Stripe.js yourself asynchronously, `window.Stripe` won't be available to the `StripeProvider` immediately, so you won't be able to use the helpers documented above.
+
+Instead, you'll want to do something like this:
+
+```js
+// AsyncCheckoutForm.js
+import React from 'react';
+import {CardElement} from 'react-stripe-elements';
+
+class AsyncCheckoutForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      stripe: null,
+    };
+
+    // This is something you'll need to implement:
+    waitForStripe().then(() => {
+      // You will probably want to keep references to these objects if you're using them in other parts of your form:
+      const stripe = Stripe('pk_test_12345');
+      const elements = stripe.elements();
+
+      this.setState({stripe, elements});
+    });
+  }
+
+  handleElementRef = (element) => {
+    this._cardElement = element;
+  }
+
+  handleSubmit = (ev) => {
+    // We don't want to let default form submission happen here, which would refresh the page.
+    ev.preventDefault();
+
+    this.state.stripe.createToken(this._cardElement, {name: 'Jenny Rosen'});
+  }
+
+  render() {
+    if (this.state.elements) {
+      return (
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Card details
+            <CardElement
+              elements={this.state.elements}
+              elementRef={this.handleElementRef}
+              style={{base: {fontSize: '18px'}}}
+            />
+          </label>
+          <button>Confirm order</button>
+        </form>
+      );
+    } else {
+      return (
+        <div>
+          Loading...
+        </div>
+      );
+    }
+  }
+};
+
+export default AsyncCheckoutForm;
+```
+
 ## Component reference
 
 ### `<StripeProvider>`
@@ -215,6 +297,9 @@ type ElementProps = {
   onReady?: () => void,
   onFocus?: () => void,
   onBlur?: () => void,
+
+  // Only applicable if you are asynchronously loading Stripe.js:
+  elements: Elements,
 };
 ```
 
@@ -239,7 +324,6 @@ type FactoryProps = {
   },
 };
 ```
-
 
 ## Development
 
