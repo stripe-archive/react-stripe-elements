@@ -45,7 +45,7 @@ We recommend loading Stripe.js on every page to best leverage Stripe’s advance
 This allows Stripe to detect anomalous behavior that may be indicative of fraud as users browse your web site.
 
 However, if you're loading Stripe.js yourself asynchronously, you won't be able to use some of the helpers below, which assume that the `window.Stripe` object is immediately available.
-Instead, you'll want to follow the instructions (here)[#loading-stripejs-asynchronously].
+Instead, you'll want to follow the instructions [here](#loading-stripejs-asynchronously).
 
 ### The Stripe context (`StripeProvider`)
 
@@ -164,7 +164,7 @@ export default CardSection;
 
 ### Check out the demo!
 
-It's (here)[https://github.com/stripe/react-stripe-elements/tree/master/demo].
+It's [here](https://github.com/stripe/react-stripe-elements/tree/master/demo).
 
 ### Loading Stripe.js asynchronously
 
