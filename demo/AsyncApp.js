@@ -29,7 +29,7 @@ const createOptions = (fontSize: string) => {
 
 // We load Stripe immediately, so we'll add some delay.
 const waitForStripe = () => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(
       () => resolve(window.Stripe('pk_RXwtgk4Z5VR82S94vtwmam6P8qMXQ')),
       5000
@@ -45,7 +45,7 @@ class Checkout extends React.Component {
     };
 
     // Wait for Stripe to load!
-    waitForStripe().then(stripe =>
+    waitForStripe().then((stripe) =>
       this.setState({stripe, elements: stripe.elements()})
     );
 
@@ -64,14 +64,14 @@ class Checkout extends React.Component {
     elementFontSize: string,
   };
 
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
     this.state.stripe
       .createToken(this._cardElement)
-      .then(payload => console.log(payload));
+      .then((payload) => console.log(payload));
   };
 
-  handleElementRef = element => (this._cardElement = element);
+  handleElementRef = (element) => (this._cardElement = element);
 
   render() {
     const {elementFontSize} = this.state;
@@ -80,16 +80,16 @@ class Checkout extends React.Component {
         <h1>Asynchronous example</h1>
         {this.state.elements
           ? <form onSubmit={this.handleSubmit}>
-              <label>
+            <label>
                 Card details
                 <CardElement
                   elements={this.state.elements}
                   elementRef={this.handleElementRef}
                   {...createOptions(this.state.elementFontSize)}
                 />
-              </label>
-              <button>Pay</button>
-            </form>
+            </label>
+            <button>Pay</button>
+          </form>
           : 'Loading...'}
       </div>
     );

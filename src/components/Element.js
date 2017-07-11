@@ -101,7 +101,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
         this.props.onReady();
       });
 
-      this._element.on('change', change => {
+      this._element.on('change', (change) => {
         this.props.onChange(change);
       });
 

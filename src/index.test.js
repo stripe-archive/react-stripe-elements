@@ -36,10 +36,10 @@ describe('index', () => {
     window.Stripe = jest.fn().mockReturnValue(stripeMock);
   });
 
-  const MyCheckout = props => {
+  const MyCheckout = (props) => {
     return (
       <form
-        onSubmit={ev => {
+        onSubmit={(ev) => {
           ev.preventDefault();
           props.stripe.createToken();
         }}

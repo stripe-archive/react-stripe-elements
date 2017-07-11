@@ -11,7 +11,7 @@ import {
   injectStripe,
 } from '../src/index';
 
-const handleChange = change => {
+const handleChange = (change) => {
   console.log('[change]', change);
 };
 const handleFocus = () => {
@@ -48,9 +48,9 @@ class _CardForm extends React.Component {
     fontSize: string,
     stripe: StripeProps,
   };
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
-    this.props.stripe.createToken().then(payload => console.log(payload));
+    this.props.stripe.createToken().then((payload) => console.log(payload));
   };
   render() {
     return (
@@ -77,9 +77,9 @@ class _SplitForm extends React.Component {
     fontSize: string,
     stripe: StripeProps,
   };
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
-    this.props.stripe.createToken().then(payload => console.log(payload));
+    this.props.stripe.createToken().then((payload) => console.log(payload));
   };
   render() {
     return (
