@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-console, react/no-multi-comp */
 import React from 'react';
 import ReactDOM from 'react-dom';
 

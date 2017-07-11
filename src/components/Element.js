@@ -11,7 +11,7 @@ type Props = {
   onFocus: Function,
   onReady: Function,
 
-  elements: mixed,
+  elements?: mixed,
 };
 
 const noop = () => {};
@@ -53,7 +53,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
 
       if (!this._elements || typeof this._elements.create !== 'function') {
         throw new Error(
-          'If you are not using the StripeProvider and Elements components, please pass an `elements` instance (returned by stripe.elements()) to your Element.'
+          'If you are not using the StripeProvider and Elements components, please pass an `elements` instance (returned by stripe.elements()) to your Element.' // eslint-disable-line
         );
       }
 

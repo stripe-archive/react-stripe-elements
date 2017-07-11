@@ -1,11 +1,9 @@
-import type {StripeProps} from '../src/components/inject';
+// @flow
+/* eslint-disable no-console, react/no-multi-comp */
+import React from 'react';
 
 import {
   CardElement,
-  CardNumberElement,
-  CardExpiryElement,
-  CardCVCElement,
-  PostalCodeElement,
 } from '../src/index';
 
 const createOptions = (fontSize: string) => {
@@ -62,16 +60,19 @@ class Checkout extends React.Component {
   }
   state: {
     elementFontSize: string,
+    elements?: Object,
+    stripe?: Object,
   };
+  _cardElement: ?Object
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    this.state.stripe
+    this.state.stripe && this.state.stripe
       .createToken(this._cardElement)
       .then((payload) => console.log(payload));
   };
 
-  handleElementRef = (element) => (this._cardElement = element);
+  saveElementRef = (element) => (this._cardElement = element);
 
   render() {
     const {elementFontSize} = this.state;
@@ -84,8 +85,8 @@ class Checkout extends React.Component {
                 Card details
                 <CardElement
                   elements={this.state.elements}
-                  elementRef={this.handleElementRef}
-                  {...createOptions(this.state.elementFontSize)}
+                  elementRef={this.saveElementRef}
+                  {...createOptions(elementFontSize)}
                 />
             </label>
             <button>Pay</button>

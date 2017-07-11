@@ -1,4 +1,5 @@
 // @noflow
+/* eslint-disable no-console */
 import React from 'react';
 import {mount} from 'enzyme';
 
