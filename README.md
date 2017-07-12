@@ -18,7 +18,7 @@ goes into more detail on the various customization options for Elements (e.g. st
 
 ### Installation
 
-First, install `react-stripe-elements`.
+#### First, install `react-stripe-elements`.
 
 Using yarn:
 
@@ -28,7 +28,13 @@ Using npm:
 
     npm install --save react-stripe-elements
 
-Then, load Stripe.js in your application:
+Using UMD build (exports a global `ReactStripeElements` object):
+
+```html
+<script src="https://unpkg.com/react-stripe-elements@latest/dist/react-stripe-elements.min.js"></script>
+```
+
+#### Then, load Stripe.js in your application:
 
 ```html
 <script src="https://js.stripe.com/v3/"></script>
