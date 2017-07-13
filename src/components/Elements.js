@@ -22,14 +22,16 @@ export default class Elements extends React.Component {
     elements: PropTypes.object.isRequired,
     registerElement: PropTypes.func.isRequired,
     unregisterElement: PropTypes.func.isRequired,
-    registeredElements: PropTypes.arrayOf(PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      element: PropTypes.object.isRequired,
-    })).isRequired,
-  }
+    registeredElements: PropTypes.arrayOf(
+      PropTypes.shape({
+        type: PropTypes.string.isRequired,
+        element: PropTypes.object.isRequired,
+      })
+    ).isRequired,
+  };
   static contextTypes = {
     stripe: PropTypes.object.isRequired,
-  }
+  };
 
   constructor(props: Props, context: StripeContext) {
     super(props, context);
@@ -41,7 +43,7 @@ export default class Elements extends React.Component {
       registeredElements: [],
     };
   }
-  state: FormContext
+  state: FormContext;
 
   getChildContext(): ElementsContext {
     return {
@@ -51,21 +53,23 @@ export default class Elements extends React.Component {
       registeredElements: this.state.registeredElements,
     };
   }
-  props: Props
-  context: StripeContext
-  _elements: ElementsShape
+  props: Props;
+  context: StripeContext;
+  _elements: ElementsShape;
 
   handleRegisterElement = (type: string, element: Object) => {
     this.setState({
       registeredElements: [...this.state.registeredElements, {type, element}],
     });
-  }
+  };
 
   handleUnregisterElement = (el: Object) => {
     this.setState({
-      registeredElements: this.state.registeredElements.filter(({element}) => element !== el),
+      registeredElements: this.state.registeredElements.filter(
+        ({element}) => element !== el
+      ),
     });
-  }
+  };
 
   render() {
     return React.Children.only(this.props.children);

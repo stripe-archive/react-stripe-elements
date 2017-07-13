@@ -1,4 +1,5 @@
 // @noflow
+/* eslint-disable no-console */
 import React from 'react';
 import {mount} from 'enzyme';
 
@@ -117,19 +118,30 @@ describe('index', () => {
   describe('errors', () => {
     it('Provider should throw if Stripe is not loaded', () => {
       window.Stripe = undefined;
-      expect(() => mount(<StripeProvider apiKey="pk_test_xxx" />)).toThrowError(/js.stripe.com\/v3/);
+      expect(() => mount(<StripeProvider apiKey="pk_test_xxx" />)).toThrowError(
+        /js.stripe.com\/v3/
+      );
+    });
+
+    it('Elements should throw if no elements instance', () => {
+      expect(() => mount(<CardElement />)).toThrowError(/`elements` instance/);
+      expect(() =>
+        mount(<CardElement elements={{create: 'foobar'}} />)
+      ).toThrowError(/`elements` instance/);
     });
 
     it('createToken should throw when not in Elements', () => {
-      expect(() => mount(
-        <StripeProvider apiKey="pk_test_xxx">
-          <WrappedCheckout>
-            <Elements>
-              <CardElement />
-            </Elements>
-          </WrappedCheckout>
-        </StripeProvider>
-      )).toThrowError('Elements context');
+      expect(() =>
+        mount(
+          <StripeProvider apiKey="pk_test_xxx">
+            <WrappedCheckout>
+              <Elements>
+                <CardElement />
+              </Elements>
+            </WrappedCheckout>
+          </StripeProvider>
+        )
+      ).toThrowError('Elements context');
     });
 
     it('createToken should throw when no Element found', () => {
@@ -142,7 +154,9 @@ describe('index', () => {
           </Elements>
         </StripeProvider>
       );
-      expect(() => app.find('form').simulate('submit')).toThrowError(/did not specify/);
+      expect(() => app.find('form').simulate('submit')).toThrowError(
+        /did not specify/
+      );
     });
   });
 });
