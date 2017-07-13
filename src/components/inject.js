@@ -28,14 +28,14 @@ const inject = <P: Object>(WrappedComponent: ReactClass<P & StripeProps>): React
     if (!context || !context.registeredElements) {
       throw new Error(
         `It looks like you are trying to inject Stripe context outside of an Elements context.
-Please be sure the component that calls createSource or createToken is within an <Elements> component.`
+Please be sure the component that calls createSource or createToken is within an <Elements> component.`,
       );
     }
 
     super(props, context);
   }
 
-  context: Context
+  context: Context;
 
   stripeProps(): StripeProps {
     return {
@@ -57,28 +57,28 @@ Please be sure the component that calls createSource or createToken is within an
     } else {
       throw new Error(
         `You did not specify the type of Source or Token to create.
-        We could not infer which Element you want to use for this operation.`
+        We could not infer which Element you want to use for this operation.`,
       );
     }
-  }
+  };
   wrappedCreateToken = (options: mixed = {}) => {
     if (options && typeof options === 'object') {
-      const {type, ...rest} = options;
-      const element = this.findElement(type);
+      const {elementType, ...rest} = options;
+      const element = this.findElement(elementType);
       return this.context.stripe.createToken(element, rest);
     } else {
       throw new Error(`Invalid options passed to createToken. Expected an object, got ${options === null ? 'null' : typeof options}.`);
     }
-  }
+  };
   wrappedCreateSource = (options: mixed) => {
     if (options && typeof options === 'object') {
-      const {type, ...rest} = options; // eslint-disable-line no-unused-vars
-      const element = this.findElement(type);
+      const {elementType, ...rest} = options; // eslint-disable-line no-unused-vars
+      const element = this.findElement(elementType);
       return this.context.stripe.createSource(element, rest);
     } else {
       throw new Error(`Invalid options passed to createSource. Expected an object, got ${typeof options}.`);
     }
-  }
+  };
   render() {
     return <WrappedComponent {...this.props} stripe={this.stripeProps()} />;
   }

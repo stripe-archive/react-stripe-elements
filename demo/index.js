@@ -52,14 +52,37 @@ class _CardForm extends React.Component {
   props: {
     fontSize: string,
     stripe: StripeProps,
-  }
+  };
   handleSubmit = (ev) => {
     ev.preventDefault();
     this.props.stripe.createToken().then((payload) => console.log(payload));
-  }
+  };
+  handleSubmitWithSource = (ev) => {
+    ev.preventDefault();
+
+    this.props.stripe.createSource({
+      type: 'card',
+      currency: 'nok',
+      amount: 100000,
+    }).then((cardPayload) => {
+      const cardSource = cardPayload.source;
+      this.props.stripe.createSource({
+        type: 'three_d_secure',
+        amount: cardSource.amount,
+        currency: cardSource.currency,
+        three_d_secure: {
+          card: cardSource.id,
+        },
+        redirect: {
+          return_url: 'https://shop.example.com/crtA6B28E1',
+        },
+      }).then((threeDSecurePayload) => console.log(threeDSecurePayload.source));
+    });
+  };
+
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmitWithSource}>
         <label>
           Card details
           <CardElement
