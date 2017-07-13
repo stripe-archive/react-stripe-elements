@@ -109,7 +109,7 @@ Please be sure the component that calls createSource or createToken is within an
           return this.context.stripe.createSource(options);
         } else {
           throw new Error(
-            `You did not specify the type of Source or Token to create.
+            `You did not specify the type of Source to create.
           We also could not find any Elements in the current context.`
           );
         }
