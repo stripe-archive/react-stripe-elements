@@ -76,7 +76,7 @@ Please be sure the component that calls createSource or createToken is within an
       const element = this.findElement(type);
       return this.context.stripe.createSource(element, rest);
     } else {
-      throw new Error(`Invalid options passed to createToken. Expected an object, got ${typeof options}.`);
+      throw new Error(`Invalid options passed to createSource. Expected an object, got ${typeof options}.`);
     }
   }
   render() {
