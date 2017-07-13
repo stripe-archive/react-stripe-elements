@@ -1,22 +1,28 @@
+// @flow
 /* global StripeShape:false, ElementsShape:false, ElementShape:false */
 // ^For https://github.com/gajus/eslint-plugin-flowtype/issues/84
 
-// @flow
+type MixedObject = {[string]: mixed};
 
 declare type ElementShape = {
   mount: Function,
   destroy: () => ElementShape,
   on: (event: string, handler: Function) => ElementShape,
-  update: (options: Object) => ElementShape,
+  update: (options: MixedObject) => ElementShape,
 };
 
 declare type ElementsShape = {
-  create: (type: string, options: Object) => ElementShape,
+  create: (type: string, options: MixedObject) => ElementShape,
 };
 
 declare type StripeShape = {
-  elements: (options: Object) => ElementsShape,
-  createSource: (element: ElementShape | Object, options: ?Object) => Promise<{source?: Object, error?: Object}>,
-  createToken: (type: string | ElementShape, options: Object) => Promise<{token?: Object, error?: Object}>,
+  elements: (options: MixedObject) => ElementsShape,
+  createSource: (
+    element: ElementShape | MixedObject,
+    options: ?{}
+  ) => Promise<{source?: MixedObject, error?: MixedObject}>,
+  createToken: (
+    type: string | ElementShape,
+    options: mixed
+  ) => Promise<{token?: MixedObject, error?: MixedObject}>,
 };
-
