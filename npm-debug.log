@@ -1,0 +1,154 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/jenan/.nvm/versions/node/v6.11.1/bin/node',
+1 verbose cli   '/Users/jenan/.nvm/versions/node/v6.11.1/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.1
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/jenan/stripe/react-stripe-elements',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/jenan/.npm/react-stripe-elements/0.0.4/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/jenan/.npm correctMkdir not in flight; initializing
+10 info lifecycle react-stripe-elements@0.0.4~prepublish: react-stripe-elements@0.0.4
+11 verbose lifecycle react-stripe-elements@0.0.4~prepublish: unsafe-perm in lifecycle true
+12 verbose lifecycle react-stripe-elements@0.0.4~prepublish: PATH: /Users/jenan/.nvm/versions/node/v6.11.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/jenan/stripe/react-stripe-elements/node_modules/.bin:/Users/jenan/.nvm/versions/node/v6.11.1/bin:/Users/jenan/stripe/henson/bin:/Users/jenan/stripe/bin:/Users/jenan/.bin_local:/Users/jenan/.rbenv/shims:/Users/jenan/src/go/bin:./node_modules/.bin:/Users/jenan/bin:/Users/jenan/.local/bin:/Users/jenan/node_modules/.bin:/opt/google-cloud-sdk/bin:/share/npm/bin:/usr/local/Cellar/emacs/25.2/bin:/opt/coreutils/libexec/gnubin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/go/bin:/usr/local/MacGPG2/bin:/usr/local/munki:/Users/jenan/stripe/henson/bin:/Users/jenan/stripe/password-vault/bin:/Users/jenan/stripe/space-commander/bin
+13 verbose lifecycle react-stripe-elements@0.0.4~prepublish: CWD: /Users/jenan/stripe/react-stripe-elements
+14 silly lifecycle react-stripe-elements@0.0.4~prepublish: Args: [ '-c', 'yarn run clean && yarn run build' ]
+15 silly lifecycle react-stripe-elements@0.0.4~prepublish: Returned: code: 0  signal: null
+16 verbose tar pack [ '/Users/jenan/.npm/react-stripe-elements/0.0.4/package.tgz',
+16 verbose tar pack   '/Users/jenan/stripe/react-stripe-elements' ]
+17 verbose tarball /Users/jenan/.npm/react-stripe-elements/0.0.4/package.tgz
+18 verbose folder /Users/jenan/stripe/react-stripe-elements
+19 verbose addLocalTarball adding from inside cache /Users/jenan/.npm/react-stripe-elements/0.0.4/package.tgz
+20 verbose correctMkdir /Users/jenan/.npm correctMkdir not in flight; initializing
+21 silly cache afterAdd react-stripe-elements@0.0.4
+22 verbose afterAdd /Users/jenan/.npm/react-stripe-elements/0.0.4/package/package.json not in flight; writing
+23 verbose correctMkdir /Users/jenan/.npm correctMkdir not in flight; initializing
+24 verbose afterAdd /Users/jenan/.npm/react-stripe-elements/0.0.4/package/package.json written
+25 silly publish { name: 'react-stripe-elements',
+25 silly publish   version: '0.0.4',
+25 silly publish   description: 'React components that help you quickly add Stripe Elements to your React app.',
+25 silly publish   main: './lib/index.js',
+25 silly publish   module: 'es/index.js',
+25 silly publish   'jsnext:main': 'es/index.js',
+25 silly publish   scripts:
+25 silly publish    { test: 'jest',
+25 silly publish      'build:commonjs': 'cross-env BABEL_ENV=commonjs babel src --out-dir lib',
+25 silly publish      'build:es': 'cross-env BABEL_ENV=es babel src --out-dir es',
+25 silly publish      'build:umd': 'cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js',
+25 silly publish      'build:umd:min': 'cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js',
+25 silly publish      lint: 'eslint src demo',
+25 silly publish      flow: 'flow',
+25 silly publish      build: 'yarn run lint && yarn run flow && yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min',
+25 silly publish      clean: 'rimraf lib dist es',
+25 silly publish      prepublish: 'yarn run clean && yarn run build',
+25 silly publish      demo: 'webpack-dev-server --content-base dist' },
+25 silly publish   keywords: [],
+25 silly publish   author: { name: 'Stripe', url: 'https://www.stripe.com' },
+25 silly publish   license: 'MIT',
+25 silly publish   dependencies: { 'prop-types': '^15.5.8' },
+25 silly publish   repository:
+25 silly publish    { type: 'git',
+25 silly publish      url: 'git+https://github.com/stripe/react-stripe-elements.git' },
+25 silly publish   files: [ 'dist', 'lib', 'src', 'es' ],
+25 silly publish   devDependencies:
+25 silly publish    { 'babel-cli': '^6.24.1',
+25 silly publish      'babel-core': '^6.24.1',
+25 silly publish      'babel-eslint': '^7.2.2',
+25 silly publish      'babel-jest': '^19.0.0',
+25 silly publish      'babel-loader': '^6.4.1',
+25 silly publish      'babel-plugin-transform-class-properties': '^6.24.1',
+25 silly publish      'babel-plugin-transform-object-rest-spread': '^6.23.0',
+25 silly publish      'babel-preset-es2015': '^6.24.1',
+25 silly publish      'babel-preset-react': '^6.24.1',
+25 silly publish      'cross-env': '^4.0.0',
+25 silly publish      enzyme: '^2.8.2',
+25 silly publish      eslint: '^3.19.0',
+25 silly publish      'eslint-config-stripe': '^1.0.10',
+25 silly publish      'eslint-plugin-flowtype': '^2.32.1',
+25 silly publish      'eslint-plugin-jest': '^19.0.1',
+25 silly publish      'flow-bin': '^0.44.0',
+25 silly publish      'html-webpack-plugin': '^2.28.0',
+25 silly publish      jest: '^19.0.2',
+25 silly publish      react: '^15.5.4',
+25 silly publish      'react-dom': '^15.5.4',
+25 silly publish      'react-test-renderer': '^15.5.4',
+25 silly publish      rimraf: '^2.6.1',
+25 silly publish      webpack: '^2.4.1',
+25 silly publish      'webpack-dev-server': '^2.4.5' },
+25 silly publish   peerDependencies: { react: '^15.5.4', 'react-dom': '^15.5.4' },
+25 silly publish   readme: '# Stripe Elements for React\n\nReact components that help you quickly add Stripe Elements to your React app.\n\n[![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)\n[![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)\n\nThis project is a thin React wrapper around [Stripe.js](https://stripe.com/docs/stripe.js)\nand [Stripe Elements](https://stripe.com/docs/elements). It allows you to add Elements\nto any React app, and manages the state and lifecycle of Elements for you.\n\nThe [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)\ngoes into more detail on the various customization options for Elements (e.g. styles, fonts).\n\n> This project is currently in beta. The API presented below may undergo significant changes until we hit a stable release.\n\n## Getting started\n\n### Installation\n\n#### First, install `react-stripe-elements`.\n\nUsing yarn:\n\n    yarn add react-stripe-elements\n\nUsing npm:\n\n    npm install --save react-stripe-elements\n\nUsing UMD build (exports a global `ReactStripeElements` object):\n\n```html\n<script src="https://unpkg.com/react-stripe-elements@latest/dist/react-stripe-elements.min.js"></script>\n```\n\n#### Then, load Stripe.js in your application:\n\n```html\n<script src="https://js.stripe.com/v3/"></script>\n```\n\nYou\'re good to go!\n\n### The Stripe context (`StripeProvider`)\n\nIn order for your application to have access to [the Stripe object](https://stripe.com/docs/elements/reference#the-stripe-object),\nlet\'s add `StripeProvider` to our root React App component:\n\n```js\n// index.js\nimport React from \'react\';\nimport {StripeProvider} from \'react-stripe-elements\';\n\nimport MyStoreCheckout from \'./MyStoreCheckout\';\n\nconst App = () => {\n  return (\n    <StripeProvider apiKey="pk_test_12345">\n      <MyStoreCheckout />\n    </StripeProvider>\n  );\n};\n\nReactDOM.render(<App />, document.getElementById(\'root\'));\n```\n\n### Element groups (`Elements`)\n\nNext, when you\'re building components for your checkout form, you\'ll want to wrap the `Elements` component around your `form`.\nThis groups the set of Stripe Elements you\'re using together, so that we\'re able to pull data from groups of Elements when\nyou\'re tokenizing.\n\n```js\n// MyStoreCheckout.js\nimport React from \'react\';\nimport {Elements} from \'react-stripe-elements\';\n\nimport CheckoutForm from \'./CheckoutForm\';\n\nclass MyStoreCheckout extends React.Component {\n  render() {\n    return (\n      <Elements>\n        <CheckoutForm />\n      </Elements>\n    );\n  }\n}\n\nexport default MyStoreCheckout;\n```\n\n### Setting up your payment form (`injectStripe`)\n\nUse the `injectStripe` Higher-Order Component (HOC) to build your payment form components in the `Elements` tree. This HOC injects the `stripe`\ninstance that manages your `Elements` groups. You can call `createToken` on the injected `stripe` instance to submit\npayment data to Stripe.\n\n```js\n// CheckoutForm.js\nimport React from \'react\';\nimport {injectStripe} from \'react-stripe-elements\';\n\nimport AddressSection from \'./AddressSection\';\nimport CardSection from \'./CardSection\';\n\nclass CheckoutForm extends React.Component {\n  handleSubmit = (ev) => {\n    // We don\'t want to let default form submission happen here, which would refresh the page.\n    ev.preventDefault();\n\n    // Within the context of `Elements`, this call to createToken knows which Element to\n    // tokenize, since there\'s only one in this group.\n    this.props.stripe.createToken({name: \'Jenny Rosen\'}).then(({token}) => {\n      console.log(\'Received Stripe token:\', token);\n    });\n\n    // However, this line of code will do the same thing:\n    // this.props.stripe.createToken({type: \'card\', name: \'Jenny Rosen\'});\n  }\n\n  render() {\n    return (\n      <form onSubmit={this.handleSubmit}>\n        <AddressSection />\n        <CardSection />\n        <button>Confirm order</button>\n      </form>\n    );\n  }\n}\n\nexport default injectStripe(CheckoutForm);\n```\n\n### Using individual `*Element` components\n\nNow, you can use individual `*Element` components, such as `CardElement`, to build your form.\n\n```js\n// CardSection.js\nimport React from \'react\';\nimport {CardElement} from \'react-stripe-elements\';\n\nclass CardSection extends React.Component {\n  render() {\n    return (\n      <label>\n        Card details\n        <CardElement style={{base: {fontSize: \'18px\'}}} />\n      </label>\n    );\n  }\n};\n\nexport default CardSection;\n```\n\n## Component reference\n\n### `<StripeProvider>`\n\nAll applications using `react-stripe-elements` must use the `<StripeProvider>`  component, which sets up the Stripe context for a component tree.\n`react-stripe-elements` uses the provider pattern (which is also adopted by tools like [`react-redux`](https://github.com/reactjs/react-redux) and [`react-intl`](https://github.com/yahoo/react-intl)) to scope a Stripe context to a tree of components. This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.\n\nAn integration usually wraps the `<StripeProvider>` around the application’s root component. This way, your entire application has the configured Stripe context.\n\n#### Props shape\n\nThis component accepts all `options` that can be passed into `Stripe(apiKey, options)` as props.\n\n```js\ntype StripeProviderProps = {\n  apiKey: string,\n};\n```\n\n\n### `<Elements>`\n\nThe `Elements` component wraps groups of Elements that belong together. In most cases, you want to wrap this around your checkout form.\n\n#### Props shape\n\nThis component accepts all `options` that can be passed into `stripe.elements(options)` as props.\n\n```js\ntype ElementsProps = {\n  locale?: string,\n  fonts?: Array<Object>,\n  // The full specification for `elements()` options is here: https://stripe.com/docs/elements/reference#elements-options\n};\n```\n\n### `<*Element>` components\n\nThese components display the UI for Elements, and must be used within `StripeProvider` and `Elements`.\n\n#### Available components\n\n(More to come!)\n\n- `CardElement`\n- `CardNumberElement`\n- `CardExpiryElement`\n- `CardCVCElement`\n- `PostalCodeElement`\n\n#### Props shape\n\nThese components accept all `options` that can be passed into `elements.create(type, options)` as props.\n\n```js\ntype ElementProps = {\n  elementRef?: (StripeElement) => void,\n\n  // For full documentation on the events and payloads below, see:\n  // https://stripe.com/docs/elements/reference#element-on\n  onChange?: (changeObject: Object) => void,\n  onReady?: () => void,\n  onFocus?: () => void,\n  onBlur?: () => void,\n};\n```\n\n### `injectStripe` HOC\n\nComponents that need to initiate Source or Token creations (e.g. a checkout form component) can access `stripe.createToken` via props of any component returned by the `injectStripe` HOC factory.\n\n#### Example\n\n```js\nconst StripeCheckoutForm = injectStripe(CheckoutForm);\n```\n\nThe following props will be available to this component:\n\n```js\ntype FactoryProps = {\n  stripe: {\n    createToken: (tokenParameters: {type?: string}) => Promise<{token?: Object, error?: Object}>,\n    // and other functions available on the `stripe` object,\n    // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object\n  },\n};\n```\n\n\n## Development\n\nInstall dependencies:\n\n    yarn install\n\nRun the demo:\n\n    yarn run demo\n\nRun the tests:\n\n    yarn run test\n\nBuild:\n\n    yarn run build\n\nChecks:\n\n    yarn run lint\n    yarn run flow\n',
+25 silly publish   readmeFilename: 'README.md',
+25 silly publish   gitHead: '82dd561e9d98100759fdb40e81e7c524239febdf',
+25 silly publish   bugs: { url: 'https://github.com/stripe/react-stripe-elements/issues' },
+25 silly publish   homepage: 'https://github.com/stripe/react-stripe-elements#readme',
+25 silly publish   _id: 'react-stripe-elements@0.0.4',
+25 silly publish   _shasum: '6225da383862daea9f16b937f9200437885ddb21',
+25 silly publish   _from: '.' }
+26 verbose getPublishConfig undefined
+27 silly mapToRegistry name react-stripe-elements
+28 silly mapToRegistry using default registry
+29 silly mapToRegistry registry https://registry.npmjs.org/
+30 silly mapToRegistry data Result {
+30 silly mapToRegistry   raw: 'react-stripe-elements',
+30 silly mapToRegistry   scope: null,
+30 silly mapToRegistry   escapedName: 'react-stripe-elements',
+30 silly mapToRegistry   name: 'react-stripe-elements',
+30 silly mapToRegistry   rawSpec: '',
+30 silly mapToRegistry   spec: 'latest',
+30 silly mapToRegistry   type: 'tag' }
+31 silly mapToRegistry uri https://registry.npmjs.org/react-stripe-elements
+32 verbose publish registryBase https://registry.npmjs.org/
+33 silly publish uploading /Users/jenan/.npm/react-stripe-elements/0.0.4/package.tgz
+34 verbose request uri https://registry.npmjs.org/react-stripe-elements
+35 verbose request sending authorization for write operation
+36 info attempt registry request try #1 at 2:55:52 PM
+37 verbose request using bearer token for auth
+38 verbose request id a9b18a125c1adee9
+39 http request PUT https://registry.npmjs.org/react-stripe-elements
+40 http 403 https://registry.npmjs.org/react-stripe-elements
+41 verbose headers { 'content-type': 'application/json',
+41 verbose headers   'cache-control': 'max-age=300',
+41 verbose headers   'content-length': '95',
+41 verbose headers   'accept-ranges': 'bytes',
+41 verbose headers   date: 'Thu, 20 Jul 2017 21:55:52 GMT',
+41 verbose headers   via: '1.1 varnish',
+41 verbose headers   connection: 'keep-alive',
+41 verbose headers   'x-served-by': 'cache-sjc3135-SJC',
+41 verbose headers   'x-cache': 'MISS',
+41 verbose headers   'x-cache-hits': '0',
+41 verbose headers   'x-timer': 'S1500587752.324936,VS0,VE202',
+41 verbose headers   vary: 'Accept-Encoding, Accept' }
+42 verbose request invalidating /Users/jenan/.npm/registry.npmjs.org/react-stripe-elements on PUT
+43 error publish Failed PUT 403
+44 verbose stack Error: "You cannot publish over the previously published version 0.0.4." : react-stripe-elements
+44 verbose stack     at makeError (/Users/jenan/.nvm/versions/node/v6.11.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+44 verbose stack     at CachingRegistryClient.<anonymous> (/Users/jenan/.nvm/versions/node/v6.11.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+44 verbose stack     at Request._callback (/Users/jenan/.nvm/versions/node/v6.11.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+44 verbose stack     at Request.self.callback (/Users/jenan/.nvm/versions/node/v6.11.1/lib/node_modules/npm/node_modules/request/request.js:187:22)
+44 verbose stack     at emitTwo (events.js:106:13)
+44 verbose stack     at Request.emit (events.js:191:7)
+44 verbose stack     at Request.<anonymous> (/Users/jenan/.nvm/versions/node/v6.11.1/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+44 verbose stack     at emitOne (events.js:96:13)
+44 verbose stack     at Request.emit (events.js:188:7)
+44 verbose stack     at IncomingMessage.<anonymous> (/Users/jenan/.nvm/versions/node/v6.11.1/lib/node_modules/npm/node_modules/request/request.js:969:12)
+45 verbose statusCode 403
+46 verbose pkgid react-stripe-elements
+47 verbose cwd /Users/jenan/stripe/react-stripe-elements
+48 error Darwin 16.7.0
+49 error argv "/Users/jenan/.nvm/versions/node/v6.11.1/bin/node" "/Users/jenan/.nvm/versions/node/v6.11.1/bin/npm" "publish"
+50 error node v6.11.1
+51 error npm  v3.10.10
+52 error code E403
+53 error "You cannot publish over the previously published version 0.0.4." : react-stripe-elements
+54 error If you need help, you may report this error at:
+54 error     <https://github.com/npm/npm/issues>
+55 verbose exit [ 1, true ]
