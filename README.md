@@ -93,9 +93,15 @@ export default MyStoreCheckout;
 
 ### Setting up your payment form (`injectStripe`)
 
-Use the `injectStripe` Higher-Order Component (HOC) to build your payment form components in the `Elements` tree. This HOC injects the `stripe`
-instance that manages your `Elements` groups. You can call `createToken` on the injected `stripe` instance to submit
-payment data to Stripe.
+Use the `injectStripe` Higher-Order Component (HOC) to build your payment form
+components in the `Elements` tree. This HOC injects the `stripe` instance that
+manages your `Elements` groups. You can call `createToken` on the injected
+`stripe` instance to submit payment data to Stripe.
+
+> ⚠️ NOTE: `injectStripe` cannot be used on the same element that renders the
+> `Elements` component; it must be used on the child component of `Elements`.
+> This is strictly because the component using `injectStripe` is injected with
+> the `stripe` prop at build time, before its `render` method is invoked.
 
 ```js
 // CheckoutForm.js
