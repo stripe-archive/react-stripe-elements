@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-console, react/no-multi-comp */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 
 import type {StripeProps} from '../src/components/inject';
 
@@ -176,4 +176,4 @@ const App = () => {
     </StripeProvider>
   );
 };
-ReactDOM.render(<App />, document.querySelector('.App'));
+render(<App />, document.querySelector('.App'));
