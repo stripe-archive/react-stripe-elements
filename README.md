@@ -50,6 +50,7 @@ let's add `StripeProvider` to our root React App component:
 ```js
 // index.js
 import React from 'react';
+import { render } from 'react-dom';
 import {StripeProvider} from 'react-stripe-elements';
 
 import MyStoreCheckout from './MyStoreCheckout';
@@ -62,7 +63,7 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+render(<App />, document.getElementById('root'));
 ```
 
 ### Element groups (`Elements`)
