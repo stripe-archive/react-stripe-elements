@@ -5,4 +5,5 @@ script:
   - npm run lint
   - npm run flow
   - npm run test
+  - npm run prettier-list-different
 cache: yarn

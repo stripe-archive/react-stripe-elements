@@ -37,10 +37,10 @@ describe('index', () => {
   });
 
   const WrappedCheckout = (type, additionalOptions) => {
-    const MyCheckout = (props) => {
+    const MyCheckout = props => {
       return (
         <form
-          onSubmit={(ev) => {
+          onSubmit={ev => {
             ev.preventDefault();
             if (type === 'token') {
               props.stripe.createToken(additionalOptions);
@@ -111,9 +111,9 @@ describe('index', () => {
     });
 
     it('should be callable for other token types', () => {
-      const Checkout = injectStripe((props) => (
+      const Checkout = injectStripe(props =>
         <form
-          onSubmit={(ev) => {
+          onSubmit={ev => {
             ev.preventDefault();
             props.stripe.createToken('bank_account', {some: 'data'});
           }}
@@ -121,13 +121,11 @@ describe('index', () => {
           {props.children}
           <button>Pay</button>
         </form>
-      ));
+      );
       const app = mount(
         <StripeProvider apiKey="pk_test_xxx">
           <Elements>
-            <Checkout>
-              Hello world
-            </Checkout>
+            <Checkout>Hello world</Checkout>
           </Elements>
         </StripeProvider>
       );
@@ -177,9 +175,9 @@ describe('index', () => {
     });
 
     it('should be callable for other source types', () => {
-      const Checkout = injectStripe((props) => (
+      const Checkout = injectStripe(props =>
         <form
-          onSubmit={(ev) => {
+          onSubmit={ev => {
             ev.preventDefault();
             props.stripe.createSource({
               type: 'three_d_secure',
@@ -190,13 +188,11 @@ describe('index', () => {
           {props.children}
           <button>Pay</button>
         </form>
-      ));
+      );
       const app = mount(
         <StripeProvider apiKey="pk_test_xxx">
           <Elements>
-            <Checkout>
-              Hello world
-            </Checkout>
+            <Checkout>Hello world</Checkout>
           </Elements>
         </StripeProvider>
       );
@@ -236,9 +232,7 @@ describe('index', () => {
         const app = mount(
           <StripeProvider apiKey="pk_test_xxx">
             <Elements>
-              <Checkout>
-                Hello world
-              </Checkout>
+              <Checkout>Hello world</Checkout>
             </Elements>
           </StripeProvider>
         );
@@ -269,9 +263,7 @@ describe('index', () => {
         const app = mount(
           <StripeProvider apiKey="pk_test_xxx">
             <Elements>
-              <Checkout>
-                Hello world
-              </Checkout>
+              <Checkout>Hello world</Checkout>
             </Elements>
           </StripeProvider>
         );

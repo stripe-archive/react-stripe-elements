@@ -27,7 +27,9 @@ const inject = <P: Object>(
         })
       ),
     };
-    static displayName = `InjectStripe(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+    static displayName = `InjectStripe(${WrappedComponent.displayName ||
+      WrappedComponent.name ||
+      'Component'})`;
 
     constructor(props: P, context: Context) {
       if (!context || !context.registeredElements) {
@@ -65,9 +67,10 @@ Please be sure the component that calls createSource or createToken is within an
     // Finds the element by the specified type. Throws if multiple Elements match.
     findElement = (specifiedType: string): ?ElementShape => {
       const allElements = this.context.registeredElements || [];
-      const matchingElements = specifiedType === 'auto'
-        ? allElements
-        : allElements.filter(({type}) => type === specifiedType);
+      const matchingElements =
+        specifiedType === 'auto'
+          ? allElements
+          : allElements.filter(({type}) => type === specifiedType);
 
       if (matchingElements.length === 1) {
         return matchingElements[0].element;

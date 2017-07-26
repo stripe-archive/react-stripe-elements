@@ -271,6 +271,10 @@ Build:
 
     yarn run build
 
+Code formatting:
+
+    yarn run prettier
+
 Checks:
 
     yarn run lint
