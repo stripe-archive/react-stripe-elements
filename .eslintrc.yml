@@ -2,6 +2,10 @@
 extends:
   - stripe
   - plugin:flowtype/recommended
+  # overwrite any rules that may conflict with prettier
+  - "prettier"
+  - "prettier/flowtype"
+  - "prettier/react"
 parser: 'babel-eslint'
 plugins:
   - flowtype
@@ -13,7 +17,9 @@ rules:
   no-duplicate-imports: 0 # doesn't support flow imports.
   no-console: 1 # disable this while undergoing lots of development.
   func-style: 2
-  arrow-parens: 2
+  arrow-parens:
+    - 2
+    - 'as-needed'
   consistent-return: 2
   prefer-arrow-callback:
     - 2

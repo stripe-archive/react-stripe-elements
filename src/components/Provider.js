@@ -16,16 +16,18 @@ export default class Provider extends React.Component {
   static propTypes = {
     apiKey: PropTypes.string.isRequired,
     children: PropTypes.any,
-  }
+  };
   static childContextTypes = {
     stripe: PropTypes.object.isRequired,
-  }
+  };
 
   constructor(props: Props) {
     super(props);
 
     if (!window.Stripe) {
-      throw new Error('Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.');
+      throw new Error(
+        'Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.'
+      );
     }
 
     const {apiKey, children, ...options} = this.props;
@@ -40,14 +42,21 @@ export default class Provider extends React.Component {
     };
   }
   componentWillReceiveProps(nextProps: Props) {
-    if (!this._didWarn && this.props.apiKey !== nextProps.apiKey && window.console && window.console.error) {
+    if (
+      !this._didWarn &&
+      this.props.apiKey !== nextProps.apiKey &&
+      window.console &&
+      window.console.error
+    ) {
       this._didWarn = true;
-      console.error('StripeProvider does not support changing the apiKey parameter.'); // eslint-disable-line no-console
+      console.error(
+        'StripeProvider does not support changing the apiKey parameter.'
+      ); // eslint-disable-line no-console
     }
   }
-  props: Props
-  _stripe: StripeShape
-  _didWarn: boolean
+  props: Props;
+  _stripe: StripeShape;
+  _didWarn: boolean;
 
   render() {
     return React.Children.only(this.props.children);

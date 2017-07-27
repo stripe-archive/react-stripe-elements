@@ -16,7 +16,7 @@ import {
   injectStripe,
 } from '../src/index';
 
-const handleChange = (change) => {
+const handleChange = change => {
   console.log('[change]', change);
 };
 const handleFocus = () => {
@@ -52,11 +52,11 @@ class _CardForm extends React.Component {
   props: {
     fontSize: string,
     stripe: StripeProps,
-  }
-  handleSubmit = (ev) => {
+  };
+  handleSubmit = ev => {
     ev.preventDefault();
-    this.props.stripe.createToken().then((payload) => console.log(payload));
-  }
+    this.props.stripe.createToken().then(payload => console.log(payload));
+  };
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -81,11 +81,11 @@ class _SplitForm extends React.Component {
   props: {
     fontSize: string,
     stripe: StripeProps,
-  }
-  handleSubmit = (ev) => {
+  };
+  handleSubmit = ev => {
     ev.preventDefault();
-    this.props.stripe.createToken().then((payload) => console.log(payload));
-  }
+    this.props.stripe.createToken().then(payload => console.log(payload));
+  };
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -145,14 +145,17 @@ class Checkout extends React.Component {
     window.addEventListener('resize', () => {
       if (window.innerWidth < 450 && this.state.elementFontSize !== '14px') {
         this.setState({elementFontSize: '14px'});
-      } else if (window.innerWidth >= 450 && this.state.elementFontSize !== '18px') {
+      } else if (
+        window.innerWidth >= 450 &&
+        this.state.elementFontSize !== '18px'
+      ) {
         this.setState({elementFontSize: '18px'});
       }
     });
   }
   state: {
     elementFontSize: string,
-  }
+  };
 
   render() {
     const {elementFontSize} = this.state;

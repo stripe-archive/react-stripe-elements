@@ -271,6 +271,10 @@ Build:
 
     yarn run build
 
+We use We use [prettier](https://github.com/prettier/prettier) for code formatting:
+
+    yarn run prettier
+
 Checks:
 
     yarn run lint

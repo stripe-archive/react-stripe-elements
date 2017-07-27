@@ -27,10 +27,7 @@ describe('Element', () => {
 
   it('should call the right hooks for a source Element', () => {
     const SourceElement = Element('source', {sourceType: 'foobar'});
-    const element = mount(
-      <SourceElement onChange={jest.fn()} />,
-      {context}
-    );
+    const element = mount(<SourceElement onChange={jest.fn()} />, {context});
 
     expect(context.registerElement).toHaveBeenCalledTimes(1);
     expect(context.registerElement).toHaveBeenCalledWith('foobar', elementMock);
@@ -43,10 +40,7 @@ describe('Element', () => {
 
   it('should call the right hooks for a non-source Element', () => {
     const SourceElement = Element('source');
-    const element = mount(
-      <SourceElement onChange={jest.fn()} />,
-      {context}
-    );
+    const element = mount(<SourceElement onChange={jest.fn()} />, {context});
 
     expect(context.registerElement).toHaveBeenCalledTimes(0);
 
@@ -74,6 +68,8 @@ describe('Element', () => {
 
     element.setProps({style: {base: {fontSize: '20px'}}, onChange: jest.fn()});
     expect(elementMock.update).toHaveBeenCalledTimes(1);
-    expect(elementMock.update).toHaveBeenCalledWith({style: {base: {fontSize: '20px'}}});
+    expect(elementMock.update).toHaveBeenCalledWith({
+      style: {base: {fontSize: '20px'}},
+    });
   });
 });
