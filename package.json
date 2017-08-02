@@ -62,7 +62,8 @@
     "react-test-renderer": "^15.5.4",
     "rimraf": "^2.6.1",
     "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack-dev-server": "^2.4.5",
+    "yarn": "0.27.5"
   },
   "peerDependencies": {
     "react": "^15.5.4",
