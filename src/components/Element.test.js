@@ -1,6 +1,6 @@
 // @noflow
 import React from 'react';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 
 import Element from './Element';
 
@@ -23,6 +23,13 @@ describe('Element', () => {
       registerElement: jest.fn(),
       unregisterElement: jest.fn(),
     };
+  });
+
+  it('should pass className to the DOM element', () => {
+    const className = 'my-class';
+    const CardElement = Element('card', {sourceType: 'card'});
+    const element = shallow(<CardElement className={className} />, {context});
+    expect(element.first().hasClass(className)).toBeTruthy();
   });
 
   it('should call the right hooks for a source Element', () => {

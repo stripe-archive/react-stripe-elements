@@ -219,6 +219,7 @@ These components accept all `options` that can be passed into `elements.create(t
 
 ```js
 type ElementProps = {
+  className?: string,
   elementRef?: (StripeElement) => void,
 
   // For full documentation on the events and payloads below, see:
