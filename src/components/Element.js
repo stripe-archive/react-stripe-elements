@@ -106,7 +106,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       this._ref = ref;
     };
     render() {
-      return <span className={this.props.className} ref={this.handleRef} />;
+      return <div className={this.props.className} ref={this.handleRef} />;
     }
   };
 
