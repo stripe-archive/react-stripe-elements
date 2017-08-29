@@ -94,15 +94,21 @@ export default MyStoreCheckout;
 
 ### Setting up your payment form (`injectStripe`)
 
-Use the `injectStripe` Higher-Order Component (HOC) to build your payment form
-components in the `Elements` tree. This HOC injects the `stripe` instance that
-manages your `Elements` groups. You can call `createToken` on the injected
-`stripe` instance to submit payment data to Stripe.
+Use the `injectStripe` [Higher-Order Component][hoc] (HOC) to build your payment
+form components in the `Elements` tree. The [Higher-Order Component][hoc]
+pattern in React can be unfamiliar to those who've never seen it before, so
+consider reading up before continuing. The `injectStripe` HOC provides the
+`this.props.stripe` property that manages your `Elements` groups. You can call
+`this.props.stripe.createToken` within a component that has been injected to
+submit payment data to Stripe.
 
-> ⚠️ NOTE: `injectStripe` cannot be used on the same element that renders the
-> `Elements` component; it must be used on the child component of `Elements`.
-> This is strictly because the component using `injectStripe` is injected with
-> the `stripe` prop at build time, before its `render` method is invoked.
+[hoc]: https://facebook.github.io/react/docs/higher-order-components.html
+
+> :warning: NOTE `injectStripe` cannot be used on the same element that renders
+> the `Elements` component; it must be used on the child component of
+> `Elements`. `injectStripe` *returns a wrapped component* that needs to sit
+> under `<Elements>` but above any code where you'd like to access
+> `this.props.stripe`.
 
 ```js
 // CheckoutForm.js
