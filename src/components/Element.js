@@ -1,22 +1,25 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import shallowEqual from '../utils/shallowEqual';
 import type {ElementContext} from './Elements';
 
 type Props = {
-  className: string,
-  elementRef: Function,
-  onChange: Function,
-  onBlur: Function,
-  onFocus: Function,
-  onReady: Function,
+  className?: string,
+  elementRef?: Function,
+  onChange?: Function,
+  onBlur?: Function,
+  onFocus?: Function,
+  onReady?: Function,
 };
 
 const noop = () => {};
 
-const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
-  class extends React.Component {
+const Element = (
+  type: string,
+  hocOptions: {sourceType?: string} = {}
+): React.ComponentType<Props> =>
+  class extends React.Component<Props> {
     static propTypes = {
       className: PropTypes.string,
       elementRef: PropTypes.func,
@@ -72,21 +75,35 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     props: Props;
     context: ElementContext;
     _element: ElementShape;
-    _ref: ?HTMLElement;
+    _ref: ?React.Ref<any>;
     _options: Object;
 
     _setupEventListeners() {
-      this._element.on('ready', () => {
-        this.props.elementRef(this._element);
-        this.props.onReady();
-      });
+      const { elementRef, onReady, onChange, onBlur, onFocus } = this.props
 
-      this._element.on('change', change => {
-        this.props.onChange(change);
-      });
+      if (elementRef) {
+        this._element.on('ready', () => {
+          elementRef(this._element);
+        });
+      }
 
-      this._element.on('blur', (...args) => this.props.onBlur(...args));
-      this._element.on('focus', (...args) => this.props.onFocus(...args));
+      if (onReady) {
+        this._element.on('ready', () => {
+          onReady();
+        });
+      }
+
+      if (onChange) {
+        this._element.on('change', change => onChange(change));
+      }
+
+      if (onBlur) {
+        this._element.on('blur', (...args) => onBlur(...args));
+      }
+
+      if (onFocus) {
+        this._element.on('focus', (...args) => onFocus(...args));
+      }
     }
 
     _extractOptions(props: Props): Object {
@@ -102,7 +119,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       return options;
     }
 
-    handleRef = (ref: HTMLElement) => {
+    handleRef = (ref: ?React.Ref<any>) => {
       this._ref = ref;
     };
     render() {
