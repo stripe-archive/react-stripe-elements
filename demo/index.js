@@ -136,7 +136,7 @@ class _SplitForm extends React.Component<*> {
 }
 const SplitForm = injectStripe(_SplitForm);
 
-class Checkout extends React.Component<*,*> {
+class Checkout extends React.Component<*, *> {
   constructor() {
     super();
     this.state = {

@@ -79,7 +79,7 @@ const Element = (
     _options: Object;
 
     _setupEventListeners() {
-      const { elementRef, onReady, onChange, onBlur, onFocus } = this.props
+      const {elementRef, onReady, onChange, onBlur, onFocus} = this.props;
 
       if (elementRef) {
         this._element.on('ready', () => {
