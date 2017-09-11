@@ -240,7 +240,17 @@ type ElementProps = {
 
 ### `injectStripe` HOC
 
+```
+function injectStripe(
+  WrappedComponent: ReactClass,
+  options?: {
+    withRef?: boolean = false,
+  }
+): ReactClass;
+```
 Components that need to initiate Source or Token creations (e.g. a checkout form component) can access `stripe.createToken` via props of any component returned by the `injectStripe` HOC factory.
+
+If the `withRef` option is set to `true`, the wrapped component instance will be available with the `getWrappedInstance()` method of the wrapper component. This feature can not be used if the wrapped component is a stateless function component.
 
 #### Example
 

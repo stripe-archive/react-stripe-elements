@@ -7,6 +7,10 @@ import type {StripeContext} from './Provider';
 
 type Context = FormContext & StripeContext;
 
+type Options = {
+  withRef?: boolean,
+};
+
 export type StripeProps = {
   createToken: Function,
   createSource: Function,
@@ -15,9 +19,12 @@ export type StripeProps = {
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
 const inject = <P: Object>(
-  WrappedComponent: ReactClass<P & StripeProps>
-): ReactClass<P> =>
-  class extends React.Component {
+  WrappedComponent: ReactClass<P & StripeProps>,
+  componentOptions: Options = {}
+): ReactClass<P> => {
+  const {withRef = false} = componentOptions;
+
+  return class extends React.Component {
     static contextTypes = {
       stripe: PropTypes.object.isRequired,
       registeredElements: PropTypes.arrayOf(
@@ -43,6 +50,7 @@ Please be sure the component that calls createSource or createToken is within an
     }
 
     context: Context;
+    wrappedInstance: ?WrappedComponent;
 
     stripeProps(): StripeProps {
       return {
@@ -83,6 +91,14 @@ Please be sure the component that calls createSource or createToken is within an
         return null;
       }
     };
+    getWrappedInstance() {
+      if (!withRef) {
+        throw new Error(
+          'To access the wrapped instance, the `{withRef: true}` option must be set when calling `injectStripe()`'
+        );
+      }
+      return this.wrappedInstance;
+    }
     // createToken has a bit of an unusual method signature for legacy reasons
     // -- we're allowed to pass in the token type OR the element as the first parameter,
     // so we need to check if we're passing in a string as the first parameter and
@@ -123,8 +139,21 @@ Please be sure the component that calls createSource or createToken is within an
       }
     };
     render() {
-      return <WrappedComponent {...this.props} stripe={this.stripeProps()} />;
+      return (
+        <WrappedComponent
+          {...this.props}
+          stripe={this.stripeProps()}
+          ref={
+            withRef
+              ? c => {
+                  this.wrappedInstance = c;
+                }
+              : null
+          }
+        />
+      );
     }
   };
+};
 
 export default inject;
