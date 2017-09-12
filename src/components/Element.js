@@ -5,12 +5,12 @@ import shallowEqual from '../utils/shallowEqual';
 import type {ElementContext} from './Elements';
 
 type Props = {
-  className?: string,
-  elementRef?: Function,
-  onChange?: Function,
-  onBlur?: Function,
-  onFocus?: Function,
-  onReady?: Function,
+  className: string,
+  elementRef: Function,
+  onChange: Function,
+  onBlur: Function,
+  onFocus: Function,
+  onReady: Function,
 };
 
 const noop = () => {};
@@ -81,29 +81,17 @@ const Element = (
     _setupEventListeners() {
       const {elementRef, onReady, onChange, onBlur, onFocus} = this.props;
 
-      if (elementRef) {
-        this._element.on('ready', () => {
-          elementRef(this._element);
-        });
-      }
+      this._element.on('ready', () => {
+        elementRef(this._element);
+      });
 
-      if (onReady) {
-        this._element.on('ready', () => {
-          onReady();
-        });
-      }
+      this._element.on('ready', () => {
+        onReady();
+      });
 
-      if (onChange) {
-        this._element.on('change', change => onChange(change));
-      }
-
-      if (onBlur) {
-        this._element.on('blur', (...args) => onBlur(...args));
-      }
-
-      if (onFocus) {
-        this._element.on('focus', (...args) => onFocus(...args));
-      }
+      this._element.on('change', change => onChange(change));
+      this._element.on('blur', (...args) => onBlur(...args));
+      this._element.on('focus', (...args) => onFocus(...args));
     }
 
     _extractOptions(props: Props): Object {
