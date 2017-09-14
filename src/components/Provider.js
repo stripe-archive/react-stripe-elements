@@ -11,7 +11,7 @@ export type StripeContext = {
   stripe: StripeShape,
 };
 
-export default class Provider extends React.Component {
+export default class Provider extends React.Component<Props> {
   // Even though we're using flow, also use PropTypes so we can take advantage of developer warnings.
   static propTypes = {
     apiKey: PropTypes.string.isRequired,

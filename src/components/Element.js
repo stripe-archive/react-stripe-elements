@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 import shallowEqual from '../utils/shallowEqual';
 import type {ElementContext} from './Elements';
@@ -28,8 +28,11 @@ const _extractOptions = (props: Props): Object => {
   return options;
 };
 
-const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
-  class extends React.Component {
+const Element = (
+  type: string,
+  hocOptions: {sourceType?: string} = {}
+): React.ComponentType<Props> =>
+  class extends React.Component<Props> {
     static propTypes = {
       className: PropTypes.string,
       elementRef: PropTypes.func,
@@ -102,7 +105,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       this._element.on('focus', (...args) => this.props.onFocus(...args));
     }
 
-    handleRef = (ref: HTMLElement) => {
+    handleRef = (ref: ?HTMLElement) => {
       this._ref = ref;
     };
     render() {
