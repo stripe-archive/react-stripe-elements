@@ -57,12 +57,10 @@ describe('injectStripe()', () => {
     const originalConsoleError = global.console.error;
     global.console.error = msg => {
       if (
-        msg.startsWith(
+        !msg.startsWith(
           'Warning: Failed context type: The context `stripe` is marked as required'
         )
       ) {
-        return;
-      } else {
         originalConsoleError(msg);
       }
     };
@@ -145,8 +143,9 @@ Please be sure the component that calls createSource or createToken is within an
     // refs won't work with stateless functional components
     class WrappedClassComponent extends React.Component {
       static displayName = 'WrappedClassComponent';
+      foo: 'bar';
       render() {
-        return <div />;
+        return <div>{this.foo}</div>;
       }
     }
 
