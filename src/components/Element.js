@@ -15,6 +15,19 @@ type Props = {
 
 const noop = () => {};
 
+const _extractOptions = (props: Props): Object => {
+  const {
+    className,
+    elementRef,
+    onChange,
+    onFocus,
+    onBlur,
+    onReady,
+    ...options
+  } = props;
+  return options;
+};
+
 const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
   class extends React.Component {
     static propTypes = {
@@ -43,7 +56,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     constructor(props: Props, context: ElementContext) {
       super(props, context);
 
-      const options = this._extractOptions(this.props);
+      const options = _extractOptions(this.props);
       this._element = this.context.elements.create(type, options);
       this._setupEventListeners();
       this._options = options;
@@ -56,7 +69,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       }
     }
     componentWillReceiveProps(nextProps: Props) {
-      const options = this._extractOptions(nextProps);
+      const options = _extractOptions(nextProps);
       if (
         Object.keys(options).length !== 0 &&
         !shallowEqual(options, this._options)
@@ -87,19 +100,6 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
 
       this._element.on('blur', (...args) => this.props.onBlur(...args));
       this._element.on('focus', (...args) => this.props.onFocus(...args));
-    }
-
-    _extractOptions(props: Props): Object {
-      const {
-        className,
-        elementRef,
-        onChange,
-        onFocus,
-        onBlur,
-        onReady,
-        ...options
-      } = props;
-      return options;
     }
 
     handleRef = (ref: HTMLElement) => {
