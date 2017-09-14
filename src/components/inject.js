@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import type {FormContext} from './Elements';
@@ -18,13 +18,13 @@ export type StripeProps = {
 
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
-const inject = <P: Object>(
-  WrappedComponent: ReactClass<P & StripeProps>,
+const inject = <Props: {}>(
+  WrappedComponent: React.ComponentType<{stripe: StripeProps} & Props>,
   componentOptions: Options = {}
-): ReactClass<P> => {
+): React.ComponentType<Props> => {
   const {withRef = false} = componentOptions;
 
-  return class extends React.Component {
+  return class extends React.Component<Props, any> {
     static contextTypes = {
       stripe: PropTypes.object.isRequired,
       registeredElements: PropTypes.arrayOf(
@@ -38,7 +38,7 @@ const inject = <P: Object>(
       WrappedComponent.name ||
       'Component'})`;
 
-    constructor(props: P, context: Context) {
+    constructor(props: Props, context: Context) {
       if (!context || !context.registeredElements) {
         throw new Error(
           `It looks like you are trying to inject Stripe context outside of an Elements context.
@@ -59,7 +59,7 @@ Please be sure the component that calls createSource or createToken is within an
     }
 
     context: Context;
-    wrappedInstance: ?WrappedComponent;
+    wrappedInstance: ?React.Component<Object, any>;
 
     stripeProps(): StripeProps {
       return {
