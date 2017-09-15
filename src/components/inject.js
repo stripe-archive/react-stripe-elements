@@ -115,7 +115,7 @@ Please be sure the component that calls createSource or createToken is within an
         return this.context.stripe.createToken(typeOrOptions, options);
       } else {
         throw new Error(
-          `Invalid options passed to createToken. Expected an object, got ${typeof options}.`
+          `Invalid options passed to createToken. Expected an object, got ${typeof typeOrOptions}.`
         );
       }
     };

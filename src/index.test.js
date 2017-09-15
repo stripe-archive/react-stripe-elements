@@ -111,7 +111,7 @@ describe('index', () => {
     });
 
     it('should be callable for other token types', () => {
-      const Checkout = injectStripe(props =>
+      const Checkout = injectStripe(props => (
         <form
           onSubmit={ev => {
             ev.preventDefault();
@@ -121,7 +121,7 @@ describe('index', () => {
           {props.children}
           <button>Pay</button>
         </form>
-      );
+      ));
       const app = mount(
         <StripeProvider apiKey="pk_test_xxx">
           <Elements>
@@ -175,7 +175,7 @@ describe('index', () => {
     });
 
     it('should be callable for other source types', () => {
-      const Checkout = injectStripe(props =>
+      const Checkout = injectStripe(props => (
         <form
           onSubmit={ev => {
             ev.preventDefault();
@@ -188,7 +188,7 @@ describe('index', () => {
           {props.children}
           <button>Pay</button>
         </form>
-      );
+      ));
       const app = mount(
         <StripeProvider apiKey="pk_test_xxx">
           <Elements>
@@ -205,27 +205,7 @@ describe('index', () => {
     });
   });
 
-  describe('updating props', () => {
-    it('should warn when attempting to update API key', () => {
-      const stripe = mount(
-        <StripeProvider apiKey="pk_test_xxx">
-          <form />
-        </StripeProvider>
-      );
-      console.error = jest.fn();
-      stripe.setProps({apiKey: 'pk_test_yyy'});
-      expect(console.error).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('errors', () => {
-    it('Provider should throw if Stripe is not loaded', () => {
-      window.Stripe = undefined;
-      expect(() => mount(<StripeProvider apiKey="pk_test_xxx" />)).toThrowError(
-        /js.stripe.com\/v3/
-      );
-    });
-
     describe('createSource', () => {
       it('should throw when no Element found', () => {
         const Checkout = WrappedCheckout('source');
