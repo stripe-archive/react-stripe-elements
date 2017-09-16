@@ -32,7 +32,9 @@ export default class Elements extends React.Component<Props, FormContext> {
   static contextTypes = {
     stripe: PropTypes.object.isRequired,
   };
-
+  static defaultProps = {
+    children: null,
+  };
   constructor(props: Props, context: StripeContext) {
     super(props, context);
 

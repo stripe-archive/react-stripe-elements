@@ -240,7 +240,17 @@ type ElementProps = {
 
 ### `injectStripe` HOC
 
+```
+function injectStripe(
+  WrappedComponent: ReactClass,
+  options?: {
+    withRef?: boolean = false,
+  }
+): ReactClass;
+```
 Components that need to initiate Source or Token creations (e.g. a checkout form component) can access `stripe.createToken` via props of any component returned by the `injectStripe` HOC factory.
+
+If the `withRef` option is set to `true`, the wrapped component instance will be available with the `getWrappedInstance()` method of the wrapper component. This feature can not be used if the wrapped component is a stateless function component.
 
 #### Example
 
@@ -260,6 +270,30 @@ type FactoryProps = {
 };
 ```
 
+## Troubleshooting
+
+`react-stripe-elements` may not work properly when used with components that implement `shouldComponentUpdate`. `react-stripe-elements` relies heavily on React's `context` feature and `shouldComponentUpdate` does not provide a way to take context updates into account when deciding whether to allow a re-render. These components can block context updates from reaching `react-stripe-element` components in the tree.
+
+For example, when using `react-stripe-elements` together with [`react-redux`](https://github.com/reactjs/react-redux) doing the following will not work:
+```js
+const Component = connect()(injectStripe(_Component));
+```
+In this case, the context updates originating from the `StripeProvider` are not reaching the components wrapped inside the `connect` function. Therefore, `react-stripe-elements` components deeper in the tree break. The reason is that the `connect` function of `react-redux` [implements `shouldComponentUpdate`](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux) and blocks re-renders that are triggered by context changes outside of the connected component.
+
+There are two ways to prevent this issue:
+
+1. Change the order of the functions to have `injectStripe` be the outermost one:
+  ```js
+  const Component = injectStripe(connect()(_CardForm));
+  ```
+  This works, because `injectStripe` does not implement `shouldComponentUpdate` itself, so context updates originating from the `redux` `Provider` will still reach all components.
+
+2. You can use the [`pure: false`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) option for `redux-connect`:
+  ```js
+  const Component = connect(mapStateToProps, mapDispatchToProps, mergeProps, {
+    pure: false,
+  })(injectStripe(_CardForm));
+  ```
 
 ## Development
 

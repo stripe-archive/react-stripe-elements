@@ -15,10 +15,13 @@ export default class Provider extends React.Component<Props> {
   // Even though we're using flow, also use PropTypes so we can take advantage of developer warnings.
   static propTypes = {
     apiKey: PropTypes.string.isRequired,
-    children: PropTypes.any,
+    children: PropTypes.node,
   };
   static childContextTypes = {
     stripe: PropTypes.object.isRequired,
+  };
+  static defaultProps = {
+    children: null,
   };
 
   constructor(props: Props) {
