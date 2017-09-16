@@ -17,7 +17,7 @@ export type FormContext = {
 };
 type ElementsContext = ElementContext & FormContext;
 
-export default class Elements extends React.Component {
+export default class Elements extends React.Component<Props, FormContext> {
   static childContextTypes = {
     elements: PropTypes.object.isRequired,
     registerElement: PropTypes.func.isRequired,
