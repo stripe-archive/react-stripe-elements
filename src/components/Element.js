@@ -78,7 +78,6 @@ class Element extends React.Component<Props> {
   _ref: ?React.Ref<any>;
   _options: Object;
 
-<<<<<<< HEAD
   _setupEventListeners() {
     const {elementRef, onReady, onChange, onBlur, onFocus} = this.props;
 
@@ -132,14 +131,6 @@ type FinalProps = {
 const makeElement = (type: string, options: Options = {}) => {
   const WrappedElement = (props: FinalProps) => {
     return <Element type={type} {...options} {...props} />;
-=======
-    handleRef = (ref: HTMLElement) => {
-      this._ref = ref;
-    };
-    render() {
-      return <div className={this.props.className} ref={this.handleRef} />;
-    }
->>>>>>> upstream/master
   };
 
   WrappedElement.displayName = type.substr(0, 1).toLowerCase() + type.substr(1);
