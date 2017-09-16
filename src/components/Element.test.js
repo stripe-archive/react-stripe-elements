@@ -2,7 +2,7 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 
-import Element from './Element';
+import makeElement from './Element';
 
 describe('Element', () => {
   let elementMock;
@@ -27,13 +27,13 @@ describe('Element', () => {
 
   it('should pass className to the DOM element', () => {
     const className = 'my-class';
-    const CardElement = Element('card', {sourceType: 'card'});
+    const CardElement = makeElement('card', {sourceType: 'card'});
     const element = shallow(<CardElement className={className} />, {context});
     expect(element.first().hasClass(className)).toBeTruthy();
   });
 
   it('should call the right hooks for a source Element', () => {
-    const SourceElement = Element('source', {sourceType: 'foobar'});
+    const SourceElement = makeElement('source', {sourceType: 'foobar'});
     const element = mount(<SourceElement onChange={jest.fn()} />, {context});
 
     expect(context.registerElement).toHaveBeenCalledTimes(1);
@@ -46,7 +46,7 @@ describe('Element', () => {
   });
 
   it('should call the right hooks for a non-source Element', () => {
-    const SourceElement = Element('source');
+    const SourceElement = makeElement('source');
     const element = mount(<SourceElement onChange={jest.fn()} />, {context});
 
     expect(context.registerElement).toHaveBeenCalledTimes(0);
@@ -63,7 +63,7 @@ describe('Element', () => {
         fontSize: '16px',
       },
     };
-    const SourceElement = Element('source', {sourceType: 'foobar'});
+    const SourceElement = makeElement('source', {sourceType: 'foobar'});
     const element = mount(
       <SourceElement onChange={jest.fn()} style={style} />,
       {context}
@@ -76,6 +76,8 @@ describe('Element', () => {
     element.setProps({style: {base: {fontSize: '20px'}}, onChange: jest.fn()});
     expect(elementMock.update).toHaveBeenCalledTimes(1);
     expect(elementMock.update).toHaveBeenCalledWith({
+      type: 'source',
+      sourceType: 'foobar',
       style: {base: {fontSize: '20px'}},
     });
   });
