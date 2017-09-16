@@ -294,11 +294,7 @@ describe('injectStripe()', () => {
       static displayName = 'WrappedClassComponent';
       foo: 'bar';
       render() {
-        return (
-          <div>
-            {this.foo}
-          </div>
-        );
+        return <div>{this.foo}</div>;
       }
     }
 
