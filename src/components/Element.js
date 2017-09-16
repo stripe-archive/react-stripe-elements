@@ -131,15 +131,15 @@ type FinalProps = {
 const makeElement = (type: string, options: Options = {}) => {
   const WrappedElement = (props: FinalProps) => {
     return <Element type={type} {...options} {...props} />;
-  }
+  };
 
-  WrappedElement.displayName = type.substr(0, 1).toLowerCase() + type.substr(1)
+  WrappedElement.displayName = type.substr(0, 1).toLowerCase() + type.substr(1);
   WrappedElement.contextTypes = {
     elements: PropTypes.object.isRequired,
     registerElement: PropTypes.func.isRequired,
     unregisterElement: PropTypes.func.isRequired,
-  }
-  return WrappedElement
-}
+  };
+  return WrappedElement;
+};
 
 export default makeElement;
