@@ -59,7 +59,7 @@ Please be sure the component that calls createSource or createToken is within an
     }
 
     context: Context;
-    wrappedInstance: ?React.Component<Object, any>;
+    wrappedInstance: ?React.Component<{stripe: StripeProps} & Props, any>;
 
     stripeProps(): StripeProps {
       return {
