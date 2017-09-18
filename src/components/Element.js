@@ -28,7 +28,7 @@ const _extractOptions = (props: Props): Object => {
   return options;
 };
 
-const Element = (type: string, hocOptions: {sourceType?: string} = {}): * =>
+const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
   class extends React.Component<Props> {
     static propTypes = {
       className: PropTypes.string,
