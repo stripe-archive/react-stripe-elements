@@ -48,11 +48,10 @@ const createOptions = (fontSize: string) => {
   };
 };
 
-class _CardForm extends React.Component {
-  props: {
-    fontSize: string,
-    stripe: StripeProps,
-  };
+class _CardForm extends React.Component<{
+  fontSize: string,
+  stripe: StripeProps,
+}> {
   handleSubmit = ev => {
     ev.preventDefault();
     this.props.stripe.createToken().then(payload => console.log(payload));
@@ -77,11 +76,10 @@ class _CardForm extends React.Component {
 }
 const CardForm = injectStripe(_CardForm);
 
-class _SplitForm extends React.Component {
-  props: {
-    fontSize: string,
-    stripe: StripeProps,
-  };
+class _SplitForm extends React.Component<{
+  fontSize: string,
+  stripe: StripeProps,
+}> {
   handleSubmit = ev => {
     ev.preventDefault();
     this.props.stripe.createToken().then(payload => console.log(payload));
@@ -136,7 +134,7 @@ class _SplitForm extends React.Component {
 }
 const SplitForm = injectStripe(_SplitForm);
 
-class Checkout extends React.Component {
+class Checkout extends React.Component<{}, {elementFontSize: string}> {
   constructor() {
     super();
     this.state = {
@@ -153,9 +151,6 @@ class Checkout extends React.Component {
       }
     });
   }
-  state: {
-    elementFontSize: string,
-  };
 
   render() {
     const {elementFontSize} = this.state;
