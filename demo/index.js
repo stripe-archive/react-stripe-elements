@@ -169,7 +169,7 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
 }
 const App = () => {
   return (
-    <StripeProvider apiKey="pk_RXwtgk4Z5VR82S94vtwmam6P8qMXQ">
+    <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
       <Checkout />
     </StripeProvider>
   );
