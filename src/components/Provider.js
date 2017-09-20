@@ -5,12 +5,14 @@ import PropTypes from 'prop-types';
 type Props = {
   apiKey: string,
   children?: any,
-  stripeFactory: Function;
+  stripeFactory: StripeFactory;
 };
 
 export type StripeContext = {
   stripe: StripeShape,
 };
+
+export type StripeFactory = (props: Props) => StripeShape;
 
 function defaultStripeFactory(props: Props): StripeShape {
   if (!window.Stripe) {
