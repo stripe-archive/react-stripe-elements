@@ -24,7 +24,7 @@ const defaultStripeFactory = (props: Props): StripeShape => {
   const { apiKey, children, ...options } = props;
 
   return window.Stripe(apiKey, options);
-}
+};
 
 export default class Provider extends React.Component<Props> {
   // Even though we're using flow, also use PropTypes so we can take advantage of developer warnings.
