@@ -2,19 +2,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-type Props = {
+type StripeFactoryProps = {
   apiKey: string,
+};
+
+export type StripeFactory = (props: StripeFactoryProps) => StripeShape;
+
+type Props = StripeFactoryProps | {
   children?: any,
-  stripeFactory: StripeFactory;
+  stripeFactory: StripeFactory,
 };
 
 export type StripeContext = {
   stripe: StripeShape,
 };
 
-export type StripeFactory = (props: Props) => StripeShape;
-
-const defaultStripeFactory = (props: Props): StripeShape => {
+const defaultStripeFactory = (props: StripeFactoryProps): StripeShape => {
   if (!window.Stripe) {
     throw new Error(
       'Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.'
