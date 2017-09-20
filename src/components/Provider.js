@@ -14,7 +14,7 @@ export type StripeContext = {
 
 export type StripeFactory = (props: Props) => StripeShape;
 
-function defaultStripeFactory(props: Props): StripeShape {
+const defaultStripeFactory = (props: Props): StripeShape => {
   if (!window.Stripe) {
     throw new Error(
       'Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.'
