@@ -52,9 +52,10 @@ export default class Provider extends React.Component<Props> {
       window.console.error
     ) {
       this._didWarn = true;
+      // eslint-disable-next-line no-console
       console.error(
         'StripeProvider does not support changing the apiKey parameter.'
-      ); // eslint-disable-line no-console
+      );
     }
   }
   props: Props;
