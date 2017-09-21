@@ -1,5 +1,5 @@
 // @flow
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import type {StripeContext} from './Provider';
 
