@@ -14,8 +14,8 @@ env:
   jest/globals: true
 rules:
   react/jsx-filename-extension: 0
-  no-duplicate-imports: 0 # doesn't support flow imports.
-  no-console: 1 # disable this while undergoing lots of development.
+  no-duplicate-imports: 2 # doesn't support flow imports.
+  no-console: 0
   func-style: 2
   arrow-parens:
     - 2
@@ -25,6 +25,7 @@ rules:
     - 2
     - allowNamedFunctions: false
       allowUnboundThis: false
+  flowtype/no-primitive-constructor-types: 2
   flowtype/require-valid-file-annotation:
     - 2
     - 'always'
