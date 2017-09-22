@@ -1,7 +1,8 @@
 // @flow
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
+import type {ComponentType} from 'react';
 import type {FormContext} from './Elements';
 import type {StripeContext} from './Provider';
 
@@ -19,9 +20,9 @@ export type StripeProps = {
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
 const inject = <Props: {}>(
-  WrappedComponent: React.ComponentType<{stripe: StripeProps} & Props>,
+  WrappedComponent: ComponentType<{stripe: StripeProps} & Props>,
   componentOptions: Options = {}
-): React.ComponentType<Props> => {
+): ComponentType<Props> => {
   const {withRef = false} = componentOptions;
 
   return class extends React.Component<Props, any> {
