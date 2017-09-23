@@ -6,14 +6,12 @@ import type {ElementContext} from './Elements';
 
 type Props = {
   className: string,
-  elementRef: Function,
-  onChange: Function,
-  onBlur: Function,
-  onFocus: Function,
-  onReady: Function,
+  elementRef: ?Function,
+  onChange: ?Function,
+  onBlur: ?Function,
+  onFocus: ?Function,
+  onReady: ?Function,
 };
-
-const noop = () => {};
 
 const _extractOptions = (props: Props): Object => {
   const {
@@ -40,11 +38,11 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     };
     static defaultProps = {
       className: '',
-      elementRef: noop,
-      onChange: noop,
-      onBlur: noop,
-      onFocus: noop,
-      onReady: noop,
+      elementRef: undefined,
+      onChange: undefined,
+      onBlur: undefined,
+      onFocus: undefined,
+      onReady: undefined,
     };
 
     static contextTypes = {
@@ -90,16 +88,22 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
 
     _setupEventListeners() {
       this._element.on('ready', () => {
-        this.props.elementRef(this._element);
-        this.props.onReady();
+        this.props.elementRef && this.props.elementRef(this._element);
+        this.props.onReady && this.props.onReady();
       });
 
       this._element.on('change', change => {
-        this.props.onChange(change);
+        this.props.onChange && this.props.onChange(change);
       });
 
-      this._element.on('blur', (...args) => this.props.onBlur(...args));
-      this._element.on('focus', (...args) => this.props.onFocus(...args));
+      this._element.on(
+        'blur',
+        (...args) => this.props.onBlur && this.props.onBlur(...args)
+      );
+      this._element.on(
+        'focus',
+        (...args) => this.props.onFocus && this.props.onFocus(...args)
+      );
     }
 
     handleRef = (ref: ?HTMLElement) => {
