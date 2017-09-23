@@ -9,7 +9,7 @@ type StripeFactoryProps = {
 
 export type StripeFactory = (props: StripeFactoryProps) => StripeShape;
 
-type Props = StripeFactoryProps | {
+type Props = StripeFactoryProps & {
   stripeFactory: StripeFactory,
 };
 
