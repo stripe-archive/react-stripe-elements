@@ -114,4 +114,15 @@ describe('StripeProvider', () => {
     );
     global.console.error = originalConsoleError;
   });
+
+  it('supports custom stripe factory', () => {
+    const mockStripeFactory = jest.fn();
+    mockStripeFactory.mockReturnValue({});
+    shallow(
+      <StripeProvider apiKey="made_up_key" foo="bar" stripeFactory={mockStripeFactory}>
+        <form />
+      </StripeProvider>
+    );
+    expect(mockStripeFactory).toHaveBeenCalledWith({ apiKey: 'made_up_key', foo: 'bar' });
+  });
 });

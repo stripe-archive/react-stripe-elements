@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 
 type StripeFactoryProps = {
   apiKey: string,
-  children?: any,
 };
 
 export type StripeFactory = (props: StripeFactoryProps) => StripeShape;
 
 type Props = StripeFactoryProps & {
   stripeFactory: StripeFactory,
+  children?: any,
 };
 
 export type StripeContext = {
@@ -24,7 +24,7 @@ const defaultStripeFactory = (props: StripeFactoryProps): StripeShape => {
     );
   }
 
-  const { apiKey, children, ...options } = props;
+  const { apiKey, ...options } = props;
 
   return window.Stripe(apiKey, options);
 };
@@ -47,7 +47,9 @@ export default class Provider extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    this._stripe = props.stripeFactory(props);
+    const { stripeFactory, children, ...factoryProps } = this.props;
+
+    this._stripe = stripeFactory(factoryProps);
     this._didWarn = false;
   }
 
