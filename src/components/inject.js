@@ -1,8 +1,7 @@
 // @flow
-import React from 'react';
+import React, {type ComponentType} from 'react';
 import PropTypes from 'prop-types';
 
-import type {ComponentType} from 'react';
 import type {FormContext} from './Elements';
 import type {StripeContext} from './Provider';
 
