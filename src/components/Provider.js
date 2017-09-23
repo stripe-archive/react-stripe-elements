@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 
 type StripeFactoryProps = {
   apiKey: string,
+  children?: any,
 };
 
 export type StripeFactory = (props: StripeFactoryProps) => StripeShape;
 
 type Props = StripeFactoryProps | {
-  children?: any,
   stripeFactory: StripeFactory,
 };
 
