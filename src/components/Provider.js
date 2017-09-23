@@ -24,7 +24,7 @@ const defaultStripeFactory = (props: StripeFactoryProps): StripeShape => {
     );
   }
 
-  const { apiKey, ...options } = props;
+  const {apiKey, ...options} = props;
 
   return window.Stripe(apiKey, options);
 };
@@ -47,7 +47,7 @@ export default class Provider extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    const { stripeFactory, children, ...factoryProps } = this.props;
+    const {stripeFactory, children, ...factoryProps} = this.props;
 
     this._stripe = stripeFactory(factoryProps);
     this._didWarn = false;

@@ -119,10 +119,17 @@ describe('StripeProvider', () => {
     const mockStripeFactory = jest.fn();
     mockStripeFactory.mockReturnValue({});
     shallow(
-      <StripeProvider apiKey="made_up_key" foo="bar" stripeFactory={mockStripeFactory}>
+      <StripeProvider
+        apiKey="made_up_key"
+        foo="bar"
+        stripeFactory={mockStripeFactory}
+      >
         <form />
       </StripeProvider>
     );
-    expect(mockStripeFactory).toHaveBeenCalledWith({ apiKey: 'made_up_key', foo: 'bar' });
+    expect(mockStripeFactory).toHaveBeenCalledWith({
+      apiKey: 'made_up_key',
+      foo: 'bar',
+    });
   });
 });
