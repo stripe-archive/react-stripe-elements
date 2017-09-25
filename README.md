@@ -12,8 +12,6 @@ to any React app, and manages the state and lifecycle of Elements for you.
 The [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)
 goes into more detail on the various customization options for Elements (e.g. styles, fonts).
 
-> This project is currently in beta. The API presented below may undergo significant changes until we hit a stable release.
-
 ## Getting started
 
 ### Installation
