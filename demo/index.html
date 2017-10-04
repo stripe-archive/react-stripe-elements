@@ -3,6 +3,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <style>
+* {
+  box-sizing: border-box;
+}
+
 body, html {
   background-color: #f6f9fc;
   font-size: 18px;
@@ -81,6 +85,10 @@ button:hover {
   box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px, rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
   -webkit-transition: all 150ms ease;
   transition: all 150ms ease;
+}
+
+.StripeElement.PaymentRequestButton {
+  padding: 0;
 }
     </style>
   </head>

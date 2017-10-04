@@ -11,6 +11,7 @@ import {
   CardExpiryElement,
   CardCVCElement,
   PostalCodeElement,
+  PaymentRequestButtonElement,
   StripeProvider,
   Elements,
   injectStripe,
@@ -134,6 +135,63 @@ class _SplitForm extends React.Component<{
 }
 const SplitForm = injectStripe(_SplitForm);
 
+class _PaymentRequestForm extends React.Component<
+  {stripe: StripeProps},
+  {
+    canMakePayment: boolean,
+    paymentRequest: Object,
+  }
+> {
+  constructor(props) {
+    super(props);
+
+    const paymentRequest = props.stripe.paymentRequest({
+      country: 'US',
+      currency: 'usd',
+      total: {
+        label: 'Demo total',
+        amount: 1000,
+      },
+    });
+
+    paymentRequest.on('token', ({complete, ...data}) => {
+      console.log(data);
+      complete('success');
+    });
+
+    paymentRequest.canMakePayment().then(result => {
+      this.setState({canMakePayment: result});
+    });
+
+    this.state = {
+      canMakePayment: false,
+      paymentRequest,
+    };
+  }
+
+  state: {
+    canMakePayment: boolean,
+    paymentRequest: Object,
+  };
+
+  render() {
+    return this.state.canMakePayment ? (
+      <PaymentRequestButtonElement
+        paymentRequest={this.state.paymentRequest}
+        className="PaymentRequestButton"
+        style={{
+          paymentRequestButton: {
+            theme: 'dark',
+            height: '64px',
+            type: 'donate',
+          },
+        }}
+      />
+    ) : null;
+  }
+}
+const PaymentRequestForm = injectStripe(_PaymentRequestForm);
+
 class Checkout extends React.Component<{}, {elementFontSize: string}> {
   constructor() {
     super();
@@ -162,6 +220,9 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
         </Elements>
         <Elements>
           <SplitForm fontSize={elementFontSize} />
+        </Elements>
+        <Elements>
+          <PaymentRequestForm />
         </Elements>
       </div>
     );

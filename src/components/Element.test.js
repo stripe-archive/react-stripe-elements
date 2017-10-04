@@ -12,7 +12,11 @@ describe('Element', () => {
     elementMock = {
       mount: jest.fn(),
       destroy: jest.fn(),
-      on: jest.fn(),
+      on: jest.fn((event, cb) => {
+        if (event === 'ready') {
+          cb();
+        }
+      }),
       update: jest.fn(),
     };
     elementsMock = {
@@ -55,6 +59,19 @@ describe('Element', () => {
     expect(elementMock.destroy).toHaveBeenCalledTimes(1);
     expect(context.unregisterElement).toHaveBeenCalledTimes(1);
     expect(context.unregisterElement).toHaveBeenCalledWith(elementMock);
+  });
+
+  it('should call onReady and elementRef', () => {
+    const CardElement = Element('card', {sourceType: 'card'});
+    const onReadyMock = jest.fn();
+    const elementRefMock = jest.fn();
+    mount(<CardElement onReady={onReadyMock} elementRef={elementRefMock} />, {
+      context,
+    });
+
+    expect(elementMock.on.mock.calls[0][0]).toBe('ready');
+    expect(elementRefMock).toHaveBeenCalledWith(elementMock);
+    expect(onReadyMock).toHaveBeenCalled();
   });
 
   it('should update the Element when props change', () => {
