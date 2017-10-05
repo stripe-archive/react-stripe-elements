@@ -190,13 +190,14 @@ class PaymentRequestForm extends React.Component {
       },
     });
 
-    paymentRequest.on('token', ({complete, ...data}) => {
-      console.log('received Stripe token': data);
+    paymentRequest.on('token', ({complete, token, ...data}) => {
+      console.log('Received Stripe token: ', token);
+      console.log('Received customer information: ', data);
       complete('success');
     });
 
     paymentRequest.canMakePayment().then(result => {
-      this.setState({canMakePayment: result});
+      this.setState({canMakePayment: !!result});
     });
 
     this.state = {
@@ -303,6 +304,8 @@ type PaymentRequestButtonProps = {
   elementRef?: (StripeElement) => void,
 
   onReady?: () => void,
+  onFocus?: () => void,
+  onBlur?: () => void,
 };
 ```
 
