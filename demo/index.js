@@ -34,9 +34,9 @@ const createOptions = (fontSize: string) => {
     style: {
       base: {
         fontSize,
-        color: '#424770',
+        color: '#6b7c93',
         letterSpacing: '0.025em',
-        fontFamily: 'Source Code Pro, monospace',
+        fontFamily: 'Roboto, Ubuntu, Droid Sans, Helvetica Neue, sans-serif',
         '::placeholder': {
           color: '#aab7c4',
         },
@@ -138,16 +138,16 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
   constructor() {
     super();
     this.state = {
-      elementFontSize: window.innerWidth < 450 ? '14px' : '18px',
+      elementFontSize: window.innerWidth < 450 ? '14px' : '14px',
     };
     window.addEventListener('resize', () => {
-      if (window.innerWidth < 450 && this.state.elementFontSize !== '14px') {
-        this.setState({elementFontSize: '14px'});
+      if (window.innerWidth < 450 && this.state.elementFontSize !== '12px') {
+        this.setState({elementFontSize: '12px'});
       } else if (
         window.innerWidth >= 450 &&
-        this.state.elementFontSize !== '18px'
+        this.state.elementFontSize !== '12px'
       ) {
-        this.setState({elementFontSize: '18px'});
+        this.setState({elementFontSize: '12px'});
       }
     });
   }
@@ -169,7 +169,7 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
 }
 const App = () => {
   return (
-    <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
+    <StripeProvider apiKey="pk_test_fiXugxUKCPhDkuY0O2D9CFPQ">
       <Checkout />
     </StripeProvider>
   );
