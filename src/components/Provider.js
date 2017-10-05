@@ -2,8 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-type Props = {
+type StripeFactoryProps = {
   apiKey: string,
+};
+
+export type StripeFactory = (props: StripeFactoryProps) => StripeShape;
+
+type Props = StripeFactoryProps & {
+  stripeFactory: StripeFactory,
   children?: any,
 };
 
@@ -11,31 +17,39 @@ export type StripeContext = {
   stripe: StripeShape,
 };
 
+const defaultStripeFactory = (props: StripeFactoryProps): StripeShape => {
+  if (!window.Stripe) {
+    throw new Error(
+      'Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.'
+    );
+  }
+
+  const {apiKey, ...options} = props;
+
+  return window.Stripe(apiKey, options);
+};
+
 export default class Provider extends React.Component<Props> {
   // Even though we're using flow, also use PropTypes so we can take advantage of developer warnings.
   static propTypes = {
     apiKey: PropTypes.string.isRequired,
     children: PropTypes.node,
+    stripeFactory: PropTypes.func.isRequired,
   };
   static childContextTypes = {
     stripe: PropTypes.object.isRequired,
   };
   static defaultProps = {
     children: null,
+    stripeFactory: defaultStripeFactory,
   };
 
   constructor(props: Props) {
     super(props);
 
-    if (!window.Stripe) {
-      throw new Error(
-        'Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.'
-      );
-    }
+    const {stripeFactory, children, ...factoryProps} = this.props;
 
-    const {apiKey, children, ...options} = this.props;
-
-    this._stripe = window.Stripe(apiKey, options);
+    this._stripe = stripeFactory(factoryProps);
     this._didWarn = false;
   }
 
