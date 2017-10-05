@@ -172,7 +172,7 @@ export default CardSection;
 
 The [Payment Request Button](https://stripe.com/docs/elements/payment-request-button) lets you collect payment and address information from your customers using Apple Pay and the Payment Request API.
 
-To use the `PaymentRequestButtonElement` you need to first create a [`PaymentRequest` Object](https://stripe.com/docs/stripe.js#the-payment-request-object). You can then conditionally render the `PaymentRequestButtonElement` based on the result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object as a prop.
+To use the `PaymentRequestButtonElement` you need to first create a [`PaymentRequest` object](https://stripe.com/docs/stripe.js#the-payment-request-object). You can then conditionally render the `PaymentRequestButtonElement` based on the result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object as a prop.
 
 ```js
 class PaymentRequestForm extends React.Component {
