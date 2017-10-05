@@ -4,16 +4,15 @@
     <script src="https://js.stripe.com/v3/"></script>
     <style>
 body, html {
-  background-color: #f6f9fc;
-  font-size: 18px;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;;
 }
 
 h1 {
-  color: #32325d;
+  color: #6b7c93;
   font-weight: 400;
   line-height: 50px;
-  font-size: 40px;
+  font-size: 20px;
   margin: 20px 0;
   padding: 0;
 }
@@ -35,18 +34,16 @@ button {
   white-space: nowrap;
   border: 0;
   outline: 0;
-  display: inline-block;
+  display: block;
+  float: right;
   height: 40px;
   line-height: 40px;
   padding: 0 14px;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, .11), 0 1px 3px rgba(0, 0, 0, .08);
-  color: #fff;
+  color: #6b7c93;
   border-radius: 4px;
-  font-size: 15px;
-  font-weight: 600;
-  text-transform: uppercase;
+  font-size: 13px;
   letter-spacing: 0.025em;
-  background-color: #6772e5;
+  background: none;
   text-decoration: none;
   -webkit-transition: all 150ms ease;
   transition: all 150ms ease;
@@ -56,31 +53,29 @@ button {
 form {
   margin-bottom: 40px;
   padding-bottom: 40px;
-  border-bottom: 3px solid #e6ebf1;
 }
 
 button:hover {
-  color: #fff;
+  color: #6b7c93;
   cursor: pointer;
-  background-color: #7795f8;
-  transform: translateY(-1px);
-  box-shadow: 0 7px 14px rgba(50, 50, 93, .10), 0 3px 6px rgba(0, 0, 0, .08);
+  background-color: #E9E9E9;
 }
 
 .StripeElement {
   display: block;
+  height: 18px;
   margin: 10px 0 20px 0;
   max-width: 500px;
   padding: 10px 14px;
-  box-shadow: rgba(50, 50, 93, 0.14902) 0px 1px 3px, rgba(0, 0, 0, 0.0196078) 0px 1px 0px;
   border-radius: 4px;
+  border: solid 1px#3E4158;
   background: white;
 }
 
 .StripeElement--focus {
-  box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px, rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
   -webkit-transition: all 150ms ease;
   transition: all 150ms ease;
+  border: solid 2px#3E4158;
 }
     </style>
   </head>
