@@ -168,6 +168,64 @@ class CardSection extends React.Component {
 export default CardSection;
 ```
 
+### Using the `PaymentRequestButtonElement`
+
+The [Payment Request Button](https://stripe.com/docs/elements/payment-request-button) lets you collect payment and address information from your customers using Apple Pay and the Payment Request API.
+
+To use the `PaymentRequestButtonElement` you need to first create a [`PaymentRequest` object](https://stripe.com/docs/stripe.js#the-payment-request-object). You can then conditionally render the `PaymentRequestButtonElement` based on the result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object as a prop.
+
+```js
+class PaymentRequestForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    // For full documentation of the available paymentRequest options, see:
+    // https://stripe.com/docs/stripe.js#the-payment-request-object
+    const paymentRequest = props.stripe.paymentRequest({
+      country: 'US',
+      currency: 'usd',
+      total: {
+        label: 'Demo total',
+        amount: 1000,
+      },
+    });
+
+    paymentRequest.on('token', ({complete, token, ...data}) => {
+      console.log('Received Stripe token: ', token);
+      console.log('Received customer information: ', data);
+      complete('success');
+    });
+
+    paymentRequest.canMakePayment().then(result => {
+      this.setState({canMakePayment: !!result});
+    });
+
+    this.state = {
+      canMakePayment: false,
+      paymentRequest,
+    };
+  }
+
+  render() {
+    return this.state.canMakePayment ? (
+      <PaymentRequestButtonElement
+        paymentRequest={this.state.paymentRequest}
+        className="PaymentRequestButton"
+        style={{
+          // For more details on how to style the Payment Request Button, see:
+          // https://stripe.com/docs/elements/payment-request-button#styling-the-element
+          paymentRequestButton: {
+            theme: 'light',
+            height: '64px',
+          },
+        }}
+      />
+    ) : null;
+  }
+}
+export default injectStripe(PaymentRequestForm);
+```
+
 ## Component reference
 
 ### `<StripeProvider>`
@@ -217,6 +275,7 @@ These components display the UI for Elements, and must be used within `StripePro
 - `CardExpiryElement`
 - `CardCVCElement`
 - `PostalCodeElement`
+- `PaymentRequestButtonElement`
 
 #### Props shape
 
@@ -230,6 +289,20 @@ type ElementProps = {
   // For full documentation on the events and payloads below, see:
   // https://stripe.com/docs/elements/reference#element-on
   onChange?: (changeObject: Object) => void,
+  onReady?: () => void,
+  onFocus?: () => void,
+  onBlur?: () => void,
+};
+```
+
+The props for the `PaymentRequestButtonElement` are:
+
+```js
+type PaymentRequestButtonProps = {
+  paymentRequest: StripePaymentRequest,
+  className?: string,
+  elementRef?: (StripeElement) => void,
+
   onReady?: () => void,
   onFocus?: () => void,
   onBlur?: () => void,

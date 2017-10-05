@@ -82,7 +82,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       this._element.destroy();
       this.context.unregisterElement(this._element);
     }
-    props: Props;
+
     context: ElementContext;
     _element: ElementShape;
     _ref: ?HTMLElement;
