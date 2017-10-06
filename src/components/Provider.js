@@ -45,18 +45,15 @@ export default class Provider extends React.Component<Props> {
     };
   }
   componentWillReceiveProps(nextProps: Props) {
-    if (
-      !this._didWarn &&
+    !this._didWarn &&
       this.props.apiKey !== nextProps.apiKey &&
       window.console &&
-      window.console.error
-    ) {
-      this._didWarn = true;
-      // eslint-disable-next-line no-console
-      console.error(
-        'StripeProvider does not support changing the apiKey parameter.'
-      );
-    }
+      window.console.error &&
+      ((this._didWarn = true) &&
+        // eslint-disable-next-line no-console
+        console.error(
+          'StripeProvider does not support changing the apiKey parameter.'
+        ));
   }
   props: Props;
   _stripe: StripeShape;
