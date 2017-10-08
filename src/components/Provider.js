@@ -35,7 +35,13 @@ export default class Provider extends React.Component<Props> {
 
     const {apiKey, children, ...options} = this.props;
 
-    this._stripe = window.Stripe(apiKey, options);
+    window.Stripe.__cachedInstances = window.Stripe.__cachedInstances || {};
+    const cacheKey = `key=${apiKey} options=${JSON.stringify(options)}`;
+    this._stripe =
+      window.Stripe.__cachedInstances[cacheKey] ||
+      window.Stripe(apiKey, options);
+    window.Stripe.__cachedInstances[cacheKey] = this._stripe;
+
     this._didWarn = false;
   }
 
