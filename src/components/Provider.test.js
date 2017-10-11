@@ -99,6 +99,38 @@ describe('StripeProvider', () => {
     expect(childContext).toEqual({stripe: stripeMockResult});
   });
 
+  it('does not create a new Stripe instance if one exists for the same key', () => {
+    window.Stripe = jest.fn(() => ({}));
+
+    // First, create the first instance.
+    let wrapper = mount(
+      <StripeProvider apiKey="key_one">
+        <form />
+      </StripeProvider>
+    );
+    let childContext = wrapper.node.getChildContext();
+    const keyOneInstance = childContext.stripe;
+    expect(keyOneInstance).toBeTruthy();
+
+    // Create another!
+    wrapper = mount(
+      <StripeProvider apiKey="key_one">
+        <form />
+      </StripeProvider>
+    );
+    childContext = wrapper.node.getChildContext();
+    expect(childContext.stripe).toBe(keyOneInstance);
+
+    // Create another, but with a different key!
+    wrapper = mount(
+      <StripeProvider apiKey="key_two">
+        <form />
+      </StripeProvider>
+    );
+    childContext = wrapper.node.getChildContext();
+    expect(childContext.stripe).not.toBe(keyOneInstance);
+  });
+
   it('warns when trying to change the API key', () => {
     const originalConsoleError = global.console.error;
     const mockConsoleError = jest.fn();

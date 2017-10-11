@@ -35,7 +35,19 @@ export default class Provider extends React.Component<Props> {
 
     const {apiKey, children, ...options} = this.props;
 
-    this._stripe = window.Stripe(apiKey, options);
+    /**
+     * Note that this is not meant to be a generic memoization solution.
+     * This is specifically a solution for `StripeProvider`s being initialized
+     * and destroyed regularly (with the same set of props) when users only
+     * use `StripeProvider` for the subtree that contains their checkout form.
+     */
+    window.Stripe.__cachedInstances = window.Stripe.__cachedInstances || {};
+    const cacheKey = `key=${apiKey} options=${JSON.stringify(options)}`;
+    this._stripe =
+      window.Stripe.__cachedInstances[cacheKey] ||
+      window.Stripe(apiKey, options);
+    window.Stripe.__cachedInstances[cacheKey] = this._stripe;
+
     this._didWarn = false;
   }
 
