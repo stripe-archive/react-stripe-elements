@@ -90,7 +90,10 @@ describe('Element', () => {
     element.setProps({style, onChange: jest.fn()});
     expect(elementMock.update).toHaveBeenCalledTimes(0);
 
-    element.setProps({style: {base: {fontSize: '20px'}}, onChange: jest.fn()});
+    element.setProps({
+      style: {base: {fontSize: '20px'}},
+      onChange: jest.fn(),
+    });
     expect(elementMock.update).toHaveBeenCalledTimes(1);
     expect(elementMock.update).toHaveBeenCalledWith({
       style: {base: {fontSize: '20px'}},

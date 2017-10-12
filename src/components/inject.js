@@ -146,11 +146,11 @@ Please be sure the component that calls createSource or createToken is within an
           {...this.props}
           stripe={this.stripeProps()}
           ref={
-            withRef ? (
-              c => {
-                this.wrappedInstance = c;
-              }
-            ) : null
+            withRef
+              ? c => {
+                  this.wrappedInstance = c;
+                }
+              : null
           }
         />
       );
