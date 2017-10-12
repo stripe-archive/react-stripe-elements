@@ -288,10 +288,10 @@ type ElementProps = {
 
   // For full documentation on the events and payloads below, see:
   // https://stripe.com/docs/elements/reference#element-on
-  onChange?: (changeObject: Object) => void,
-  onReady?: () => void,
-  onFocus?: () => void,
   onBlur?: () => void,
+  onChange?: (changeObject: Object) => void,
+  onFocus?: () => void,
+  onReady?: () => void,
 };
 ```
 
@@ -303,9 +303,10 @@ type PaymentRequestButtonProps = {
   className?: string,
   elementRef?: (StripeElement) => void,
 
-  onReady?: () => void,
-  onFocus?: () => void,
   onBlur?: () => void,
+  onClick?: () => void,
+  onFocus?: () => void,
+  onReady?: () => void,
 };
 ```
 

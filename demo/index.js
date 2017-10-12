@@ -17,14 +17,17 @@ import {
   injectStripe,
 } from '../src/index';
 
+const handleBlur = () => {
+  console.log('[blur]');
+};
 const handleChange = change => {
   console.log('[change]', change);
 };
+const handleClick = () => {
+  console.log('[click]');
+};
 const handleFocus = () => {
   console.log('[focus]');
-};
-const handleBlur = () => {
-  console.log('[blur]');
 };
 const handleReady = () => {
   console.log('[ready]');
@@ -63,9 +66,9 @@ class _CardForm extends React.Component<{
         <label>
           Card details
           <CardElement
+            onBlur={handleBlur}
             onChange={handleChange}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             onReady={handleReady}
             {...createOptions(this.props.fontSize)}
           />
@@ -91,9 +94,9 @@ class _SplitForm extends React.Component<{
         <label>
           Card number
           <CardNumberElement
+            onBlur={handleBlur}
             onChange={handleChange}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             onReady={handleReady}
             {...createOptions(this.props.fontSize)}
           />
@@ -101,9 +104,9 @@ class _SplitForm extends React.Component<{
         <label>
           Expiration date
           <CardExpiryElement
+            onBlur={handleBlur}
             onChange={handleChange}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             onReady={handleReady}
             {...createOptions(this.props.fontSize)}
           />
@@ -111,9 +114,9 @@ class _SplitForm extends React.Component<{
         <label>
           CVC
           <CardCVCElement
+            onBlur={handleBlur}
             onChange={handleChange}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             onReady={handleReady}
             {...createOptions(this.props.fontSize)}
           />
@@ -121,9 +124,9 @@ class _SplitForm extends React.Component<{
         <label>
           Postal code
           <PostalCodeElement
+            onBlur={handleBlur}
             onChange={handleChange}
             onFocus={handleFocus}
-            onBlur={handleBlur}
             onReady={handleReady}
             {...createOptions(this.props.fontSize)}
           />
@@ -178,8 +181,12 @@ class _PaymentRequestForm extends React.Component<
   render() {
     return this.state.canMakePayment ? (
       <PaymentRequestButtonElement
-        paymentRequest={this.state.paymentRequest}
         className="PaymentRequestButton"
+        onBlur={handleBlur}
+        onClick={handleClick}
+        onFocus={handleFocus}
+        onReady={handleReady}
+        paymentRequest={this.state.paymentRequest}
         style={{
           paymentRequestButton: {
             theme: 'dark',
