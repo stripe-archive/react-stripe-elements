@@ -9,18 +9,14 @@
     "test": "node_modules/.bin/jest",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd":
-      "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
-    "build:umd:min":
-      "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js",
     "lint": "eslint src demo",
     "flow": "flow",
-    "build":
-      "yarn run lint && yarn run flow && yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
+    "build": "yarn run lint && yarn run flow && yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
     "clean": "rimraf lib dist es",
     "prettier": "prettier src/**/*.js demo/**/*.js --write",
-    "prettier-list-different":
-      "prettier src/**/*.js demo/**/*.js --list-different",
+    "prettier-list-different": "prettier src/**/*.js demo/**/*.js --list-different",
     "prepublish": "yarn run clean && yarn run build",
     "demo": "webpack-dev-server --content-base dist"
   },
@@ -34,7 +30,12 @@
     "type": "git",
     "url": "https://github.com/stripe/react-stripe-elements.git"
   },
-  "files": ["dist", "lib", "src", "es"],
+  "files": [
+    "dist",
+    "lib",
+    "src",
+    "es"
+  ],
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -48,7 +49,7 @@
     "cross-env": "^5.0.5",
     "enzyme": "^2.9.1",
     "eslint": "^4.6.1",
-    "eslint-config-prettier": "^2.4.0",
+    "eslint-config-prettier": "^2.6.0",
     "eslint-config-stripe": "^1.0.13",
     "eslint-plugin-flowtype": "^2.35.1",
     "eslint-plugin-jest": "^21.1.0",
