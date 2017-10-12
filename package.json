@@ -9,14 +9,18 @@
     "test": "node_modules/.bin/jest",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
-    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js",
+    "build:umd":
+      "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
+    "build:umd:min":
+      "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/react-stripe-elements.min.js --config webpack.config.prod.js",
     "lint": "eslint src demo",
     "flow": "flow",
-    "build": "yarn run lint && yarn run flow && yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
+    "build":
+      "yarn run lint && yarn run flow && yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
     "clean": "rimraf lib dist es",
-    "prettier": "prettier --single-quote --trailing-comma es5 --bracket-spacing false --parser flow src/**/*.js demo/**/*.js --write",
-    "prettier-list-different": "prettier --single-quote --trailing-comma es5 --bracket-spacing false --parser flow src/**/*.js demo/**/*.js --list-different",
+    "prettier": "prettier src/**/*.js demo/**/*.js --write",
+    "prettier-list-different":
+      "prettier src/**/*.js demo/**/*.js --list-different",
     "prepublish": "yarn run clean && yarn run build",
     "demo": "webpack-dev-server --content-base dist"
   },
@@ -30,12 +34,7 @@
     "type": "git",
     "url": "https://github.com/stripe/react-stripe-elements.git"
   },
-  "files": [
-    "dist",
-    "lib",
-    "src",
-    "es"
-  ],
+  "files": ["dist", "lib", "src", "es"],
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -56,7 +55,7 @@
     "flow-bin": "^0.54.1",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^21.1.0",
-    "prettier": "^1.6.1",
+    "prettier": "^1.7.4",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1",

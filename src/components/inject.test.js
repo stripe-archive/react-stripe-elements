@@ -107,7 +107,9 @@ describe('injectStripe()', () => {
 
     const props = wrapper.props();
     props.stripe.createToken({foo: 'bar'});
-    expect(createToken).toHaveBeenCalledWith(elementMock.element, {foo: 'bar'});
+    expect(createToken).toHaveBeenCalledWith(elementMock.element, {
+      foo: 'bar',
+    });
   });
 
   it('props.stripe.createToken calls createToken with string as first argument and options object as second', () => {
