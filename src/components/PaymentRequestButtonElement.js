@@ -8,7 +8,6 @@ type Props = {
   className: string,
   elementRef: Function,
   onBlur: Function,
-  onClick: Function,
   onFocus: Function,
   onReady: Function,
   paymentRequest: {
@@ -24,11 +23,10 @@ const _extractOptions = (props: Props): Object => {
   const {
     className,
     elementRef,
-    onBlur,
-    onClick,
-    onFocus,
-    onReady,
     paymentRequest,
+    onReady,
+    onFocus,
+    onBlur,
     ...options
   } = props;
   return options;
@@ -39,7 +37,6 @@ class PaymentRequestButtonElement extends React.Component<Props> {
     className: PropTypes.string,
     elementRef: PropTypes.func,
     onBlur: PropTypes.func,
-    onClick: PropTypes.func,
     onFocus: PropTypes.func,
     onReady: PropTypes.func,
     paymentRequest: PropTypes.shape({
@@ -52,7 +49,6 @@ class PaymentRequestButtonElement extends React.Component<Props> {
     className: '',
     elementRef: noop,
     onBlur: noop,
-    onClick: noop,
     onFocus: noop,
     onReady: noop,
   };
@@ -72,13 +68,12 @@ class PaymentRequestButtonElement extends React.Component<Props> {
       ...options,
     });
     this._options = options;
-    this._element.on('blur', (...args) => this.props.onBlur(...args));
-    this._element.on('click', (...args) => this.props.onClick(...args));
-    this._element.on('focus', (...args) => this.props.onFocus(...args));
     this._element.on('ready', () => {
       this.props.elementRef(this._element);
       this.props.onReady();
     });
+    this._element.on('blur', (...args) => this.props.onBlur(...args));
+    this._element.on('focus', (...args) => this.props.onFocus(...args));
   }
 
   componentDidMount() {
