@@ -391,5 +391,6 @@ We use [prettier](https://github.com/prettier/prettier) for code formatting:
 
 Checks:
 
+    yarn test
     yarn run lint
     yarn run flow
