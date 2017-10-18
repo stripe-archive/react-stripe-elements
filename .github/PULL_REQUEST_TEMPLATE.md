@@ -5,7 +5,7 @@
 
 ### API review
 
-<!-- Delete this section if this change involves no or negligible API changes. -->
+<!-- Delete this section if this change involves no API changes. -->
 
 Copy [this template](.github/API_REVIEW.md) **or** link to an API review issue.
 

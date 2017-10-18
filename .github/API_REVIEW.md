@@ -32,7 +32,8 @@ possible to omit some of the sections below.
 
 #### Motivation
 
-> What is the root of the problem we are trying to solve?
+> Describe the problem you are trying to solve with this API change.
+> What does this API enable that was previously not possible?
 
 <!-- TODO -->
 
@@ -45,7 +46,8 @@ possible to omit some of the sections below.
 
 #### Alternatives
 
-> How else could we implement this feature? Are there any workarounds?
+> How else could we implement this feature?
+> Are there any existing workarounds that would offer the same functionality?
 > Why should we chose this implementation over another?
 
 <!-- TODO -->
@@ -61,7 +63,7 @@ possible to omit some of the sections below.
 #### Risks
 
 > Are there any security implications (for example, XSS)?
-> Will this feature be easy for users to misuse?
+> What are some ways users might get confused or misuse this feature?
 
 <!-- TODO -->
 ```

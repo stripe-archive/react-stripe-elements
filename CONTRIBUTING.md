@@ -25,7 +25,7 @@ implementation changes. If your code change involves adding, removing, or
 modifying the surface area of the API, we ask that you go through an API review
 by following [this guide][api-review]. It's best to go through API review before
 implementing a feature. If you've already implemented a feature, address the
-[api review][api-review] considerations within your pull request.
+[API review][api-review] considerations within your pull request.
 
 Going through an API review is not required, but it helps us to understand the
 problem you are trying to solve, and enables us to collaborate and solve it
