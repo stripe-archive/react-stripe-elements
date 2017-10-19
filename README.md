@@ -12,6 +12,35 @@ to any React app, and manages the state and lifecycle of Elements for you.
 The [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)
 goes into more detail on the various customization options for Elements (e.g. styles, fonts).
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
+
+- [Installation](#installation)
+  - [First, install `react-stripe-elements`.](#first-install-react-stripe-elements)
+  - [Then, load Stripe.js in your application:](#then-load-stripejs-in-your-application)
+- [Demo](#demo)
+- [Getting Started](#getting-started)
+  - [The Stripe context (`StripeProvider`)](#the-stripe-context-stripeprovider)
+  - [Element groups (`Elements`)](#element-groups-elements)
+  - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
+  - [Using individual `*Element` components](#using-individual-element-components)
+  - [Using the `PaymentRequestButtonElement`](#using-the-paymentrequestbuttonelement)
+- [Component reference](#component-reference)
+  - [`<StripeProvider>`](#stripeprovider)
+    - [Props shape](#props-shape)
+  - [`<Elements>`](#elements)
+    - [Props shape](#props-shape-1)
+  - [`<*Element>` components](#element-components)
+    - [Available components](#available-components)
+    - [Props shape](#props-shape-2)
+  - [`injectStripe` HOC](#injectstripe-hoc)
+    - [Example](#example)
+- [Troubleshooting](#troubleshooting)
+- [Development](#development)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Getting started
 
 ### Installation
