@@ -43,8 +43,11 @@ goes into more detail on the various customization options for Elements (e.g. st
 
 ## Demo
 
-The fastest way to start playing around with `react-stripe-elements` is with the
-demo in the [demo/](demo/) folder. To run it:
+The fastest way to start playing around with `react-stripe-elements` is with
+this JSFiddle: <https://jsfiddle.net/g9rm5qkt/>.
+
+You can also play around with the demo locally. The source code is in
+[demo/](demo/). To run it:
 
 ```shell
 git clone https://github.com/stripe/react-stripe-elements
