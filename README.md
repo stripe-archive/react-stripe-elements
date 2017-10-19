@@ -56,6 +56,10 @@ yarn install
 yarn run demo
 ```
 
+Now go to <https://localhost:8080/> to try it out!
+
+![Screenshot of the demo running](demo/demo.png)
+
 ## Installation
 
 ### First, install `react-stripe-elements`.
