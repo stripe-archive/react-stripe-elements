@@ -1,9 +1,9 @@
-# Stripe Elements for React
-
-React components that help you quickly add Stripe Elements to your React app.
+# Stripe Elements for React _(react-stripe-elements)_
 
 [![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
 [![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
+
+> React components for Stripe.js and Stripe Elements
 
 This project is a thin React wrapper around [Stripe.js](https://stripe.com/docs/stripe.js)
 and [Stripe Elements](https://stripe.com/docs/elements). It allows you to add Elements
@@ -20,7 +20,7 @@ goes into more detail on the various customization options for Elements (e.g. st
   - [First, install `react-stripe-elements`.](#first-install-react-stripe-elements)
   - [Then, load Stripe.js in your application:](#then-load-stripejs-in-your-application)
 - [Demo](#demo)
-- [Getting Started](#getting-started)
+- [Getting started](#getting-started)
   - [The Stripe context (`StripeProvider`)](#the-stripe-context-stripeprovider)
   - [Element groups (`Elements`)](#element-groups-elements)
   - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
@@ -84,7 +84,7 @@ yarn install
 yarn run demo
 ```
 
-## Getting Started
+## Getting started
 
 ### The Stripe context (`StripeProvider`)
 
