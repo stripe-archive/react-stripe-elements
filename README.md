@@ -41,33 +41,50 @@ goes into more detail on the various customization options for Elements (e.g. st
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Getting started
+## Installation
 
-### Installation
+### First, install `react-stripe-elements`.
 
-#### First, install `react-stripe-elements`.
+Install with `yarn`:
 
-Using yarn:
+```
+yarn add react-stripe-elements
+```
 
-    yarn add react-stripe-elements
+OR with `npm`:
 
-Using npm:
+```
+npm install --save react-stripe-elements
+```
 
-    npm install --save react-stripe-elements
-
-Using UMD build (exports a global `ReactStripeElements` object):
+OR using UMD build (exports a global `ReactStripeElements` object);
 
 ```html
 <script src="https://unpkg.com/react-stripe-elements@latest/dist/react-stripe-elements.min.js"></script>
 ```
 
-#### Then, load Stripe.js in your application:
+### Then, load Stripe.js in your application:
 
 ```html
 <script src="https://js.stripe.com/v3/"></script>
 ```
 
-You're good to go!
+## Demo
+
+The fastest way to start playing around with `react-stripe-elements` is with the
+demo in the [demo/](demo/) folder. To run it:
+
+```shell
+git clone https://github.com/stripe/react-stripe-elements
+cd react-stripe-elements
+
+# (make sure you have yarn installed: https://yarnpkg.com/)
+
+yarn install
+yarn run demo
+```
+
+## Getting Started
 
 ### The Stripe context (`StripeProvider`)
 
