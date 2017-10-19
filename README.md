@@ -1,4 +1,4 @@
-# Stripe Elements for React _(react-stripe-elements)_
+# react-stripe-elements
 
 [![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
 [![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
@@ -16,10 +16,10 @@ goes into more detail on the various customization options for Elements (e.g. st
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of Contents
 
+- [Demo](#demo)
 - [Installation](#installation)
   - [First, install `react-stripe-elements`.](#first-install-react-stripe-elements)
   - [Then, load Stripe.js in your application:](#then-load-stripejs-in-your-application)
-- [Demo](#demo)
 - [Getting started](#getting-started)
   - [The Stripe context (`StripeProvider`)](#the-stripe-context-stripeprovider)
   - [Element groups (`Elements`)](#element-groups-elements)
@@ -40,6 +40,21 @@ goes into more detail on the various customization options for Elements (e.g. st
 - [Development](#development)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Demo
+
+The fastest way to start playing around with `react-stripe-elements` is with the
+demo in the [demo/](demo/) folder. To run it:
+
+```shell
+git clone https://github.com/stripe/react-stripe-elements
+cd react-stripe-elements
+
+# (make sure you have yarn installed: https://yarnpkg.com/)
+
+yarn install
+yarn run demo
+```
 
 ## Installation
 
@@ -67,21 +82,6 @@ OR using UMD build (exports a global `ReactStripeElements` object);
 
 ```html
 <script src="https://js.stripe.com/v3/"></script>
-```
-
-## Demo
-
-The fastest way to start playing around with `react-stripe-elements` is with the
-demo in the [demo/](demo/) folder. To run it:
-
-```shell
-git clone https://github.com/stripe/react-stripe-elements
-cd react-stripe-elements
-
-# (make sure you have yarn installed: https://yarnpkg.com/)
-
-yarn install
-yarn run demo
 ```
 
 ## Getting started
