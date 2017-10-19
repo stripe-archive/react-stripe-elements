@@ -36,7 +36,7 @@ together.
 All pull requests will be reviewed by someone from Stripe before merging. At
 Stripe, we believe that code review is for explaining and having a discussion
 around code. For those new to code review, we strongly recommend [this
-video][code-reivew] on "code review culture."
+video][code-review] on "code review culture."
 
 
 ## Developing
