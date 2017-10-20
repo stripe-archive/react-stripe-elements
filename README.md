@@ -1,9 +1,9 @@
-# Stripe Elements for React
-
-React components that help you quickly add Stripe Elements to your React app.
+# react-stripe-elements
 
 [![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
 [![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
+
+> React components for Stripe.js and Stripe Elements
 
 This project is a thin React wrapper around [Stripe.js](https://stripe.com/docs/stripe.js)
 and [Stripe Elements](https://stripe.com/docs/elements). It allows you to add Elements
@@ -12,33 +12,86 @@ to any React app, and manages the state and lifecycle of Elements for you.
 The [Stripe.js / Stripe Elements API reference](https://stripe.com/docs/elements/reference)
 goes into more detail on the various customization options for Elements (e.g. styles, fonts).
 
-## Getting started
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+## Table of Contents
 
-### Installation
+- [Demo](#demo)
+- [Installation](#installation)
+  - [First, install `react-stripe-elements`.](#first-install-react-stripe-elements)
+  - [Then, load Stripe.js in your application:](#then-load-stripejs-in-your-application)
+- [Getting started](#getting-started)
+  - [The Stripe context (`StripeProvider`)](#the-stripe-context-stripeprovider)
+  - [Element groups (`Elements`)](#element-groups-elements)
+  - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
+  - [Using individual `*Element` components](#using-individual-element-components)
+  - [Using the `PaymentRequestButtonElement`](#using-the-paymentrequestbuttonelement)
+- [Component reference](#component-reference)
+  - [`<StripeProvider>`](#stripeprovider)
+    - [Props shape](#props-shape)
+  - [`<Elements>`](#elements)
+    - [Props shape](#props-shape-1)
+  - [`<*Element>` components](#element-components)
+    - [Available components](#available-components)
+    - [Props shape](#props-shape-2)
+  - [`injectStripe` HOC](#injectstripe-hoc)
+    - [Example](#example)
+- [Troubleshooting](#troubleshooting)
+- [Development](#development)
 
-#### First, install `react-stripe-elements`.
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Using yarn:
+## Demo
 
-    yarn add react-stripe-elements
+The fastest way to start playing around with `react-stripe-elements` is with
+this JSFiddle: <https://jsfiddle.net/g9rm5qkt/>.
 
-Using npm:
+You can also play around with the demo locally. The source code is in
+[demo/](demo/). To run it:
 
-    npm install --save react-stripe-elements
+```shell
+git clone https://github.com/stripe/react-stripe-elements
+cd react-stripe-elements
 
-Using UMD build (exports a global `ReactStripeElements` object):
+# (make sure you have yarn installed: https://yarnpkg.com/)
+
+yarn install
+yarn run demo
+```
+
+Now go to <https://localhost:8080/> to try it out!
+
+![Screenshot of the demo running](demo/demo.png)
+
+## Installation
+
+### First, install `react-stripe-elements`.
+
+Install with `yarn`:
+
+```
+yarn add react-stripe-elements
+```
+
+OR with `npm`:
+
+```
+npm install --save react-stripe-elements
+```
+
+OR using UMD build (exports a global `ReactStripeElements` object);
 
 ```html
 <script src="https://unpkg.com/react-stripe-elements@latest/dist/react-stripe-elements.min.js"></script>
 ```
 
-#### Then, load Stripe.js in your application:
+### Then, load Stripe.js in your application:
 
 ```html
 <script src="https://js.stripe.com/v3/"></script>
 ```
 
-You're good to go!
+## Getting started
 
 ### The Stripe context (`StripeProvider`)
 
@@ -388,6 +441,10 @@ Build:
 We use [prettier](https://github.com/prettier/prettier) for code formatting:
 
     yarn run prettier
+
+To update the ToC in the README if any of the headers changed:
+
+    yarn run doctoc
 
 Checks:
 

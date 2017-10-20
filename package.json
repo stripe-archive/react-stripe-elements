@@ -1,7 +1,7 @@
 {
   "name": "react-stripe-elements",
   "version": "1.2.0",
-  "description": "",
+  "description": "React components for Stripe.js and Stripe Elements",
   "main": "./lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
@@ -18,7 +18,8 @@
     "prettier": "prettier src/**/*.js demo/**/*.js --write",
     "prettier-list-different": "prettier src/**/*.js demo/**/*.js --list-different",
     "prepublish": "yarn run clean && yarn run build",
-    "demo": "webpack-dev-server --content-base dist"
+    "demo": "webpack-dev-server --content-base dist",
+    "doctoc": "doctoc README.md"
   },
   "keywords": [],
   "author": "Stripe (https://www.stripe.com)",
@@ -47,6 +48,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "cross-env": "^5.0.5",
+    "doctoc": "^1.3.0",
     "enzyme": "^2.9.1",
     "eslint": "^4.6.1",
     "eslint-config-prettier": "2.6.0",
