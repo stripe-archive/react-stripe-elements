@@ -442,6 +442,10 @@ We use [prettier](https://github.com/prettier/prettier) for code formatting:
 
     yarn run prettier
 
+To update the ToC if you make a change to any headers:
+
+    yarn run doctoc
+
 Checks:
 
     yarn test
