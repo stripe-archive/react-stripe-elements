@@ -73,5 +73,11 @@
   "peerDependencies": {
     "react": "^15.5.4 || ^16.0.0-0",
     "react-dom": "^15.5.4 || ^16.0.0-0"
+  },
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/config/shim.js",
+      "<rootDir>/config/setupTests.js"
+    ]
   }
 }
