@@ -285,7 +285,7 @@ describe('injectStripe()', () => {
       context,
     });
 
-    expect(() => wrapper.node.getWrappedInstance()).toThrow(
+    expect(() => wrapper.first().instance().getWrappedInstance()).toThrow(
       'To access the wrapped instance, the `{withRef: true}` option must be set when calling `injectStripe()`'
     );
   });
@@ -307,7 +307,7 @@ describe('injectStripe()', () => {
     });
 
     expect(
-      wrapper.node.getWrappedInstance() instanceof WrappedClassComponent
+      wrapper.first().instance().getWrappedInstance() instanceof WrappedClassComponent
     ).toBe(true);
   });
 });
