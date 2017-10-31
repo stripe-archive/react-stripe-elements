@@ -6,7 +6,7 @@
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
   "scripts": {
-    "test": "node_modules/.bin/jest",
+    "test": "cross-env NODE_ENV=commonjs node_modules/.bin/jest",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/react-stripe-elements.js --config webpack.config.prod.js",
@@ -20,6 +20,9 @@
     "prepublish": "yarn run clean && yarn run build",
     "demo": "webpack-dev-server --content-base dist",
     "doctoc": "doctoc README.md"
+  },
+  "jest": {
+    "testRegex": "(/src/.*\\.test.js)$"
   },
   "keywords": [],
   "author": "Stripe (https://www.stripe.com)",
