@@ -1,7 +1,7 @@
 {
   "name": "react-stripe-elements-universal",
-  "version": "1.2.0",
-  "description": "React components for Stripe.js and Stripe Elements (works with SSR)",
+  "version": "1.2.0-3",
+  "description": "React components for Stripe.js and Stripe Elements (universal)",
   "main": "./lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",

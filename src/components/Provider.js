@@ -18,7 +18,7 @@ export default class Provider extends React.Component<Props> {
     children: PropTypes.node,
   };
   static childContextTypes = {
-    stripe: PropTypes.object.isRequired,
+    stripe: PropTypes.object,
   };
   static defaultProps = {
     children: null,

@@ -19,7 +19,7 @@ type ElementsContext = ElementContext & FormContext;
 
 export default class Elements extends React.Component<Props, FormContext> {
   static childContextTypes = {
-    elements: PropTypes.object.isRequired,
+    elements: PropTypes.object,
     registerElement: PropTypes.func.isRequired,
     unregisterElement: PropTypes.func.isRequired,
     registeredElements: PropTypes.arrayOf(
@@ -30,7 +30,7 @@ export default class Elements extends React.Component<Props, FormContext> {
     ).isRequired,
   };
   static contextTypes = {
-    stripe: PropTypes.object.isRequired,
+    stripe: PropTypes.object,
   };
   static defaultProps = {
     children: null,
@@ -39,7 +39,11 @@ export default class Elements extends React.Component<Props, FormContext> {
     super(props, context);
 
     const {children, ...options} = this.props;
-    this._elements = this.context.stripe.elements(options);
+
+    // Stripe.js browser-only check
+    if (typeof window === 'object') {
+      this._elements = this.context.stripe.elements(options);
+    }
 
     this.state = {
       registeredElements: [],

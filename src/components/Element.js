@@ -48,7 +48,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     };
 
     static contextTypes = {
-      elements: PropTypes.object.isRequired,
+      elements: PropTypes.object,
       registerElement: PropTypes.func.isRequired,
       unregisterElement: PropTypes.func.isRequired,
     };
@@ -57,8 +57,13 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       super(props, context);
 
       const options = _extractOptions(this.props);
-      this._element = this.context.elements.create(type, options);
-      this._setupEventListeners();
+
+      // Stripe.js browser-only check
+      if (typeof window === 'object') {
+        this._element = this.context.elements.create(type, options);
+        this._setupEventListeners();
+      }
+
       this._options = options;
     }
 

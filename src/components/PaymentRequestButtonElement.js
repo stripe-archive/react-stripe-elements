@@ -58,7 +58,7 @@ class PaymentRequestButtonElement extends React.Component<Props> {
   };
 
   static contextTypes = {
-    elements: PropTypes.object.isRequired,
+    elements: PropTypes.object,
     registerElement: PropTypes.func.isRequired,
     unregisterElement: PropTypes.func.isRequired,
   };
