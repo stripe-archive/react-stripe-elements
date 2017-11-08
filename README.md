@@ -59,7 +59,10 @@ yarn install
 yarn run demo
 ```
 
-Now go to <https://localhost:8080/> to try it out!
+Now go to <http://localhost:8080/> to try it out!
+
+> :warning: `PaymentRequestButtonElement` will not render unless the page is served over HTTPS.
+> To demo `PaymentRequestButtonElement`, you can tunnel over HTTPS to the local server using ngrok or a similar service.
 
 ![Screenshot of the demo running](demo/demo.png)
 
