@@ -1,7 +1,7 @@
 {
-  "name": "react-stripe-elements",
-  "version": "1.2.0",
-  "description": "React components for Stripe.js and Stripe Elements",
+  "name": "react-stripe-elements-universal",
+  "version": "1.2.0-3",
+  "description": "React components for Stripe.js and Stripe Elements (universal)",
   "main": "./lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
@@ -22,14 +22,14 @@
     "doctoc": "doctoc README.md"
   },
   "keywords": [],
-  "author": "Stripe (https://www.stripe.com)",
+  "author": "Lee Benson <lee@leebenson.com>",
   "license": "MIT",
   "dependencies": {
     "prop-types": "^15.5.10"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/stripe/react-stripe-elements.git"
+    "url": "https://github.com/leebenson/react-stripe-elements-universal.git"
   },
   "files": [
     "dist",

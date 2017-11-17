@@ -1,7 +1,6 @@
-# react-stripe-elements
+# react-stripe-elements-universal
 
-[![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
-[![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
+## Exactly the same as Stripe's official [react-stripe-elements](https://www.npmjs.com/package/react-stripe-elements), but doesn't choke when rendering on the server
 
 > React components for Stripe.js and Stripe Elements
 
