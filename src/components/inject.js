@@ -2,10 +2,10 @@
 import React, {type ComponentType} from 'react';
 import PropTypes from 'prop-types';
 
-import type {FormContext} from './Elements';
+import type {InjectContext} from './Elements';
 import type {StripeContext} from './Provider';
 
-type Context = FormContext & StripeContext;
+type Context = InjectContext & StripeContext;
 
 type Options = {
   withRef?: boolean,
@@ -27,19 +27,14 @@ const inject = <Props: {}>(
   return class extends React.Component<Props, any> {
     static contextTypes = {
       stripe: PropTypes.object.isRequired,
-      registeredElements: PropTypes.arrayOf(
-        PropTypes.shape({
-          element: PropTypes.object.isRequired,
-          type: PropTypes.string.isRequired,
-        })
-      ),
+      getRegisteredElements: PropTypes.func,
     };
     static displayName = `InjectStripe(${WrappedComponent.displayName ||
       WrappedComponent.name ||
       'Component'})`;
 
     constructor(props: Props, context: Context) {
-      if (!context || !context.registeredElements) {
+      if (!context || !context.getRegisteredElements) {
         throw new Error(
           `It looks like you are trying to inject Stripe context outside of an Elements context.
 Please be sure the component that calls createSource or createToken is within an <Elements> component.`
@@ -83,7 +78,7 @@ Please be sure the component that calls createSource or createToken is within an
     };
     // Finds the element by the specified type. Throws if multiple Elements match.
     findElement = (specifiedType: string): ?ElementShape => {
-      const allElements = this.context.registeredElements || [];
+      const allElements = this.context.getRegisteredElements();
       const matchingElements =
         specifiedType === 'auto'
           ? allElements
