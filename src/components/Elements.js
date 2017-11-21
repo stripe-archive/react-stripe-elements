@@ -3,8 +3,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import type {StripeContext} from './Provider';
 
+type ElementsList = Array<{type: string, element: ElementShape}>;
+
 type Props = {
   children?: any,
+};
+
+type State = {
+  registeredElements: ElementsList,
+};
+
+export type InjectContext = {
+  getRegisteredElements: () => ElementsList,
 };
 
 export type ElementContext = {
@@ -12,22 +22,15 @@ export type ElementContext = {
   registerElement: (type: string, element: ElementShape) => void,
   unregisterElement: (element: ElementShape) => void,
 };
-export type FormContext = {
-  registeredElements: Array<{type: string, element: ElementShape}>,
-};
-type ElementsContext = ElementContext & FormContext;
 
-export default class Elements extends React.Component<Props, FormContext> {
+type Context = InjectContext & ElementContext;
+
+export default class Elements extends React.Component<Props, State> {
   static childContextTypes = {
     elements: PropTypes.object.isRequired,
     registerElement: PropTypes.func.isRequired,
     unregisterElement: PropTypes.func.isRequired,
-    registeredElements: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        element: PropTypes.object.isRequired,
-      })
-    ).isRequired,
+    getRegisteredElements: PropTypes.func.isRequired,
   };
   static contextTypes = {
     stripe: PropTypes.object.isRequired,
@@ -46,12 +49,12 @@ export default class Elements extends React.Component<Props, FormContext> {
     };
   }
 
-  getChildContext(): ElementsContext {
+  getChildContext(): Context {
     return {
       elements: this._elements,
       registerElement: this.handleRegisterElement,
       unregisterElement: this.handleUnregisterElement,
-      registeredElements: this.state.registeredElements,
+      getRegisteredElements: () => this.state.registeredElements,
     };
   }
   props: Props;
