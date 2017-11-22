@@ -13,6 +13,12 @@ import {
   PostalCodeElement,
 } from './index';
 
+class PureWrapper extends React.PureComponent {
+  render() {
+    return <div>{this.props.children}</div>;
+  }
+}
+
 describe('index', () => {
   let elementMock;
   let elementsMock;
@@ -70,6 +76,22 @@ describe('index', () => {
       </StripeProvider>
     );
     expect(app.text()).toMatch(/Hello world/);
+  });
+
+  it("shouldn't choke on pure components", () => {
+    const Checkout = WrappedCheckout('token');
+    const app = mount(
+      <StripeProvider apiKey="pk_test_xxx">
+        <Elements>
+          <PureWrapper>
+            <Checkout>
+              <CardElement />
+            </Checkout>
+          </PureWrapper>
+        </Elements>
+      </StripeProvider>
+    );
+    expect(() => app.find('form').simulate('submit')).not.toThrow();
   });
 
   describe('createToken', () => {

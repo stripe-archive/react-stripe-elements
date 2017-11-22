@@ -26,7 +26,7 @@ describe('injectStripe()', () => {
         createSource,
         createToken,
       },
-      registeredElements: [elementMock],
+      getRegisteredElements: () => [elementMock],
     };
     WrappedComponent = () => <div />;
     WrappedComponent.displayName = 'WrappedComponent';
@@ -143,7 +143,7 @@ describe('injectStripe()', () => {
     const wrapper = shallow(<Injected />, {
       context: {
         ...context,
-        registeredElements: [],
+        getRegisteredElements: () => [],
       },
     });
 
@@ -210,7 +210,7 @@ describe('injectStripe()', () => {
     const wrapper = shallow(<Injected />, {
       context: {
         ...context,
-        registeredElements: [],
+        getRegisteredElements: () => [],
       },
     });
 
@@ -226,7 +226,7 @@ describe('injectStripe()', () => {
     const wrapper = shallow(<Injected />, {
       context: {
         ...context,
-        registeredElements: [
+        getRegisteredElements: () => [
           {
             type: 'card',
             element: {
@@ -255,7 +255,7 @@ describe('injectStripe()', () => {
     const wrapper = shallow(<Injected />, {
       context: {
         ...context,
-        registeredElements: [
+        getRegisteredElements: () => [
           {
             type: 'card',
             element: {
