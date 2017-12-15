@@ -58,7 +58,7 @@ class PaymentRequestButtonElement extends React.Component<Props> {
   };
 
   static contextTypes = {
-    elements: PropTypes.object.isRequired,
+    addElementsLoadListener: PropTypes.func.isRequired,
     registerElement: PropTypes.func.isRequired,
     unregisterElement: PropTypes.func.isRequired,
   };
@@ -67,22 +67,24 @@ class PaymentRequestButtonElement extends React.Component<Props> {
     super(props, context);
 
     const options = _extractOptions(props);
-    this._element = this.context.elements.create('paymentRequestButton', {
-      paymentRequest: props.paymentRequest,
-      ...options,
-    });
     this._options = options;
-    this._element.on('ready', () => {
-      this.props.elementRef(this._element);
-      this.props.onReady();
-    });
-    this._element.on('focus', (...args) => this.props.onFocus(...args));
-    this._element.on('click', (...args) => this.props.onClick(...args));
-    this._element.on('blur', (...args) => this.props.onBlur(...args));
   }
 
   componentDidMount() {
-    this._element.mount(this._ref);
+    this.context.addElementsLoadListener((elements: ElementsShape) => {
+      this._element = elements.create('paymentRequestButton', {
+        paymentRequest: this.props.paymentRequest,
+        ...this._options,
+      });
+      this._element.on('ready', () => {
+        this.props.elementRef(this._element);
+        this.props.onReady();
+      });
+      this._element.on('focus', (...args) => this.props.onFocus(...args));
+      this._element.on('click', (...args) => this.props.onClick(...args));
+      this._element.on('blur', (...args) => this.props.onBlur(...args));
+      this._element.mount(this._ref);
+    });
   }
   componentWillReceiveProps(nextProps: Props) {
     if (this.props.paymentRequest !== nextProps.paymentRequest) {

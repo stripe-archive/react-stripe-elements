@@ -48,7 +48,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     };
 
     static contextTypes = {
-      elements: PropTypes.object.isRequired,
+      addElementsLoadListener: PropTypes.func.isRequired,
       registerElement: PropTypes.func.isRequired,
       unregisterElement: PropTypes.func.isRequired,
     };
@@ -56,17 +56,24 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     constructor(props: Props, context: ElementContext) {
       super(props, context);
 
+      this._element = null;
+
       const options = _extractOptions(this.props);
-      this._element = this.context.elements.create(type, options);
-      this._setupEventListeners();
       this._options = options;
     }
 
     componentDidMount() {
-      this._element.mount(this._ref);
-      if (hocOptions.sourceType) {
-        this.context.registerElement(hocOptions.sourceType, this._element);
-      }
+      this.context.addElementsLoadListener((elements: ElementsShape) => {
+        const element = elements.create(type, this._options);
+        this._element = element;
+
+        this._setupEventListeners(element);
+
+        element.mount(this._ref);
+        if (hocOptions.sourceType) {
+          this.context.registerElement(hocOptions.sourceType, element);
+        }
+      });
     }
     componentWillReceiveProps(nextProps: Props) {
       const options = _extractOptions(nextProps);
@@ -75,36 +82,42 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
         !shallowEqual(options, this._options)
       ) {
         this._options = options;
-        this._element.update(options);
+        if (this._element) {
+          this._element.update(options);
+        }
       }
     }
     componentWillUnmount() {
-      this._element.destroy();
-      this.context.unregisterElement(this._element);
+      if (this._element) {
+        const element = this._element;
+        element.destroy();
+        this.context.unregisterElement(element);
+      }
     }
 
     context: ElementContext;
-    _element: ElementShape;
+    _element: ElementShape | null;
     _ref: ?HTMLElement;
     _options: Object;
 
-    _setupEventListeners() {
-      this._element.on('ready', () => {
+    _setupEventListeners(element: ElementShape) {
+      element.on('ready', () => {
         this.props.elementRef(this._element);
         this.props.onReady();
       });
 
-      this._element.on('change', change => {
+      element.on('change', change => {
         this.props.onChange(change);
       });
 
-      this._element.on('blur', (...args) => this.props.onBlur(...args));
-      this._element.on('focus', (...args) => this.props.onFocus(...args));
+      element.on('blur', (...args) => this.props.onBlur(...args));
+      element.on('focus', (...args) => this.props.onFocus(...args));
     }
 
     handleRef = (ref: ?HTMLElement) => {
       this._ref = ref;
     };
+
     render() {
       return <div className={this.props.className} ref={this.handleRef} />;
     }
