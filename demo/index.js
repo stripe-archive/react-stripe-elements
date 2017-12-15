@@ -3,7 +3,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 
-import type {StripeProps} from '../src/components/inject';
+import type {InjectedProps} from '../src/components/inject';
 
 import {
   CardElement,
@@ -54,13 +54,16 @@ const createOptions = (fontSize: string) => {
 
 class _CardForm extends React.Component<{
   fontSize: string,
-  stripe: StripeProps,
-}> {
+} & InjectedProps> {
   handleSubmit = ev => {
     ev.preventDefault();
-    this.props.stripe
-      .createToken()
-      .then(payload => console.log('[token]', payload));
+    if (this.props.stripe) {
+      this.props.stripe
+        .createToken()
+        .then(payload => console.log('[token]', payload));
+    } else {
+      console.log("Stripe.js hasn't loaded yet.");
+    }
   };
   render() {
     return (
@@ -84,11 +87,16 @@ const CardForm = injectStripe(_CardForm);
 
 class _SplitForm extends React.Component<{
   fontSize: string,
-  stripe: StripeProps,
-}> {
+} & InjectedProps> {
   handleSubmit = ev => {
     ev.preventDefault();
-    this.props.stripe.createToken().then(payload => console.log(payload));
+    if (this.props.stripe) {
+      this.props.stripe
+        .createToken()
+        .then(payload => console.log('[token]', payload));
+    } else {
+      console.log("Stripe.js hasn't loaded yet.");
+    }
   };
   render() {
     return (
@@ -141,7 +149,7 @@ class _SplitForm extends React.Component<{
 const SplitForm = injectStripe(_SplitForm);
 
 class _PaymentRequestForm extends React.Component<
-  {stripe: StripeProps},
+  InjectedProps,
   {
     canMakePayment: boolean,
     paymentRequest: Object,
