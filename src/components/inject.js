@@ -3,30 +3,38 @@ import React, {type ComponentType} from 'react';
 import PropTypes from 'prop-types';
 
 import type {InjectContext} from './Elements';
-import type {StripeContext} from './Provider';
+import type {SyncStripeContext, AsyncStripeContext} from './Provider';
 
-type Context = InjectContext & StripeContext;
+type Context =
+  | (InjectContext & SyncStripeContext)
+  | (InjectContext & AsyncStripeContext);
 
 type Options = {
   withRef?: boolean,
 };
 
-export type StripeProps = {
+type WrappedStripeShape = {
   createToken: Function,
   createSource: Function,
 };
 
+type State = {stripe: WrappedStripeShape | null};
+
+export type InjectedProps = {stripe: WrappedStripeShape | null};
+
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
 const inject = <Props: {}>(
-  WrappedComponent: ComponentType<{stripe: StripeProps} & Props>,
+  WrappedComponent: ComponentType<InjectedProps & Props>,
   componentOptions: Options = {}
 ): ComponentType<Props> => {
   const {withRef = false} = componentOptions;
 
-  return class extends React.Component<Props, any> {
+  return class extends React.Component<Props, State> {
     static contextTypes = {
-      stripe: PropTypes.object.isRequired,
+      stripe: PropTypes.object,
+      addStripeLoadListener: PropTypes.func,
+      tag: PropTypes.string.isRequired,
       getRegisteredElements: PropTypes.func,
     };
     static displayName = `InjectStripe(${WrappedComponent.displayName ||
@@ -42,6 +50,28 @@ Please be sure the component that calls createSource or createToken is within an
       }
 
       super(props, context);
+
+      if (this.context.tag === 'sync') {
+        this.state = {
+          stripe: this.stripeProps(this.context.stripe),
+        };
+      } else {
+        this.state = {
+          stripe: null,
+        };
+      }
+    }
+
+    componentDidMount() {
+      if (this.context.tag === 'async') {
+        this.context.addStripeLoadListener((stripe: StripeShape) => {
+          this.setState({
+            stripe: this.stripeProps(stripe),
+          });
+        });
+      } else {
+        // when 'sync', it's already set in the constructor.
+      }
     }
 
     getWrappedInstance() {
@@ -54,14 +84,14 @@ Please be sure the component that calls createSource or createToken is within an
     }
 
     context: Context;
-    wrappedInstance: ?React.Component<{stripe: StripeProps} & Props, any>;
+    wrappedInstance: ?React.Component<InjectedProps & Props, any>;
 
-    stripeProps(): StripeProps {
+    stripeProps(stripe: StripeShape): WrappedStripeShape {
       return {
-        ...this.context.stripe,
+        ...stripe,
         // These are the only functions that take elements.
-        createToken: this.wrappedCreateToken,
-        createSource: this.wrappedCreateSource,
+        createToken: this.wrappedCreateToken(stripe),
+        createSource: this.wrappedCreateSource(stripe),
       };
     }
     // Require that exactly one Element is found.
@@ -100,29 +130,29 @@ Please be sure the component that calls createSource or createToken is within an
     // -- we're allowed to pass in the token type OR the element as the first parameter,
     // so we need to check if we're passing in a string as the first parameter and
     // just pass through the options if that's the case.
-    wrappedCreateToken = (typeOrOptions: mixed = {}, options: mixed = {}) => {
+    wrappedCreateToken = (stripe: StripeShape) => (typeOrOptions: mixed = {}, options: mixed = {}) => {
       if (typeOrOptions && typeof typeOrOptions === 'object') {
         const {type, ...rest} = typeOrOptions;
         const specifiedType = typeof type === 'string' ? type : 'auto';
         const element = this.requireElement(specifiedType);
-        return this.context.stripe.createToken(element, rest);
+        return stripe.createToken(element, rest);
       } else if (typeof typeOrOptions === 'string') {
-        return this.context.stripe.createToken(typeOrOptions, options);
+        return stripe.createToken(typeOrOptions, options);
       } else {
         throw new Error(
           `Invalid options passed to createToken. Expected an object, got ${typeof typeOrOptions}.`
         );
       }
     };
-    wrappedCreateSource = (options: mixed = {}) => {
+    wrappedCreateSource = (stripe: StripeShape) => (options: mixed = {}) => {
       if (options && typeof options === 'object') {
         const {type, ...rest} = options; // eslint-disable-line no-unused-vars
         const specifiedType = typeof type === 'string' ? type : 'auto';
         const element = this.findElement(specifiedType);
         if (element) {
-          return this.context.stripe.createSource(element, rest);
+          return stripe.createSource(element, rest);
         } else if (specifiedType !== 'auto') {
-          return this.context.stripe.createSource(options);
+          return stripe.createSource(options);
         } else {
           throw new Error(
             `You did not specify the type of Source to create.
@@ -139,7 +169,7 @@ Please be sure the component that calls createSource or createToken is within an
       return (
         <WrappedComponent
           {...this.props}
-          stripe={this.stripeProps()}
+          stripe={this.state.stripe}
           ref={
             withRef
               ? c => {
