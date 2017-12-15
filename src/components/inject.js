@@ -130,7 +130,10 @@ Please be sure the component that calls createSource or createToken is within an
     // -- we're allowed to pass in the token type OR the element as the first parameter,
     // so we need to check if we're passing in a string as the first parameter and
     // just pass through the options if that's the case.
-    wrappedCreateToken = (stripe: StripeShape) => (typeOrOptions: mixed = {}, options: mixed = {}) => {
+    wrappedCreateToken = (stripe: StripeShape) => (
+      typeOrOptions: mixed = {},
+      options: mixed = {}
+    ) => {
       if (typeOrOptions && typeof typeOrOptions === 'object') {
         const {type, ...rest} = typeOrOptions;
         const specifiedType = typeof type === 'string' ? type : 'auto';

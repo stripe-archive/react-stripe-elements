@@ -52,9 +52,7 @@ const createOptions = (fontSize: string) => {
   };
 };
 
-class _CardForm extends React.Component<{
-  fontSize: string,
-} & InjectedProps> {
+class _CardForm extends React.Component<InjectedProps & {fontSize: string}> {
   handleSubmit = ev => {
     ev.preventDefault();
     if (this.props.stripe) {
@@ -85,9 +83,7 @@ class _CardForm extends React.Component<{
 }
 const CardForm = injectStripe(_CardForm);
 
-class _SplitForm extends React.Component<{
-  fontSize: string,
-} & InjectedProps> {
+class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
   handleSubmit = ev => {
     ev.preventDefault();
     if (this.props.stripe) {
