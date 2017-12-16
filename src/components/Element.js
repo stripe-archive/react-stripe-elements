@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import shallowEqual from '../utils/shallowEqual';
-import type {ElementContext} from './Elements';
+import {type ElementContext, elementContextTypes} from './Elements';
 
 type Props = {
   className: string,
@@ -47,11 +47,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       onReady: noop,
     };
 
-    static contextTypes = {
-      addElementsLoadListener: PropTypes.func.isRequired,
-      registerElement: PropTypes.func.isRequired,
-      unregisterElement: PropTypes.func.isRequired,
-    };
+    static contextTypes = elementContextTypes;
 
     constructor(props: Props, context: ElementContext) {
       super(props, context);
@@ -59,6 +55,8 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       this._element = null;
 
       const options = _extractOptions(this.props);
+      // We keep track of the extracted options on this._options to avoid re-rendering.
+      // (We would unnecessarily re-render if we were tracking them with state.)
       this._options = options;
     }
 

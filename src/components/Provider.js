@@ -27,6 +27,12 @@ export type AsyncStripeContext = {
 
 export type ProviderContext = SyncStripeContext | AsyncStripeContext;
 
+export const providerContextTypes = {
+  tag: PropTypes.string.isRequired,
+  stripe: PropTypes.object,
+  addStripeLoadListener: PropTypes.func,
+};
+
 const getOrCreateStripe = (apiKey: string, options: mixed): StripeShape => {
   /**
    * Note that this is not meant to be a generic memoization solution.
@@ -64,11 +70,7 @@ export default class Provider extends React.Component<Props> {
     children: PropTypes.node,
   };
   // on the other hand: childContextTypes is *required* to use context.
-  static childContextTypes = {
-    stripe: PropTypes.object,
-    addStripeLoadListener: PropTypes.func,
-    tag: PropTypes.string.isRequired,
-  };
+  static childContextTypes = providerContextTypes;
   static defaultProps = {
     apiKey: undefined,
     stripe: undefined,

@@ -1,9 +1,12 @@
 // @flow
 import React, {type ComponentType} from 'react';
-import PropTypes from 'prop-types';
 
-import type {InjectContext} from './Elements';
-import type {SyncStripeContext, AsyncStripeContext} from './Provider';
+import {type InjectContext, injectContextTypes} from './Elements';
+import {
+  type SyncStripeContext,
+  type AsyncStripeContext,
+  providerContextTypes,
+} from './Provider';
 
 type Context =
   | (InjectContext & SyncStripeContext)
@@ -32,10 +35,8 @@ const inject = <Props: {}>(
 
   return class extends React.Component<Props, State> {
     static contextTypes = {
-      stripe: PropTypes.object,
-      addStripeLoadListener: PropTypes.func,
-      tag: PropTypes.string.isRequired,
-      getRegisteredElements: PropTypes.func,
+      ...providerContextTypes,
+      ...injectContextTypes,
     };
     static displayName = `InjectStripe(${WrappedComponent.displayName ||
       WrappedComponent.name ||
@@ -94,18 +95,6 @@ Please be sure the component that calls createSource or createToken is within an
         createSource: this.wrappedCreateSource(stripe),
       };
     }
-    // Require that exactly one Element is found.
-    requireElement = (specifiedType: string): ElementShape => {
-      const element = this.findElement(specifiedType);
-      if (element) {
-        return element;
-      } else {
-        throw new Error(
-          `You did not specify the type of Source or Token to create.
-        We could not infer which Element you want to use for this operation.`
-        );
-      }
-    };
     // Finds the element by the specified type. Throws if multiple Elements match.
     findElement = (specifiedType: string): ?ElementShape => {
       const allElements = this.context.getRegisteredElements();
@@ -123,6 +112,18 @@ Please be sure the component that calls createSource or createToken is within an
         );
       } else {
         return null;
+      }
+    };
+    // Require that exactly one Element is found.
+    requireElement = (specifiedType: string): ElementShape => {
+      const element = this.findElement(specifiedType);
+      if (element) {
+        return element;
+      } else {
+        throw new Error(
+          `You did not specify the type of Source or Token to create.
+        We could not infer which Element you want to use for this operation.`
+        );
       }
     };
 

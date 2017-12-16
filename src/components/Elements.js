@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import PropTypes from 'prop-types';
-import type {ProviderContext} from './Provider';
+import {type ProviderContext, providerContextTypes} from './Provider';
 
 export type ElementsList = Array<{type: string, element: ElementShape}>;
 export type ElementsLoadListener = ElementsShape => void;
@@ -18,26 +18,30 @@ export type InjectContext = {
   getRegisteredElements: () => ElementsList,
 };
 
+export const injectContextTypes = {
+  getRegisteredElements: PropTypes.func.isRequired,
+};
+
 export type ElementContext = {
   addElementsLoadListener: ElementsLoadListener => void,
   registerElement: (type: string, element: ElementShape) => void,
   unregisterElement: (element: ElementShape) => void,
 };
 
+export const elementContextTypes = {
+  addElementsLoadListener: PropTypes.func.isRequired,
+  registerElement: PropTypes.func.isRequired,
+  unregisterElement: PropTypes.func.isRequired,
+};
+
 type ChildContext = InjectContext & ElementContext;
 
 export default class Elements extends React.Component<Props, State> {
   static childContextTypes = {
-    addElementsLoadListener: PropTypes.func.isRequired,
-    registerElement: PropTypes.func.isRequired,
-    unregisterElement: PropTypes.func.isRequired,
-    getRegisteredElements: PropTypes.func.isRequired,
+    ...injectContextTypes,
+    ...elementContextTypes,
   };
-  static contextTypes = {
-    stripe: PropTypes.object,
-    addStripeLoadListener: PropTypes.func,
-    tag: PropTypes.string.isRequired,
-  };
+  static contextTypes = providerContextTypes;
   static defaultProps = {
     children: null,
   };
