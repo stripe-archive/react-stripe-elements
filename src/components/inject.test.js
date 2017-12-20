@@ -4,7 +4,7 @@ import {mount, shallow} from 'enzyme';
 
 import injectStripe from './inject';
 
-describe('injectStripe()', () => {
+describe('[sync] injectStripe()', () => {
   let WrappedComponent;
   let context;
   let createSource;
@@ -21,6 +21,7 @@ describe('injectStripe()', () => {
       },
     };
     context = {
+      tag: 'sync',
       stripe: {
         elements: jest.fn(),
         createSource,
@@ -58,7 +59,10 @@ describe('injectStripe()', () => {
     global.console.error = msg => {
       if (
         !msg.startsWith(
-          'Warning: Failed context type: The context `stripe` is marked as required'
+          'Warning: Failed context type: The context `tag` is marked as required'
+        ) &&
+        !msg.startsWith(
+          'Warning: Failed context type: The context `getRegisteredElements` is marked as required'
         )
       ) {
         originalConsoleError(msg);

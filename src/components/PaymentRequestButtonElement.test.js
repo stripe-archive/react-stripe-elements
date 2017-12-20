@@ -24,7 +24,7 @@ describe('PaymentRequestButtonElement', () => {
       create: jest.fn().mockReturnValue(elementMock),
     };
     context = {
-      elements: elementsMock,
+      addElementsLoadListener: fn => fn(elementsMock),
       registerElement: jest.fn(),
       unregisterElement: jest.fn(),
     };

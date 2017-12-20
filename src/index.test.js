@@ -246,6 +246,18 @@ describe('index', () => {
 
     describe('createToken', () => {
       it('should throw when not in Elements', () => {
+        // Prevent the expected console.error from react to keep the test output clean
+        const originalConsoleError = global.console.error;
+        global.console.error = msg => {
+          if (
+            !msg.startsWith(
+              'Warning: Failed context type: The context `getRegisteredElements` is marked as required'
+            )
+          ) {
+            originalConsoleError(msg);
+          }
+        };
+
         const Checkout = WrappedCheckout('token');
         expect(() =>
           mount(
@@ -258,6 +270,8 @@ describe('index', () => {
             </StripeProvider>
           )
         ).toThrowError('Elements context');
+
+        global.console.error = originalConsoleError;
       });
 
       it('should throw when no Element found', () => {
