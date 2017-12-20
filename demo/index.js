@@ -3,7 +3,7 @@
 import React from 'react';
 import {render} from 'react-dom';
 
-import type {InjectedProps} from '../src/components/inject';
+import type {InjectedProps} from '../../src/components/inject';
 
 import {
   CardElement,
@@ -15,7 +15,7 @@ import {
   StripeProvider,
   Elements,
   injectStripe,
-} from '../src/index';
+} from '../../src/index';
 
 const handleBlur = () => {
   console.log('[blur]');
