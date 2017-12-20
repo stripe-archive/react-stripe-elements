@@ -10,6 +10,7 @@ const config = {
   },
   entry: {
     demo: ['./demo/demo/index.js'],
+    async: ['./demo/async/main.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -20,6 +21,11 @@ const config = {
       inject: false,
       filename: 'index.html',
       template: './demo/demo/index.html',
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'async/index.html',
+      template: './demo/async/index.html',
     }),
   ],
 };
