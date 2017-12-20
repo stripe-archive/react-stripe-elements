@@ -58,7 +58,9 @@ class _CardForm extends React.Component<{
 }> {
   handleSubmit = ev => {
     ev.preventDefault();
-    this.props.stripe.createToken().then(payload => console.log(payload));
+    this.props.stripe
+      .createToken()
+      .then(payload => console.log('[token]', payload));
   };
   render() {
     return (
