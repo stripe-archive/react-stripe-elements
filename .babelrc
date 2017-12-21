@@ -1,4 +1,7 @@
 {
-  "presets": ["react", "env"],
+  "presets": [
+    "react",
+    ["env", {"loose": true, "targets": {"ie": 9}}]
+  ],
   "plugins": ["transform-class-properties", "transform-object-rest-spread"]
 }
