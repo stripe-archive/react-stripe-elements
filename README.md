@@ -26,6 +26,10 @@ goes into more detail on the various customization options for Elements (e.g. st
   - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
   - [Using individual `*Element` components](#using-individual-element-components)
   - [Using the `PaymentRequestButtonElement`](#using-the-paymentrequestbuttonelement)
+- [Alternative loading strategies](#alternative-loading-strategies)
+  - [Loading Stripe.js asynchronously](#loading-stripejs-asynchronously)
+  - [Server-side rendering (SSR)](#server-side-rendering-ssr)
+  - [Stripe instance from non-React context](#stripe-instance-from-non-react-context)
 - [Component reference](#component-reference)
   - [`<StripeProvider>`](#stripeprovider)
     - [Props shape](#props-shape)
@@ -131,13 +135,13 @@ you're tokenizing.
 import React from 'react';
 import {Elements} from 'react-stripe-elements';
 
-import CheckoutForm from './CheckoutForm';
+import InjectedCheckoutForm from './CheckoutForm';
 
 class MyStoreCheckout extends React.Component {
   render() {
     return (
       <Elements>
-        <CheckoutForm />
+        <InjectedCheckoutForm />
       </Elements>
     );
   }
@@ -283,6 +287,145 @@ class PaymentRequestForm extends React.Component {
 export default injectStripe(PaymentRequestForm);
 ```
 
+## Alternative loading strategies
+
+The above [Getting started](#getting-started) section outlines the most common
+use case, which holds these assumptions:
+
+- The Stripe.js script loads synchronously, before your page's code.
+- Your page's code is only run in a browser environment.
+- You don't need fine-grained control over the Stripe instance that
+  `react-stripe-elements` uses under the hood.
+
+When all of these assumptions are met, you can pass the `apiKey` prop to
+`<StripeProvider>` and let `react-stripe-elements` handle the rest.
+
+When one or more of these assumptions isn't met in your case, you have another
+option: pass the `stripe` prop to `<StripeProvider>` directly. The `stripe` prop
+can be either `null` or the result of using `Stripe(apiKey, option)` to
+construct a [Stripe instance][stripe-function].
+
+[stripe-function]: https://stripe.com/docs/stripe-js/reference#stripe-function
+
+We'll now cover a couple scenarios which break at least one of the assumptions
+listed above.
+
+### Loading Stripe.js asynchronously
+
+Loading Stripe.js asynchronously can speed up the initial page load, especially
+if your page doesn't show the payment form until after the user interacts with
+your page in some way.
+
+```html
+<html>
+<head>
+  <!-- ... -->
+
+  <!-- Note the 'id' and 'async' attributes:                         -->
+  <!--    ┌────────────┐                                 ┌───┐       -->
+  <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
+
+  <!-- ... -->
+</head>
+<!-- ... -->
+</html>
+```
+
+Inside `<InjectedCheckoutForm />`, `this.props.stripe` will either be `null` or
+set. React will re-render `<InjectedCheckoutForm>` any time `this.props.stripe`
+changes from `null` to set.
+
+```js
+class App extends React.Component {
+  constructor() {
+    this.state = {stripe: null};
+  }
+  componentDidMount() {
+    document.querySelector('#stripe-js').addEventListener('load', () => {
+      // Create Stripe instance once Stripe.js loads
+      this.setState({stripe: window.Stripe('pk_test_12345')});
+    })
+  }
+  render() {
+    // this.state.stripe will either be null or a Stripe instance
+    // depending on whether Stripe.js has loaded.
+    return (
+      <StripeProvider stripe={this.state.stripe}>
+        <Elements>
+          <InjectedCheckoutForm />
+        </Elements>
+      </StripeProvider>
+    );
+  }
+}
+```
+
+You can find a working demo of this strategy in [async.js](demo/async/async.js).
+If you run the demo locally, you can view it at <http://localhost:8080/async/>.
+
+### Server-side rendering (SSR)
+
+If you're using `react-stripe-elements` in a non-browser environment
+(`React.renderToString`, etc.), Stripe.js will never become available.
+To use `react-stripe-elements` with SSR frameworks, you can do something like
+this.
+
+Inside `<InjectedCheckoutForm />`, `this.props.stripe` will either be `null` or
+set. This means that it will be `null` on the server-side render, but set when
+rendering in a browser.
+
+```js
+class App extends React.Component {
+  constructor() {
+    this.state = {stripe: null};
+  }
+  componentDidMount() {
+    // Create Stripe instance in componentDidMount
+    // (componentDidMount only fires in browser/DOM environment)
+    this.setState({stripe: window.Stripe('pk_test_12345')});
+  }
+  render() {
+    return (
+      <StripeProvider stripe={this.state.stripe}>
+        <Elements>
+          <InjectedCheckoutForm />
+        </Elements>
+      </StripeProvider>
+    );
+  }
+}
+```
+
+
+### Stripe instance from non-React context
+
+In some projects, part of the project uses React, while another part doesn't.
+For example, maybe you have business logic and view logic separate. Or maybe you
+use `react-stripe-elements` for your Checkout form, but vanilla Stripe.js for
+tokenizing bank account information.
+
+You can use the `stripe` prop to get more fine-grained control over the Stripe
+instance that `<StripeProvider>` uses. For example, say you have a `stripe`
+instance in a Redux store that you pass to your `<App />` as a prop:
+
+```js
+class App extends React.Component {
+  render() {
+    return (
+      <StripeProvider stripe={this.props.stripe}>
+        <Elements>
+          <InjectedCheckoutForm />
+        </Elements>
+      </StripeProvider>
+    );
+  }
+}
+```
+
+As long as `<App />` is always provided with a non-null `stripe` prop,
+`this.props.stripe` will always be available within your `InjectedCheckoutForm`.
+
+
 ## Component reference
 
 ### `<StripeProvider>`
@@ -296,14 +439,18 @@ An integration usually wraps the `<StripeProvider>` around the application’s r
 
 #### Props shape
 
-This component accepts all `options` that can be passed into `Stripe(apiKey, options)` as props.
+There are two *distinct* props shapes you can pass to `<StripeProvider>`.
 
 ```js
-type StripeProviderProps = {
-  apiKey: string,
-};
+type StripeProviderProps =
+  | { apiKey: string, ... }
+  | { stripe: StripeObject | null };
 ```
 
+See [Alternative loading strategies](#alternative-loading-strategies) for more
+information on when to use each.
+
+The `...` above represents that this component accepts props for any option that can be passed into `Stripe(apiKey, options)`.
 
 ### `<Elements>`
 
@@ -386,14 +533,16 @@ If the `withRef` option is set to `true`, the wrapped component instance will be
 #### Example
 
 ```js
-const StripeCheckoutForm = injectStripe(CheckoutForm);
+const InjectedCheckoutForm = injectStripe(CheckoutForm);
 ```
 
 The following props will be available to this component:
 
 ```js
 type FactoryProps = {
-  stripe: {
+  stripe:
+  | null
+  | {
     createToken: (tokenParameters: {type?: string}) => Promise<{token?: Object, error?: Object}>,
     // and other functions available on the `stripe` object,
     // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
