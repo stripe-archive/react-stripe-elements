@@ -4,13 +4,14 @@ import {mount, shallow} from 'enzyme';
 
 import injectStripe from './inject';
 
-describe('[sync] injectStripe()', () => {
+describe('injectStripe()', () => {
   let WrappedComponent;
   let context;
   let createSource;
   let createToken;
   let elementMock;
 
+  // Before ALL tests (sync or async)
   beforeEach(() => {
     createSource = jest.fn();
     createToken = jest.fn();
@@ -20,18 +21,23 @@ describe('[sync] injectStripe()', () => {
         on: jest.fn(),
       },
     };
-    context = {
-      tag: 'sync',
-      stripe: {
-        elements: jest.fn(),
-        createSource,
-        createToken,
-      },
-      getRegisteredElements: () => [elementMock],
-    };
     WrappedComponent = () => <div />;
     WrappedComponent.displayName = 'WrappedComponent';
   });
+
+  describe('[sync]', () => {
+    // Before ONLY sync tests
+    beforeEach(() => {
+      context = {
+        tag: 'sync',
+        stripe: {
+          elements: jest.fn(),
+          createSource,
+          createToken,
+        },
+        getRegisteredElements: () => [elementMock],
+      };
+    });
 
   it('sets the correct displayName', () => {
     expect(injectStripe(WrappedComponent).displayName).toBe(
@@ -313,5 +319,46 @@ describe('[sync] injectStripe()', () => {
     expect(
       wrapper.node.getWrappedInstance() instanceof WrappedClassComponent
     ).toBe(true);
+  });
+  });
+
+  describe('[async]', () => {
+    it('props.stripe is null if addStripeLoadListener never fires', () => {
+      const Injected = injectStripe(WrappedComponent);
+      const wrapper = mount(<Injected />, {
+        context: {
+          tag: 'async',
+          // simulate StripeProvider never giving us a StripeShape
+          addStripeLoadListener: () => {},
+          getRegisteredElements: () => [elementMock],
+        },
+      });
+
+      const props = wrapper.find(WrappedComponent).props();
+      expect(props).toHaveProperty('stripe', null);
+    });
+
+    it('props.stripe is set when addStripeLoadListener fires', () => {
+      const Injected = injectStripe(WrappedComponent);
+      const wrapper = mount(<Injected />, {
+        context: {
+          tag: 'async',
+          // simulate StripeProvider eventually giving us a StripeShape
+          addStripeLoadListener: fn => {
+            fn({
+              elements: jest.fn(),
+              createSource,
+              createToken,
+            });
+          },
+          getRegisteredElements: () => [elementMock],
+        },
+      });
+
+      const props = wrapper.find(WrappedComponent).props();
+      expect(props).toHaveProperty('stripe');
+      expect(props).toHaveProperty('stripe.createToken');
+      expect(props).toHaveProperty('stripe.createSource');
+    });
   });
 });
