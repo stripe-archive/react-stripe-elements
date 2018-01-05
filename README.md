@@ -228,7 +228,8 @@ export default CardSection;
 
 The [Payment Request Button](https://stripe.com/docs/elements/payment-request-button) lets you collect payment and address information from your customers using Apple Pay and the Payment Request API.
 
-To use the `PaymentRequestButtonElement` you need to first create a [`PaymentRequest` object](https://stripe.com/docs/stripe.js#the-payment-request-object). You can then conditionally render the `PaymentRequestButtonElement` based on the result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object as a prop.
+To use the `PaymentRequestButtonElement` you need to first create a [`PaymentRequest` object](https://stripe.com/docs/stripe.js#the-payment-request-object).
+You can then conditionally render the `PaymentRequestButtonElement` based on the result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object as a prop.
 
 ```js
 class PaymentRequestForm extends React.Component {
@@ -287,7 +288,9 @@ export default injectStripe(PaymentRequestForm);
 ### `<StripeProvider>`
 
 All applications using `react-stripe-elements` must use the `<StripeProvider>`  component, which sets up the Stripe context for a component tree.
-`react-stripe-elements` uses the provider pattern (which is also adopted by tools like [`react-redux`](https://github.com/reactjs/react-redux) and [`react-intl`](https://github.com/yahoo/react-intl)) to scope a Stripe context to a tree of components. This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.
+`react-stripe-elements` uses the provider pattern (which is also adopted by tools like [`react-redux`](https://github.com/reactjs/react-redux) and [`react-intl`](https://github.com/yahoo/react-intl)) to scope a Stripe context to a tree of components.
+
+This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.
 
 An integration usually wraps the `<StripeProvider>` around the application’s root component. This way, your entire application has the configured Stripe context.
 
@@ -368,7 +371,7 @@ type PaymentRequestButtonProps = {
 
 ### `injectStripe` HOC
 
-```
+```js
 function injectStripe(
   WrappedComponent: ReactClass,
   options?: {
@@ -398,30 +401,40 @@ type FactoryProps = {
 };
 ```
 
+`stripe` is only `null` when using one of the [Alternative loading
+strategies](#alternative-loading-strategies) mentioned above.
+
 ## Troubleshooting
 
 `react-stripe-elements` may not work properly when used with components that implement `shouldComponentUpdate`. `react-stripe-elements` relies heavily on React's `context` feature and `shouldComponentUpdate` does not provide a way to take context updates into account when deciding whether to allow a re-render. These components can block context updates from reaching `react-stripe-element` components in the tree.
 
 For example, when using `react-stripe-elements` together with [`react-redux`](https://github.com/reactjs/react-redux) doing the following will not work:
+
 ```js
 const Component = connect()(injectStripe(_Component));
 ```
+
 In this case, the context updates originating from the `StripeProvider` are not reaching the components wrapped inside the `connect` function. Therefore, `react-stripe-elements` components deeper in the tree break. The reason is that the `connect` function of `react-redux` [implements `shouldComponentUpdate`](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux) and blocks re-renders that are triggered by context changes outside of the connected component.
 
 There are two ways to prevent this issue:
 
 1. Change the order of the functions to have `injectStripe` be the outermost one:
-  ```js
-  const Component = injectStripe(connect()(_CardForm));
-  ```
+
+    ```js
+    const Component = injectStripe(connect()(_CardForm));
+    ```
+
   This works, because `injectStripe` does not implement `shouldComponentUpdate` itself, so context updates originating from the `redux` `Provider` will still reach all components.
 
-2. You can use the [`pure: false`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) option for `redux-connect`:
-  ```js
-  const Component = connect(mapStateToProps, mapDispatchToProps, mergeProps, {
-    pure: false,
-  })(injectStripe(_CardForm));
-  ```
+2. You can use the [`pure: false`][pure-false] option for redux-connect:
+
+    ```js
+    const Component = connect(mapStateToProps, mapDispatchToProps, mergeProps, {
+      pure: false,
+    })(injectStripe(_CardForm));
+    ```
+
+[pure-false]: https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 
 ## Development
 
