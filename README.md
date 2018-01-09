@@ -26,6 +26,10 @@ goes into more detail on the various customization options for Elements (e.g. st
   - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
   - [Using individual `*Element` components](#using-individual-element-components)
   - [Using the `PaymentRequestButtonElement`](#using-the-paymentrequestbuttonelement)
+  - [Advanced integrations](#advanced-integrations)
+  - [Loading Stripe.js asynchronously](#loading-stripejs-asynchronously)
+  - [Server-side rendering (SSR)](#server-side-rendering-ssr)
+  - [Using an existing Stripe instance](#using-an-existing-stripe-instance)
 - [Component reference](#component-reference)
   - [`<StripeProvider>`](#stripeprovider)
     - [Props shape](#props-shape)
@@ -131,13 +135,13 @@ you're tokenizing.
 import React from 'react';
 import {Elements} from 'react-stripe-elements';
 
-import CheckoutForm from './CheckoutForm';
+import InjectedCheckoutForm from './CheckoutForm';
 
 class MyStoreCheckout extends React.Component {
   render() {
     return (
       <Elements>
-        <CheckoutForm />
+        <InjectedCheckoutForm />
       </Elements>
     );
   }
@@ -228,7 +232,8 @@ export default CardSection;
 
 The [Payment Request Button](https://stripe.com/docs/elements/payment-request-button) lets you collect payment and address information from your customers using Apple Pay and the Payment Request API.
 
-To use the `PaymentRequestButtonElement` you need to first create a [`PaymentRequest` object](https://stripe.com/docs/stripe.js#the-payment-request-object). You can then conditionally render the `PaymentRequestButtonElement` based on the result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object as a prop.
+To use the `PaymentRequestButtonElement` you need to first create a [`PaymentRequest` object](https://stripe.com/docs/stripe.js#the-payment-request-object).
+You can then conditionally render the `PaymentRequestButtonElement` based on the result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object as a prop.
 
 ```js
 class PaymentRequestForm extends React.Component {
@@ -282,25 +287,181 @@ class PaymentRequestForm extends React.Component {
 export default injectStripe(PaymentRequestForm);
 ```
 
+### Advanced integrations
+
+The above [Getting started](#getting-started) section outlines the most common
+integration, which makes the following assumptions:
+
+- The Stripe.js script is loaded before your application's code.
+- Your code is only run in a browser environment.
+- You don't need fine-grained control over the Stripe instance that
+  `react-stripe-elements` uses under the hood.
+
+When all of these assumptions are true, you can pass the `apiKey` prop to
+`<StripeProvider>` and let `react-stripe-elements` handle the rest.
+
+When one or more of these assumptions doesn't hold true for your integration,
+you have another option: pass a Stripe instance as the `stripe` prop to
+`<StripeProvider>` directly. The `stripe` prop can be either `null` or the
+result of using `Stripe(apiKey, options)` to construct a [Stripe instance].
+
+[stripe-function]: https://stripe.com/docs/stripe-js/reference#stripe-function
+
+We'll now cover a couple of use cases which break at least one of the
+assumptions listed above.
+
+### Loading Stripe.js asynchronously
+
+Loading Stripe.js asynchronously can speed up your initial page load, especially
+if you don't show the payment form until the user interacts with your
+application in some way.
+
+
+```html
+<html>
+<head>
+  <!-- ... -->
+
+  <!-- Note the 'id' and 'async' attributes:                         -->
+  <!--    ┌────────────┐                                 ┌───┐       -->
+  <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
+
+  <!-- ... -->
+</head>
+<!-- ... -->
+</html>
+```
+
+Initialize `this.state.stripe` to `null` in the `constructor`, then update it in
+`componentDidMount` when the script tag has loaded.
+
+
+```js
+class App extends React.Component {
+  constructor() {
+    this.state = {stripe: null};
+  }
+  componentDidMount() {
+    document.querySelector('#stripe-js').addEventListener('load', () => {
+      // Create Stripe instance once Stripe.js loads
+      this.setState({stripe: window.Stripe('pk_test_12345')});
+    });
+  }
+  render() {
+    // this.state.stripe will either be null or a Stripe instance
+    // depending on whether Stripe.js has loaded.
+    return (
+      <StripeProvider stripe={this.state.stripe}>
+        <Elements>
+          <InjectedCheckoutForm />
+        </Elements>
+      </StripeProvider>
+    );
+  }
+}
+```
+
+Inside `<InjectedCheckoutForm />`, `this.props.stripe` will either be `null` or
+a Stripe instance. React will re-render `<InjectedCheckoutForm>` when
+`this.props.stripe` changes from `null` to a Stripe instance.
+
+You can find a working demo of this strategy in [async.js](demo/async/async.js).
+If you run the demo locally, you can view it at <http://localhost:8080/async/>.
+
+
+
+### Server-side rendering (SSR)
+
+If you're using `react-stripe-elements` in a non-browser environment
+(`React.renderToString`, etc.), Stripe.js is not available. To use
+`react-stripe-elements` with SSR frameworks, use the following instructions.
+
+The general idea is similar to the async loading snippet from the previous
+section (initialize `this.state.stripe` to `null` in `constructor`, update in
+`componentDidMount`), but this time we don't have to wait for the script tag to
+load in `componentDidMount`; we can use `window.Stripe` directly.
+
+```js
+class App extends React.Component {
+  constructor() {
+    this.state = {stripe: null};
+  }
+  componentDidMount() {
+    // Create Stripe instance in componentDidMount
+    // (componentDidMount only fires in browser/DOM environment)
+    this.setState({stripe: window.Stripe('pk_test_12345')});
+  }
+  render() {
+    return (
+      <StripeProvider stripe={this.state.stripe}>
+        <Elements>
+          <InjectedCheckoutForm />
+        </Elements>
+      </StripeProvider>
+    );
+  }
+}
+```
+
+Inside your form, `<InjectedCheckoutForm />`, `this.props.stripe` will either be
+`null` or a valid Stripe instance. This means that it will be `null` when
+rendered server-side, but set when rendered in a browser.
+
+### Using an existing Stripe instance
+
+In some projects, part of the project uses React, while another part doesn't.
+For example, maybe you have business logic and view logic separate. Or maybe you
+use `react-stripe-elements` for your credit card form, but use Stripe.js APIs
+directly for tokenizing bank account information.
+
+You can use the `stripe` prop to get more fine-grained control over the Stripe
+instance that `<StripeProvider>` uses. For example, if you have a `stripe`
+instance in a Redux store that you pass to your `<App />` as a prop, you can
+pass that instance directly into `<StripeProvider>`:
+
+```js
+class App extends React.Component {
+  render() {
+    return (
+      <StripeProvider stripe={this.props.stripe}>
+        <Elements>
+          <InjectedCheckoutForm />
+        </Elements>
+      </StripeProvider>
+    );
+  }
+}
+```
+
+As long as `<App />` is provided a non-`null` `stripe` prop,
+`this.props.stripe` will always be available within your `InjectedCheckoutForm`.
+
+
 ## Component reference
 
 ### `<StripeProvider>`
 
 All applications using `react-stripe-elements` must use the `<StripeProvider>`  component, which sets up the Stripe context for a component tree.
-`react-stripe-elements` uses the provider pattern (which is also adopted by tools like [`react-redux`](https://github.com/reactjs/react-redux) and [`react-intl`](https://github.com/yahoo/react-intl)) to scope a Stripe context to a tree of components. This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.
+`react-stripe-elements` uses the provider pattern (which is also adopted by tools like [`react-redux`](https://github.com/reactjs/react-redux) and [`react-intl`](https://github.com/yahoo/react-intl)) to scope a Stripe context to a tree of components.
+
+This allows configuration like your API key to be provided at the root of a component tree. This context is then made available to the `<Elements>` component and individual `<*Element>` components that we provide.
 
 An integration usually wraps the `<StripeProvider>` around the application’s root component. This way, your entire application has the configured Stripe context.
 
 #### Props shape
 
-This component accepts all `options` that can be passed into `Stripe(apiKey, options)` as props.
+There are two *distinct* props shapes you can pass to `<StripeProvider>`.
 
 ```js
-type StripeProviderProps = {
-  apiKey: string,
-};
+type StripeProviderProps =
+  | { apiKey: string, ... }
+  | { stripe: StripeObject | null };
 ```
 
+See [Advanced integrations](#advanced-integrations) for more
+information on when to use each.
+
+The `...` above represents that this component accepts props for any option that can be passed into `Stripe(apiKey, options)`.
 
 ### `<Elements>`
 
@@ -368,7 +529,7 @@ type PaymentRequestButtonProps = {
 
 ### `injectStripe` HOC
 
-```
+```js
 function injectStripe(
   WrappedComponent: ReactClass,
   options?: {
@@ -383,14 +544,16 @@ If the `withRef` option is set to `true`, the wrapped component instance will be
 #### Example
 
 ```js
-const StripeCheckoutForm = injectStripe(CheckoutForm);
+const InjectedCheckoutForm = injectStripe(CheckoutForm);
 ```
 
 The following props will be available to this component:
 
 ```js
 type FactoryProps = {
-  stripe: {
+  stripe:
+  | null
+  | {
     createToken: (tokenParameters: {type?: string}) => Promise<{token?: Object, error?: Object}>,
     // and other functions available on the `stripe` object,
     // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
@@ -398,30 +561,40 @@ type FactoryProps = {
 };
 ```
 
+`stripe` is only `null` when using one of the [Advanced
+integrations](#advanced-integrations) mentioned above.
+
 ## Troubleshooting
 
 `react-stripe-elements` may not work properly when used with components that implement `shouldComponentUpdate`. `react-stripe-elements` relies heavily on React's `context` feature and `shouldComponentUpdate` does not provide a way to take context updates into account when deciding whether to allow a re-render. These components can block context updates from reaching `react-stripe-element` components in the tree.
 
 For example, when using `react-stripe-elements` together with [`react-redux`](https://github.com/reactjs/react-redux) doing the following will not work:
+
 ```js
 const Component = connect()(injectStripe(_Component));
 ```
+
 In this case, the context updates originating from the `StripeProvider` are not reaching the components wrapped inside the `connect` function. Therefore, `react-stripe-elements` components deeper in the tree break. The reason is that the `connect` function of `react-redux` [implements `shouldComponentUpdate`](https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md#my-views-arent-updating-when-something-changes-outside-of-redux) and blocks re-renders that are triggered by context changes outside of the connected component.
 
 There are two ways to prevent this issue:
 
 1. Change the order of the functions to have `injectStripe` be the outermost one:
-  ```js
-  const Component = injectStripe(connect()(_CardForm));
-  ```
+
+    ```js
+    const Component = injectStripe(connect()(_CardForm));
+    ```
+
   This works, because `injectStripe` does not implement `shouldComponentUpdate` itself, so context updates originating from the `redux` `Provider` will still reach all components.
 
-2. You can use the [`pure: false`](https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options) option for `redux-connect`:
-  ```js
-  const Component = connect(mapStateToProps, mapDispatchToProps, mergeProps, {
-    pure: false,
-  })(injectStripe(_CardForm));
-  ```
+2. You can use the [`pure: false`][pure-false] option for redux-connect:
+
+    ```js
+    const Component = connect(mapStateToProps, mapDispatchToProps, mergeProps, {
+      pure: false,
+    })(injectStripe(_CardForm));
+    ```
+
+[pure-false]: https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 
 ## Development
 

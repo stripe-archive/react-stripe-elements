@@ -1,7 +1,6 @@
-const webpack = require('webpack');
+// @noflow
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-const env = process.env.NODE_ENV;
 
 const config = {
   module: {
@@ -10,15 +9,23 @@ const config = {
     ],
   },
   entry: {
-    demo: ['./demo/index.js'],
+    demo: ['./demo/demo/index.js'],
+    async: ['./demo/async/main.js'],
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: 'demo.js'
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].js',
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './demo/index.html',
+      inject: false,
+      filename: 'index.html',
+      template: './demo/demo/index.html',
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'async/index.html',
+      template: './demo/async/index.html',
     }),
   ],
 };

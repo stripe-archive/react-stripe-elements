@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://js.stripe.com/v3/"></script>
+    <title>async demo | react-stripe-elements</title>
     <style>
 * {
   box-sizing: border-box;
@@ -58,9 +58,7 @@ button {
 }
 
 form {
-  margin-bottom: 40px;
-  padding-bottom: 40px;
-  border-bottom: 3px solid #e6ebf1;
+  margin: 80px 0;
 }
 
 button:hover {
@@ -87,13 +85,21 @@ button:hover {
   transition: all 150ms ease;
 }
 
-.StripeElement.PaymentRequestButton {
-  padding: 0;
+button[disabled] {
+  opacity: 0.6;
 }
+
+.StripeElement.loading {
+  height: 41.6px;
+  opacity: 0.6;
+}
+
     </style>
   </head>
   <body>
     <div class="App">
     </div>
+    <script src="/async.js"></script>
+    <!-- NOTE: The Stripe.js script tag is manually injected in /async.js -->
   </body>
 </html>

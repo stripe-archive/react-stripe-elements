@@ -23,7 +23,7 @@ describe('Element', () => {
       create: jest.fn().mockReturnValue(elementMock),
     };
     context = {
-      elements: elementsMock,
+      addElementsLoadListener: fn => fn(elementsMock),
       registerElement: jest.fn(),
       unregisterElement: jest.fn(),
     };
@@ -98,5 +98,18 @@ describe('Element', () => {
     expect(elementMock.update).toHaveBeenCalledWith({
       style: {base: {fontSize: '20px'}},
     });
+  });
+
+  it.only("re-rendering with new props should still work if addElementsLoadListener hasn't fired yet", () => {
+    // no-op function so that any registered listeners are never woken up
+    context.addElementsLoadListener = () => {};
+
+    const placeholder = 'hello';
+    const CardElement = Element('card', {sourceType: 'card'});
+    const element = shallow(<CardElement placeholder={placeholder} />, {
+      context,
+    });
+
+    expect(() => element.setProps({placeholder: 'placeholder'})).not.toThrow();
   });
 });

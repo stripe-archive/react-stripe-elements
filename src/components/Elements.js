@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
 import PropTypes from 'prop-types';
-import type {StripeContext} from './Provider';
+import {type ProviderContext, providerContextTypes} from './Provider';
 
-type ElementsList = Array<{type: string, element: ElementShape}>;
+export type ElementsList = Array<{type: string, element: ElementShape}>;
+export type ElementsLoadListener = ElementsShape => void;
 
 type Props = {
   children?: any,
@@ -17,48 +18,60 @@ export type InjectContext = {
   getRegisteredElements: () => ElementsList,
 };
 
+export const injectContextTypes = {
+  getRegisteredElements: PropTypes.func.isRequired,
+};
+
 export type ElementContext = {
-  elements: ElementsShape,
+  addElementsLoadListener: ElementsLoadListener => void,
   registerElement: (type: string, element: ElementShape) => void,
   unregisterElement: (element: ElementShape) => void,
 };
 
-type Context = InjectContext & ElementContext;
+export const elementContextTypes = {
+  addElementsLoadListener: PropTypes.func.isRequired,
+  registerElement: PropTypes.func.isRequired,
+  unregisterElement: PropTypes.func.isRequired,
+};
+
+type ChildContext = InjectContext & ElementContext;
 
 export default class Elements extends React.Component<Props, State> {
   static childContextTypes = {
-    elements: PropTypes.object.isRequired,
-    registerElement: PropTypes.func.isRequired,
-    unregisterElement: PropTypes.func.isRequired,
-    getRegisteredElements: PropTypes.func.isRequired,
+    ...injectContextTypes,
+    ...elementContextTypes,
   };
-  static contextTypes = {
-    stripe: PropTypes.object.isRequired,
-  };
+  static contextTypes = providerContextTypes;
   static defaultProps = {
     children: null,
   };
-  constructor(props: Props, context: StripeContext) {
+  constructor(props: Props, context: ProviderContext) {
     super(props, context);
-
-    const {children, ...options} = this.props;
-    this._elements = this.context.stripe.elements(options);
 
     this.state = {
       registeredElements: [],
     };
   }
 
-  getChildContext(): Context {
+  getChildContext(): ChildContext {
     return {
-      elements: this._elements,
+      addElementsLoadListener: (fn: ElementsLoadListener) => {
+        const {children, ...options} = this.props;
+        if (this.context.tag === 'sync') {
+          fn(this.context.stripe.elements(options));
+        } else {
+          this.context.addStripeLoadListener((stripe: StripeShape) => {
+            fn(stripe.elements(options));
+          });
+        }
+      },
       registerElement: this.handleRegisterElement,
       unregisterElement: this.handleUnregisterElement,
       getRegisteredElements: () => this.state.registeredElements,
     };
   }
   props: Props;
-  context: StripeContext;
+  context: ProviderContext;
   _elements: ElementsShape;
 
   handleRegisterElement = (type: string, element: Object) => {

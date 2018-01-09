@@ -18,25 +18,32 @@ describe('StripeProvider', () => {
     window.Stripe = stripeMockFn;
   });
 
-  it('requires apiKey', () => {
-    const originalConsoleError = global.console.error;
-    const mockConsoleError = jest.fn();
-    global.console.error = mockConsoleError;
-    shallow(
-      <StripeProvider>
-        <div />
-      </StripeProvider>
-    );
-    expect(mockConsoleError.mock.calls[0][0]).toContain(
-      'Warning: Failed prop type: The prop `apiKey` is marked as required in `Provider`, but its value is `undefined`.'
-    );
-    global.console.error = originalConsoleError;
+  it('requires apiKey or stripe prop', () => {
+    expect(() => {
+      shallow(
+        <StripeProvider>
+          <div />
+        </StripeProvider>
+      );
+    }).toThrow(/Please pass either 'apiKey' or 'stripe' to StripeProvider./);
   });
 
-  it('throws without stripe.js loaded', () => {
+  it('throws without stripe.js loaded if using apiKey', () => {
     window.Stripe = null;
     expect(() => shallow(<StripeProvider apiKey="made_up_key" />)).toThrow(
       'Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements.'
+    );
+  });
+
+  it('requires not both apiKey and stripe prop', () => {
+    expect(() => {
+      shallow(
+        <StripeProvider apiKey="made_up_key" stripe={stripeMockResult}>
+          <div />
+        </StripeProvider>
+      );
+    }).toThrow(
+      /Please pass either 'apiKey' or 'stripe' to StripeProvider, not both./
     );
   });
 
@@ -89,14 +96,51 @@ describe('StripeProvider', () => {
     expect(stripeMockFn).toHaveBeenCalledWith('made_up_key', {foo: 'bar'});
   });
 
-  it('provides context.stripe', () => {
+  it('provides sync context.stripe if using apiKey', () => {
     const wrapper = mount(
       <StripeProvider apiKey="made_up_key">
         <form />
       </StripeProvider>
     );
     const childContext = wrapper.node.getChildContext();
-    expect(childContext).toEqual({stripe: stripeMockResult});
+    expect(childContext).toEqual({stripe: stripeMockResult, tag: 'sync'});
+  });
+
+  it('if stripe prop non-null *at mount*, provides sync context', () => {
+    const wrapper = mount(
+      <StripeProvider stripe={stripeMockResult}>
+        <form />
+      </StripeProvider>
+    );
+    const childContext = wrapper.node.getChildContext();
+    expect(childContext).toEqual({stripe: stripeMockResult, tag: 'sync'});
+  });
+
+  it('if stripe prop null *at mount*, provides async context', () => {
+    const wrapper = mount(
+      <StripeProvider stripe={null}>
+        <form />
+      </StripeProvider>
+    );
+    const childContext = wrapper.node.getChildContext();
+    expect(childContext).toHaveProperty('addStripeLoadListener');
+    expect(childContext).toHaveProperty('tag', 'async');
+  });
+
+  it('addStripeLoadListener is called when stripe goes from null -> non-null', done => {
+    const wrapper = mount(
+      <StripeProvider stripe={null}>
+        <form />
+      </StripeProvider>
+    );
+
+    const childContext = wrapper.node.getChildContext();
+    childContext.addStripeLoadListener(stripe => {
+      expect(stripe).toEqual(stripeMockResult);
+      done();
+    });
+
+    wrapper.setProps({stripe: stripeMockResult});
   });
 
   it('does not create a new Stripe instance if one exists for the same key', () => {
