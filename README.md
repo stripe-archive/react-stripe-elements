@@ -26,7 +26,7 @@ goes into more detail on the various customization options for Elements (e.g. st
   - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
   - [Using individual `*Element` components](#using-individual-element-components)
   - [Using the `PaymentRequestButtonElement`](#using-the-paymentrequestbuttonelement)
-  - [Advanced integrations](#advanced-integrations)
+- [Advanced integrations](#advanced-integrations)
   - [Loading Stripe.js asynchronously](#loading-stripejs-asynchronously)
   - [Server-side rendering (SSR)](#server-side-rendering-ssr)
   - [Using an existing Stripe instance](#using-an-existing-stripe-instance)
@@ -287,7 +287,7 @@ class PaymentRequestForm extends React.Component {
 export default injectStripe(PaymentRequestForm);
 ```
 
-### Advanced integrations
+## Advanced integrations
 
 The above [Getting started](#getting-started) section outlines the most common
 integration, which makes the following assumptions:
