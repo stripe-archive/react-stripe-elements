@@ -100,7 +100,7 @@ describe('Element', () => {
     });
   });
 
-  it.only("re-rendering with new props should still work if addElementsLoadListener hasn't fired yet", () => {
+  it("re-rendering with new props should still work if addElementsLoadListener hasn't fired yet", () => {
     // no-op function so that any registered listeners are never woken up
     context.addElementsLoadListener = () => {};
 

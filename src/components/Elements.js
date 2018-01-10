@@ -56,12 +56,19 @@ export default class Elements extends React.Component<Props, State> {
   getChildContext(): ChildContext {
     return {
       addElementsLoadListener: (fn: ElementsLoadListener) => {
+        // Return the existing elements instance if we already have one.
+        if (this._elements) {
+          fn(this._elements);
+          return;
+        }
         const {children, ...options} = this.props;
         if (this.context.tag === 'sync') {
-          fn(this.context.stripe.elements(options));
+          this._elements = this.context.stripe.elements(options);
+          fn(this._elements);
         } else {
           this.context.addStripeLoadListener((stripe: StripeShape) => {
-            fn(stripe.elements(options));
+            this._elements = stripe.elements(options);
+            fn(this._elements);
           });
         }
       },
