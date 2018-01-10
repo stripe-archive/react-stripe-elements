@@ -90,7 +90,7 @@ export default class Provider extends React.Component<Props> {
           "Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements. If Stripe.js isn't available yet (it's loading asynchronously, or you're using server-side rendering), see https://github.com/stripe/react-stripe-elements#TODO"
         );
       } else {
-        const {apiKey, children, ...options} = this.props;
+        const {apiKey, children, stripe, ...options} = this.props;
         this._meta = {
           tag: 'sync',
           stripe: getOrCreateStripe(apiKey, options),
