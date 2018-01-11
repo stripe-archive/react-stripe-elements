@@ -66,7 +66,9 @@ describe('Elements', () => {
   it('with async context: addElementsLoadListener returns the same elements instance ', () => {
     const asyncContext = {
       tag: 'async',
-      addStripeLoadListener: jest.fn(callback => callback(stripeMock)),
+      addStripeLoadListener: jest.fn(callback =>
+        setTimeout(() => callback(stripeMock), 0)
+      ),
     };
     const wrapper = mount(
       <Elements>
@@ -76,12 +78,18 @@ describe('Elements', () => {
     );
     const childContext = wrapper.node.getChildContext();
 
-    const mockCallback = jest.fn();
-    childContext.addElementsLoadListener(mockCallback);
-    expect(mockCallback).toHaveBeenCalledTimes(1);
-    expect(mockCallback).toHaveBeenLastCalledWith(true);
-    childContext.addElementsLoadListener(mockCallback);
-    expect(mockCallback).toHaveBeenCalledTimes(2);
-    expect(mockCallback).toHaveBeenCalledWith(true);
+    const a = new Promise(resolve =>
+      childContext.addElementsLoadListener(first => {
+        expect(first).toEqual(true);
+        resolve();
+      })
+    );
+    const b = new Promise(resolve =>
+      childContext.addElementsLoadListener(second => {
+        expect(second).toEqual(true);
+        resolve();
+      })
+    );
+    return Promise.all([a, b]);
   });
 });
