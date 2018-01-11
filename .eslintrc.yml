@@ -33,3 +33,5 @@ rules:
   no-unused-vars:
     - 2
     - ignoreRestSiblings: true
+  jest/no-disabled-tests: 2
+  jest/no-focused-tests: 2
