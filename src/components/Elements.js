@@ -67,8 +67,12 @@ export default class Elements extends React.Component<Props, State> {
           fn(this._elements);
         } else {
           this.context.addStripeLoadListener((stripe: StripeShape) => {
-            this._elements = stripe.elements(options);
-            fn(this._elements);
+            if (this._elements) {
+              fn(this._elements);
+            } else {
+              this._elements = stripe.elements(options);
+              fn(this._elements);
+            }
           });
         }
       },
