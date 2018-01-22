@@ -87,7 +87,7 @@ export default class Provider extends React.Component<Props> {
     } else if (this.props.apiKey) {
       if (!window.Stripe) {
         throw new Error(
-          "Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements. If Stripe.js isn't available yet (it's loading asynchronously, or you're using server-side rendering), see https://github.com/stripe/react-stripe-elements#TODO"
+          "Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements. If Stripe.js isn't available yet (it's loading asynchronously, or you're using server-side rendering), see https://github.com/stripe/react-stripe-elements#advanced-integrations"
         );
       } else {
         const {apiKey, children, stripe, ...options} = this.props;
