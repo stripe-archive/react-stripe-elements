@@ -342,10 +342,14 @@ class App extends React.Component {
     this.state = {stripe: null};
   }
   componentDidMount() {
-    document.querySelector('#stripe-js').addEventListener('load', () => {
-      // Create Stripe instance once Stripe.js loads
+    if (window.Stripe) {
       this.setState({stripe: window.Stripe('pk_test_12345')});
-    });
+    } else {
+      document.querySelector('#stripe-js').addEventListener('load', () => {
+        // Create Stripe instance once Stripe.js loads
+        this.setState({stripe: window.Stripe('pk_test_12345')});
+      });
+    }
   }
   render() {
     // this.state.stripe will either be null or a Stripe instance
@@ -368,6 +372,12 @@ a Stripe instance. React will re-render `<InjectedCheckoutForm>` when
 You can find a working demo of this strategy in [async.js](demo/async/async.js).
 If you run the demo locally, you can view it at <http://localhost:8080/async/>.
 
+For alternatives to calling `setState`in `componentDidMount`, consider using a
+`setTimeout()`, moving the `if/else` statement to the `constructor`, or
+dynamically injecting a script tag in `componentDidMount`. For more
+information, see [stripe/react-stripe-elements][issue-154].
+
+[issue-154]: https://github.com/stripe/react-stripe-elements/issues/154
 
 
 ### Server-side rendering (SSR)
