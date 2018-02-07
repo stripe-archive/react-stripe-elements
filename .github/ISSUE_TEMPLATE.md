@@ -1,4 +1,4 @@
-Feature request or idea? Consider opening an [API review](.github/API_REVIEW.md)!
+Feature request or idea? Consider opening an [API review](https://github.com/stripe/react-stripe-elements/tree/master/.github/API_REVIEW.md)!
 
 ### Summary
 
