@@ -1,4 +1,9 @@
-Feature request or idea? Consider opening an [API review](https://github.com/stripe/react-stripe-elements/tree/master/.github/API_REVIEW.md)!
+Please only file issues here that you believe represent actual bugs or feature requests for this library, the React wrapper for Stripe Elements.
+
+If you're having general trouble with Elements or your Stripe integration, please reach out to support using the form at https://support.stripe.com/ (preferred) or via email to support@stripe.com.
+
+
+Have a feature request or idea for React Stripe Elements? Consider opening an [API review](https://github.com/stripe/react-stripe-elements/tree/master/.github/API_REVIEW.md)!
 
 ### Summary
 
