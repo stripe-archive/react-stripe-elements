@@ -5,6 +5,7 @@ import shallowEqual from '../utils/shallowEqual';
 import {type ElementContext, elementContextTypes} from './Elements';
 
 type Props = {
+  id: string,
   className: string,
   elementRef: Function,
   onChange: Function,
@@ -17,6 +18,7 @@ const noop = () => {};
 
 const _extractOptions = (props: Props): Object => {
   const {
+    id,
     className,
     elementRef,
     onChange,
@@ -31,6 +33,7 @@ const _extractOptions = (props: Props): Object => {
 const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
   class extends React.Component<Props> {
     static propTypes = {
+      id: PropTypes.string,
       className: PropTypes.string,
       elementRef: PropTypes.func,
       onChange: PropTypes.func,
@@ -39,6 +42,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       onReady: PropTypes.func,
     };
     static defaultProps = {
+      id: '',
       className: '',
       elementRef: noop,
       onChange: noop,
@@ -67,7 +71,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
 
         this._setupEventListeners(element);
 
-        element.mount(this._ref);
+        element.mount(this.props.id ? `#${this.props.id}` : this._ref);
         if (hocOptions.sourceType) {
           this.context.registerElement(hocOptions.sourceType, element);
         }
@@ -117,7 +121,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     };
 
     render() {
-      return <div className={this.props.className} ref={this.handleRef} />;
+      return <div id={this.props.id || undefined} className={this.props.className} ref={this.handleRef} />;
     }
   };
 

@@ -29,6 +29,13 @@ describe('Element', () => {
     };
   });
 
+  it('should pass id to the DOM element', () => {
+    const id = 'my-id';
+    const CardElement = Element('card', {sourceType: 'card'});
+    const element = shallow(<CardElement id={id} />, {context});
+    expect(element.find('#my-id').length).toBe(1);
+  })
+
   it('should pass className to the DOM element', () => {
     const className = 'my-class';
     const CardElement = Element('card', {sourceType: 'card'});
