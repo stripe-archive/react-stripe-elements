@@ -121,7 +121,13 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     };
 
     render() {
-      return <div id={this.props.id || undefined} className={this.props.className} ref={this.handleRef} />;
+      return (
+        <div
+          id={this.props.id || undefined}
+          className={this.props.className}
+          ref={this.handleRef}
+        />
+      );
     }
   };
 

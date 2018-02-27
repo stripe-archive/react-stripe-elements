@@ -34,7 +34,7 @@ describe('Element', () => {
     const CardElement = Element('card', {sourceType: 'card'});
     const element = shallow(<CardElement id={id} />, {context});
     expect(element.find('#my-id').length).toBe(1);
-  })
+  });
 
   it('should pass className to the DOM element', () => {
     const className = 'my-class';
