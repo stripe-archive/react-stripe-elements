@@ -5,7 +5,8 @@ import shallowEqual from '../utils/shallowEqual';
 import {type ElementContext, elementContextTypes} from './Elements';
 
 type Props = {
-  className: string,
+  id?: string,
+  className?: string,
   elementRef: Function,
   onChange: Function,
   onBlur: Function,
@@ -17,6 +18,7 @@ const noop = () => {};
 
 const _extractOptions = (props: Props): Object => {
   const {
+    id,
     className,
     elementRef,
     onChange,
@@ -31,6 +33,7 @@ const _extractOptions = (props: Props): Object => {
 const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
   class extends React.Component<Props> {
     static propTypes = {
+      id: PropTypes.string,
       className: PropTypes.string,
       elementRef: PropTypes.func,
       onChange: PropTypes.func,
@@ -39,7 +42,8 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       onReady: PropTypes.func,
     };
     static defaultProps = {
-      className: '',
+      id: undefined,
+      className: undefined,
       elementRef: noop,
       onChange: noop,
       onBlur: noop,
@@ -117,7 +121,13 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     };
 
     render() {
-      return <div className={this.props.className} ref={this.handleRef} />;
+      return (
+        <div
+          id={this.props.id}
+          className={this.props.className}
+          ref={this.handleRef}
+        />
+      );
     }
   };
 
