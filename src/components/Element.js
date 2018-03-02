@@ -5,8 +5,8 @@ import shallowEqual from '../utils/shallowEqual';
 import {type ElementContext, elementContextTypes} from './Elements';
 
 type Props = {
-  id: string,
-  className: string,
+  id?: string,
+  className?: string,
   elementRef: Function,
   onChange: Function,
   onBlur: Function,
@@ -42,8 +42,8 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
       onReady: PropTypes.func,
     };
     static defaultProps = {
-      id: '',
-      className: '',
+      id: undefined,
+      className: undefined,
       elementRef: noop,
       onChange: noop,
       onBlur: noop,
@@ -71,7 +71,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
 
         this._setupEventListeners(element);
 
-        element.mount(this.props.id ? `#${this.props.id}` : this._ref);
+        element.mount(this._ref);
         if (hocOptions.sourceType) {
           this.context.registerElement(hocOptions.sourceType, element);
         }
@@ -123,7 +123,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     render() {
       return (
         <div
-          id={this.props.id || undefined}
+          id={this.props.id}
           className={this.props.className}
           ref={this.handleRef}
         />
