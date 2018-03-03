@@ -7,6 +7,7 @@ import {type ElementContext, elementContextTypes} from './Elements';
 type Props = {
   id?: string,
   className?: string,
+  // DEPRECATED; remove in 2.0.0+
   elementRef?: Function,
   onBlur: Function,
   onClick: Function,
