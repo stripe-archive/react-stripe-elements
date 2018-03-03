@@ -5,8 +5,9 @@ import shallowEqual from '../utils/shallowEqual';
 import {type ElementContext, elementContextTypes} from './Elements';
 
 type Props = {
-  className: string,
-  elementRef: Function,
+  id?: string,
+  className?: string,
+  elementRef?: Function,
   onBlur: Function,
   onClick: Function,
   onFocus: Function,
@@ -22,6 +23,7 @@ const noop = () => {};
 
 const _extractOptions = (props: Props): Object => {
   const {
+    id,
     className,
     elementRef,
     onBlur,
@@ -36,6 +38,7 @@ const _extractOptions = (props: Props): Object => {
 
 class PaymentRequestButtonElement extends React.Component<Props> {
   static propTypes = {
+    id: PropTypes.string,
     className: PropTypes.string,
     elementRef: PropTypes.func,
     onBlur: PropTypes.func,
@@ -49,8 +52,9 @@ class PaymentRequestButtonElement extends React.Component<Props> {
     }).isRequired,
   };
   static defaultProps = {
-    className: '',
-    elementRef: noop,
+    id: undefined,
+    className: undefined,
+    elementRef: undefined,
     onBlur: noop,
     onClick: noop,
     onFocus: noop,
@@ -75,7 +79,14 @@ class PaymentRequestButtonElement extends React.Component<Props> {
         ...this._options,
       });
       this._element.on('ready', () => {
-        this.props.elementRef(this._element);
+        if (this.props.elementRef) {
+          if (window.console && window.console.warn) {
+            console.warn(
+              "'elementRef()' is deprecated and will be removed in a future version of react-stripe-elements. Please use 'onReady()' instead."
+            );
+          }
+          this.props.elementRef(this._element);
+        }
         this.props.onReady();
       });
       this._element.on('focus', (...args) => this.props.onFocus(...args));
@@ -113,7 +124,13 @@ class PaymentRequestButtonElement extends React.Component<Props> {
   };
 
   render() {
-    return <div className={this.props.className} ref={this.handleRef} />;
+    return (
+      <div
+        id={this.props.id}
+        className={this.props.className}
+        ref={this.handleRef}
+      />
+    );
   }
 }
 
