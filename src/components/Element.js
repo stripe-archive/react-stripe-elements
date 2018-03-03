@@ -7,7 +7,7 @@ import {type ElementContext, elementContextTypes} from './Elements';
 type Props = {
   id?: string,
   className?: string,
-  elementRef: Function,
+  elementRef?: Function,
   onChange: Function,
   onBlur: Function,
   onFocus: Function,
@@ -44,7 +44,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
     static defaultProps = {
       id: undefined,
       className: undefined,
-      elementRef: noop,
+      elementRef: undefined,
       onChange: noop,
       onBlur: noop,
       onFocus: noop,
@@ -104,8 +104,15 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
 
     _setupEventListeners(element: ElementShape) {
       element.on('ready', () => {
-        this.props.elementRef(this._element);
-        this.props.onReady();
+        if (this.props.elementRef) {
+          if (window.console && window.console.warn) {
+            console.warn(
+              "'elementRef()' is deprecated and will be removed in a future version of react-stripe-elements. Please use 'onReady()' instead."
+            );
+          }
+          this.props.elementRef(this._element);
+        }
+        this.props.onReady(this._element);
       });
 
       element.on('change', change => {

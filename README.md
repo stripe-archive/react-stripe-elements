@@ -38,6 +38,7 @@ goes into more detail on the various customization options for Elements (e.g. st
   - [`<*Element>` components](#element-components)
     - [Available components](#available-components)
     - [Props shape](#props-shape-2)
+    - [Using `onReady`](#using-onready)
   - [`injectStripe` HOC](#injectstripe-hoc)
     - [Example](#example)
 - [Troubleshooting](#troubleshooting)
@@ -512,14 +513,13 @@ These components accept all `options` that can be passed into `elements.create(t
 type ElementProps = {
   id?: string,
   className?: string,
-  elementRef?: (StripeElement) => void,
 
   // For full documentation on the events and payloads below, see:
   // https://stripe.com/docs/elements/reference#element-on
   onBlur?: () => void,
   onChange?: (changeObject: Object) => void,
   onFocus?: () => void,
-  onReady?: () => void,
+  onReady?: (StripeElement) => void,
 };
 ```
 
@@ -530,14 +530,46 @@ type PaymentRequestButtonProps = {
   paymentRequest: StripePaymentRequest,
   id?: string,
   className?: string,
-  elementRef?: (StripeElement) => void,
 
   onBlur?: () => void,
   onClick?: () => void,
   onFocus?: () => void,
-  onReady?: () => void,
+  onReady?: (StripeElement) => void,
 };
 ```
+
+#### Using `onReady`
+
+Note that the `onReady` callback gives you access to the underlying [Element]
+created with Stripe.js. You can use this to get access to all the underlying
+methods that a Stripe Element supports.
+
+For example, you can use `onReady` to force your element to focus:
+
+```js
+// CardSection.js
+import React from 'react';
+import {CardElement} from 'react-stripe-elements';
+
+class CardSection extends React.Component {
+  render = () => {
+    return (
+      <label>
+        Card details
+        <CardElement
+          onReady={(el) => el.focus()}
+        />
+      </label>
+    );
+  };
+};
+
+export default CardSection;
+```
+
+(Note that this functionality is new as of react-stripe-elements v1.6.0.)
+
+[Element]: https://stripe.com/docs/stripe-js/reference#other-methods
 
 ### `injectStripe` HOC
 
