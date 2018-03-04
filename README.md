@@ -339,6 +339,7 @@ Initialize `this.state.stripe` to `null` in the `constructor`, then update it in
 ```js
 class App extends React.Component {
   constructor() {
+    super();
     this.state = {stripe: null};
   }
   componentDidMount() {
