@@ -395,6 +395,7 @@ load in `componentDidMount`; we can use `window.Stripe` directly.
 ```js
 class App extends React.Component {
   constructor() {
+    super();
     this.state = {stripe: null};
   }
   componentDidMount() {
