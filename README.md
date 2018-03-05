@@ -528,6 +528,7 @@ The props for the `PaymentRequestButtonElement` are:
 ```js
 type PaymentRequestButtonProps = {
   paymentRequest: StripePaymentRequest,
+  id?: string,
   className?: string,
   elementRef?: (StripeElement) => void,
 

@@ -35,6 +35,18 @@ describe('PaymentRequestButtonElement', () => {
     };
   });
 
+  it('should pass the id to the DOM element', () => {
+    const id = 'my-id';
+    const element = shallow(
+      <PaymentRequestButtonElement
+        id={id}
+        paymentRequest={paymentRequestMock}
+      />,
+      {context}
+    );
+    expect(element.find(`#${id}`)).toBeTruthy();
+  });
+
   it('should pass the className to the DOM element', () => {
     const className = 'my-class';
     const element = shallow(

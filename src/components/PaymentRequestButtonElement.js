@@ -5,7 +5,8 @@ import shallowEqual from '../utils/shallowEqual';
 import {type ElementContext, elementContextTypes} from './Elements';
 
 type Props = {
-  className: string,
+  id?: string,
+  className?: string,
   elementRef: Function,
   onBlur: Function,
   onClick: Function,
@@ -22,6 +23,7 @@ const noop = () => {};
 
 const _extractOptions = (props: Props): Object => {
   const {
+    id,
     className,
     elementRef,
     onBlur,
@@ -36,6 +38,7 @@ const _extractOptions = (props: Props): Object => {
 
 class PaymentRequestButtonElement extends React.Component<Props> {
   static propTypes = {
+    id: PropTypes.string,
     className: PropTypes.string,
     elementRef: PropTypes.func,
     onBlur: PropTypes.func,
@@ -49,7 +52,8 @@ class PaymentRequestButtonElement extends React.Component<Props> {
     }).isRequired,
   };
   static defaultProps = {
-    className: '',
+    id: undefined,
+    className: undefined,
     elementRef: noop,
     onBlur: noop,
     onClick: noop,
@@ -113,7 +117,13 @@ class PaymentRequestButtonElement extends React.Component<Props> {
   };
 
   render() {
-    return <div className={this.props.className} ref={this.handleRef} />;
+    return (
+      <div
+        id={this.props.id}
+        className={this.props.className}
+        ref={this.handleRef}
+      />
+    );
   }
 }
 
