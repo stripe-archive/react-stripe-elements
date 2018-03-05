@@ -72,13 +72,21 @@ describe('Element', () => {
     const CardElement = Element('card', {sourceType: 'card'});
     const onReadyMock = jest.fn();
     const elementRefMock = jest.fn();
+
+    const originalConsoleWarn = global.console.warn;
+    const mockConsoleWarn = jest.fn();
+    global.console.warn = mockConsoleWarn;
+
     mount(<CardElement onReady={onReadyMock} elementRef={elementRefMock} />, {
       context,
     });
 
     expect(elementMock.on.mock.calls[0][0]).toBe('ready');
     expect(elementRefMock).toHaveBeenCalledWith(elementMock);
-    expect(onReadyMock).toHaveBeenCalled();
+    expect(onReadyMock).toHaveBeenCalledWith(elementMock);
+    expect(mockConsoleWarn.mock.calls[0][0]).toMatch(/deprecated/);
+
+    global.console.warn = originalConsoleWarn;
   });
 
   it('should update the Element when props change', () => {

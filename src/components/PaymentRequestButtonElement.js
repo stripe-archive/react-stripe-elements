@@ -7,7 +7,8 @@ import {type ElementContext, elementContextTypes} from './Elements';
 type Props = {
   id?: string,
   className?: string,
-  elementRef: Function,
+  // DEPRECATED; remove in 2.0.0+
+  elementRef?: Function,
   onBlur: Function,
   onClick: Function,
   onFocus: Function,
@@ -54,7 +55,7 @@ class PaymentRequestButtonElement extends React.Component<Props> {
   static defaultProps = {
     id: undefined,
     className: undefined,
-    elementRef: noop,
+    elementRef: undefined,
     onBlur: noop,
     onClick: noop,
     onFocus: noop,
@@ -79,8 +80,15 @@ class PaymentRequestButtonElement extends React.Component<Props> {
         ...this._options,
       });
       this._element.on('ready', () => {
-        this.props.elementRef(this._element);
-        this.props.onReady();
+        if (this.props.elementRef) {
+          if (window.console && window.console.warn) {
+            console.warn(
+              "'elementRef()' is deprecated and will be removed in a future version of react-stripe-elements. Please use 'onReady()' instead."
+            );
+          }
+          this.props.elementRef(this._element);
+        }
+        this.props.onReady(this._element);
       });
       this._element.on('focus', (...args) => this.props.onFocus(...args));
       this._element.on('click', (...args) => this.props.onClick(...args));
