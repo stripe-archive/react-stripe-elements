@@ -88,7 +88,7 @@ class PaymentRequestButtonElement extends React.Component<Props> {
           }
           this.props.elementRef(this._element);
         }
-        this.props.onReady();
+        this.props.onReady(this._element);
       });
       this._element.on('focus', (...args) => this.props.onFocus(...args));
       this._element.on('click', (...args) => this.props.onClick(...args));
