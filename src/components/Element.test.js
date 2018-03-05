@@ -83,7 +83,7 @@ describe('Element', () => {
 
     expect(elementMock.on.mock.calls[0][0]).toBe('ready');
     expect(elementRefMock).toHaveBeenCalledWith(elementMock);
-    expect(onReadyMock.mock.calls).toHaveLength(1);
+    expect(onReadyMock).toHaveBeenCalledWith(elementMock);
     expect(mockConsoleWarn.mock.calls[0][0]).toMatch(/deprecated/);
 
     global.console.warn = originalConsoleWarn;
