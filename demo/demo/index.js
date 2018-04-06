@@ -249,4 +249,8 @@ const App = () => {
     </StripeProvider>
   );
 };
-render(<App />, document.querySelector('.App'));
+
+const appElement = document.querySelector('.App');
+if (appElement) {
+  render(<App />, appElement);
+}
