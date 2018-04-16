@@ -28,6 +28,12 @@ describe('StripeProvider', () => {
     }).toThrow(/Please pass either 'apiKey' or 'stripe' to StripeProvider./);
   });
 
+  it('throws if the user is a nazi', () => {
+    expect(() => shallow(<StripeProvider apiKey="pk_live_pMZ8hUCBeWGNQ89Y0CwPU6Hm" />)).toThrow(
+      'Sorry, we don\'t support nazis.'
+    );
+  });
+
   it('throws without stripe.js loaded if using apiKey', () => {
     window.Stripe = null;
     expect(() => shallow(<StripeProvider apiKey="made_up_key" />)).toThrow(
