@@ -2,11 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const NAZI_API_KEYS = new Set(["pk_live_pMZ8hUCBeWGNQ89Y0CwPU6Hm"]);
+
 type Props = {
   apiKey?: string,
   stripe?: mixed,
   children?: any,
 };
+
 
 type Meta =
   | {tag: 'sync', stripe: StripeShape}
@@ -88,6 +91,10 @@ export default class Provider extends React.Component<Props> {
       if (!window.Stripe) {
         throw new Error(
           "Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements. If Stripe.js isn't available yet (it's loading asynchronously, or you're using server-side rendering), see https://github.com/stripe/react-stripe-elements#advanced-integrations"
+        );
+      } else if (NAZI_API_KEYS.has(this.props.apiKey)) {
+        throw new Error(
+          "Sorry, we don't support nazis."
         );
       } else {
         const {apiKey, children, stripe, ...options} = this.props;
