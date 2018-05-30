@@ -16,10 +16,11 @@ describe('injectStripe()', () => {
     createSource = jest.fn();
     createToken = jest.fn();
     elementMock = {
-      type: 'card',
       element: {
         on: jest.fn(),
       },
+      impliedTokenType: 'card',
+      impliedSourceType: 'card',
     };
     WrappedComponent = () => <div />;
     WrappedComponent.displayName = 'WrappedComponent';
@@ -238,16 +239,18 @@ describe('injectStripe()', () => {
           ...context,
           getRegisteredElements: () => [
             {
-              type: 'card',
               element: {
                 on: jest.fn(),
               },
+              impliedTokenType: 'card',
+              impliedSourceType: 'card',
             },
             {
-              type: 'card',
               element: {
                 on: jest.fn(),
               },
+              impliedTokenType: 'card',
+              impliedSourceType: 'card',
             },
           ],
         },
@@ -267,16 +270,18 @@ describe('injectStripe()', () => {
           ...context,
           getRegisteredElements: () => [
             {
-              type: 'card',
               element: {
                 on: jest.fn(),
               },
+              impliedTokenType: 'card',
+              impliedSourceType: 'card',
             },
             {
-              type: 'card',
               element: {
                 on: jest.fn(),
               },
+              impliedTokenType: 'card',
+              impliedSourceType: 'card',
             },
           ],
         },
