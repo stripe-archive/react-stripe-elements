@@ -101,7 +101,9 @@ Please be sure the component that calls createSource or createToken is within an
       const matchingElements =
         specifiedType === 'auto'
           ? allElements
-          : allElements.filter(({type}) => type === specifiedType);
+          : allElements.filter(
+              ({impliedTokenType}) => impliedTokenType === specifiedType
+            );
 
       if (matchingElements.length === 1) {
         return matchingElements[0].element;

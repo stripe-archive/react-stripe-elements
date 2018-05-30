@@ -3,7 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {type ProviderContext, providerContextTypes} from './Provider';
 
-export type ElementsList = Array<{type: string, element: ElementShape}>;
+export type ElementsList = Array<{
+  element: ElementShape,
+  impliedTokenType?: string,
+  impliedSourceType?: string,
+}>;
 export type ElementsLoadListener = ElementsShape => void;
 
 type Props = {
@@ -24,7 +28,11 @@ export const injectContextTypes = {
 
 export type ElementContext = {
   addElementsLoadListener: ElementsLoadListener => void,
-  registerElement: (type: string, element: ElementShape) => void,
+  registerElement: (
+    element: ElementShape,
+    impliedTokenType: ?string,
+    impliedSourceType: ?string
+  ) => void,
   unregisterElement: (element: ElementShape) => void,
 };
 
@@ -45,6 +53,7 @@ export default class Elements extends React.Component<Props, State> {
   static defaultProps = {
     children: null,
   };
+
   constructor(props: Props, context: ProviderContext) {
     super(props, context);
 
@@ -81,13 +90,25 @@ export default class Elements extends React.Component<Props, State> {
       getRegisteredElements: () => this.state.registeredElements,
     };
   }
+
   props: Props;
   context: ProviderContext;
   _elements: ElementsShape;
 
-  handleRegisterElement = (type: string, element: Object) => {
+  handleRegisterElement = (
+    element: Object,
+    impliedTokenType: ?string,
+    impliedSourceType: ?string
+  ) => {
     this.setState(prevState => ({
-      registeredElements: [...prevState.registeredElements, {type, element}],
+      registeredElements: [
+        ...prevState.registeredElements,
+        {
+          element,
+          ...(impliedTokenType ? {impliedTokenType} : {}),
+          ...(impliedSourceType ? {impliedSourceType} : {}),
+        },
+      ],
     }));
   };
 
