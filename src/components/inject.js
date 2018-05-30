@@ -152,6 +152,13 @@ Please be sure the component that calls createSource or createToken is within an
       if (options && typeof options === 'object') {
         const {type, ...rest} = options; // eslint-disable-line no-unused-vars
         const specifiedType = typeof type === 'string' ? type : 'auto';
+
+        if (specifiedType === 'auto' && window.console && window.console.warn) {
+          console.warn(
+            'Source type will be required in future versions of react-stripe-elements. Please pass in a valid source type when calling createSource().'
+          );
+        }
+
         const element = this.findElement(specifiedType);
         if (element) {
           return stripe.createSource(element, rest);
