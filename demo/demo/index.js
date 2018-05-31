@@ -12,6 +12,8 @@ import {
   CardCVCElement,
   PostalCodeElement,
   PaymentRequestButtonElement,
+  IbanElement,
+  IdealBankElement,
   StripeProvider,
   Elements,
   injectStripe,
@@ -33,7 +35,7 @@ const handleReady = () => {
   console.log('[ready]');
 };
 
-const createOptions = (fontSize: string) => {
+const createOptions = (fontSize: string, padding: ?string) => {
   return {
     style: {
       base: {
@@ -44,6 +46,7 @@ const createOptions = (fontSize: string) => {
         '::placeholder': {
           color: '#aab7c4',
         },
+        ...(padding ? {padding} : {}),
       },
       invalid: {
         color: '#9e2146',
@@ -206,6 +209,106 @@ class _PaymentRequestForm extends React.Component<
 }
 const PaymentRequestForm = injectStripe(_PaymentRequestForm);
 
+class _IbanForm extends React.Component<InjectedProps & {fontSize: string}> {
+  handleSubmit = ev => {
+    ev.preventDefault();
+    if (this.props.stripe) {
+      this.props.stripe
+        .createSource({
+          type: 'sepa_debit',
+          currency: 'eur',
+          owner: {
+            name: ev.target.name.value,
+            email: ev.target.email.value,
+          },
+        })
+        .then(payload => console.log('[source]', payload));
+    } else {
+      console.log("Stripe.js hasn't loaded yet.");
+    }
+  };
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name
+          <input name="name" type="text" placeholder="Jane Doe" required />
+        </label>
+        <label>
+          Email
+          <input
+            name="email"
+            type="email"
+            placeholder="jane.doe@example.com"
+            required
+          />
+        </label>
+        <label>
+          IBAN
+          <IbanElement
+            supportedCountries={['SEPA']}
+            onBlur={handleBlur}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onReady={handleReady}
+            {...createOptions(this.props.fontSize)}
+          />
+        </label>
+        <button>Pay</button>
+      </form>
+    );
+  }
+}
+const IbanForm = injectStripe(_IbanForm);
+
+class _IdealBankForm extends React.Component<
+  InjectedProps & {fontSize: string}
+> {
+  handleSubmit = ev => {
+    ev.preventDefault();
+    if (this.props.stripe) {
+      this.props.stripe
+        .createSource({
+          type: 'ideal',
+          amount: 1099,
+          currency: 'eur',
+          owner: {
+            name: ev.target.name.value,
+          },
+          redirect: {
+            return_url: 'https://example.com',
+          },
+        })
+        .then(payload => console.log('[source]', payload));
+    } else {
+      console.log("Stripe.js hasn't loaded yet.");
+    }
+  };
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          Name
+          <input name="name" type="text" placeholder="Jane Doe" required />
+        </label>
+        <label>
+          iDEAL Bank
+          <IdealBankElement
+            className="IdealBankElement"
+            onBlur={handleBlur}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onReady={handleReady}
+            {...createOptions(this.props.fontSize, '10px 14px')}
+          />
+        </label>
+        <button>Pay</button>
+      </form>
+    );
+  }
+}
+const IdealBankForm = injectStripe(_IdealBankForm);
+
 class Checkout extends React.Component<{}, {elementFontSize: string}> {
   constructor() {
     super();
@@ -237,6 +340,12 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
         </Elements>
         <Elements>
           <PaymentRequestForm />
+        </Elements>
+        <Elements>
+          <IbanForm fontSize={elementFontSize} />
+        </Elements>
+        <Elements>
+          <IdealBankForm fontSize={elementFontSize} />
         </Elements>
       </div>
     );
