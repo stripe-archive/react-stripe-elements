@@ -43,10 +43,10 @@ describe('index', () => {
   });
 
   const WrappedCheckout = (type, additionalOptions) => {
-    const MyCheckout = props => {
+    const MyCheckout = (props) => {
       return (
         <form
-          onSubmit={ev => {
+          onSubmit={(ev) => {
             ev.preventDefault();
             if (type === 'token') {
               props.stripe.createToken(additionalOptions);
@@ -133,9 +133,9 @@ describe('index', () => {
     });
 
     it('should be callable for other token types', () => {
-      const Checkout = injectStripe(props => (
+      const Checkout = injectStripe((props) => (
         <form
-          onSubmit={ev => {
+          onSubmit={(ev) => {
             ev.preventDefault();
             props.stripe.createToken('bank_account', {some: 'data'});
           }}
@@ -223,9 +223,9 @@ describe('index', () => {
     });
 
     it('should be callable for other source types', () => {
-      const Checkout = injectStripe(props => (
+      const Checkout = injectStripe((props) => (
         <form
-          onSubmit={ev => {
+          onSubmit={(ev) => {
             ev.preventDefault();
             props.stripe.createSource({
               type: 'three_d_secure',
@@ -277,7 +277,7 @@ describe('index', () => {
       it('should throw when not in Elements', () => {
         // Prevent the expected console.error from react to keep the test output clean
         const originalConsoleError = global.console.error;
-        global.console.error = msg => {
+        global.console.error = (msg) => {
           if (
             !msg.startsWith(
               'Warning: Failed context type: The context `getRegisteredElements` is marked as required'

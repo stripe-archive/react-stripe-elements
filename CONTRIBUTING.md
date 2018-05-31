@@ -2,7 +2,6 @@
 
 Thanks for contributing to react-stripe-elements!
 
-
 ## Issues
 
 `react-stripe-elements` is a thin wrapper around [Stripe.js] and [Stripe
@@ -16,7 +15,6 @@ service, and we're more than happy to help you out with your integration.
 
 If you've found a bug in `react-stripe-elements`, please [let us know][issue]!
 You may also want to check out our [issue template][issue-template].
-
 
 ## API review
 
@@ -38,7 +36,6 @@ Stripe, we believe that code review is for explaining and having a discussion
 around code. For those new to code review, we strongly recommend [this
 video][code-review] on "code review culture."
 
-
 ## Developing
 
 We use a number of automated checks:
@@ -52,13 +49,12 @@ We use a number of automated checks:
 - Prettier, for code formatting
   - `yarn run prettier`
 
-You might want to configure your editor to automatically run these checks.
-Not passing any of these checks will cause the CI build to fail.
-
+You might want to configure your editor to automatically run these checks. Not
+passing any of these checks will cause the CI build to fail.
 
 [code-review]: https://www.youtube.com/watch?v=PJjmw9TRB7s
 [api-review]: .github/API_REVIEW.md
-[Stripe.js]: https://stripe.com/docs/stripe.js
+[stripe.js]: https://stripe.com/docs/stripe.js
 [elements]: https://stripe.com/elements
 [issue]: https://github.com/stripe/react-stripe-elements/issues/new
 [issue-template]: .github/ISSUE_TEMPLATE.md
