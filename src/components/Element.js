@@ -7,8 +7,6 @@ import {type ElementContext, elementContextTypes} from './Elements';
 type Props = {
   id?: string,
   className?: string,
-  // DEPRECATED; remove in 2.0.0+
-  elementRef?: Function,
   onChange: Function,
   onBlur: Function,
   onFocus: Function,
@@ -18,16 +16,7 @@ type Props = {
 const noop = () => {};
 
 const _extractOptions = (props: Props): Object => {
-  const {
-    id,
-    className,
-    elementRef,
-    onChange,
-    onFocus,
-    onBlur,
-    onReady,
-    ...options
-  } = props;
+  const {id, className, onChange, onFocus, onBlur, onReady, ...options} = props;
   return options;
 };
 
@@ -39,7 +28,6 @@ const Element = (
     static propTypes = {
       id: PropTypes.string,
       className: PropTypes.string,
-      elementRef: PropTypes.func,
       onChange: PropTypes.func,
       onBlur: PropTypes.func,
       onFocus: PropTypes.func,
@@ -48,7 +36,6 @@ const Element = (
     static defaultProps = {
       id: undefined,
       className: undefined,
-      elementRef: undefined,
       onChange: noop,
       onBlur: noop,
       onFocus: noop,
@@ -116,14 +103,6 @@ const Element = (
 
     _setupEventListeners(element: ElementShape) {
       element.on('ready', () => {
-        if (this.props.elementRef) {
-          if (window.console && window.console.warn) {
-            console.warn(
-              "'elementRef()' is deprecated and will be removed in a future version of react-stripe-elements. Please use 'onReady()' instead."
-            );
-          }
-          this.props.elementRef(this._element);
-        }
         this.props.onReady(this._element);
       });
 

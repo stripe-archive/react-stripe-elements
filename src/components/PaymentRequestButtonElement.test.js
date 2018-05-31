@@ -59,18 +59,12 @@ describe('PaymentRequestButtonElement', () => {
     expect(element.first().hasClass(className)).toBeTruthy();
   });
 
-  it('should call onReady and elementRef', () => {
+  it('should call onReady', () => {
     const onReadyMock = jest.fn();
-    const elementRefMock = jest.fn();
-
-    const originalConsoleWarn = global.console.warn;
-    const mockConsoleWarn = jest.fn();
-    global.console.warn = mockConsoleWarn;
 
     mount(
       <PaymentRequestButtonElement
         onReady={onReadyMock}
-        elementRef={elementRefMock}
         paymentRequest={paymentRequestMock}
       />,
       {context}
@@ -78,10 +72,6 @@ describe('PaymentRequestButtonElement', () => {
 
     expect(elementMock.on.mock.calls[0][0]).toBe('ready');
     expect(onReadyMock).toHaveBeenCalledWith(elementMock);
-    expect(elementRefMock).toHaveBeenCalledWith(elementMock);
-    expect(mockConsoleWarn.mock.calls[0][0]).toMatch(/deprecated/);
-
-    global.console.warn = originalConsoleWarn;
   });
 
   it('should not register the Element', () => {
