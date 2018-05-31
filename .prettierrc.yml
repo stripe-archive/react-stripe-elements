@@ -3,3 +3,4 @@ trailingComma: es5
 bracketSpacing: false
 arrowParens: always
 proseWrap: always
+parser: flow
