@@ -169,11 +169,13 @@ Please be sure the component that calls createSource or createToken is within an
     // source creation.
     wrappedCreateSource = (stripe: StripeShape) => (options: mixed = {}) => {
       if (options && typeof options === 'object') {
-        const {type: sourceType, ...rest} = options;
-        const specifiedType =
-          typeof sourceType === 'string' ? sourceType : 'auto';
-        const element = this.findElement('impliedSourceType', specifiedType);
+        if (typeof options.type !== 'string') {
+          throw new Error(
+            `Invalid Source type passed to createSource. Expected string, got ${typeof options.type}.`
+          );
+        }
 
+        const element = this.findElement('impliedSourceType', options.type);
         if (element) {
           // If an Element exists for the source type, use that to create the
           // corresponding source.
@@ -181,16 +183,10 @@ Please be sure the component that calls createSource or createToken is within an
           // NOTE: this prevents users from independently creating sources of
           // type `foo` if an Element that can create `foo` sources exists in
           // the current <Elements /> context.
-          return stripe.createSource(element, rest);
-        } else if (specifiedType !== 'auto') {
+          return stripe.createSource(element, options);
+        } else {
           // If no Element exists for the source type, directly create a source.
           return stripe.createSource(options);
-        } else {
-          // If no type was specified and no Element exists that can create
-          // source, throw an error.
-          throw new Error(
-            'You did not specify the type of Source to create. We also could not find any Elements in the current context.'
-          );
         }
       } else {
         // If a bad value was passed in for options, throw an error.
