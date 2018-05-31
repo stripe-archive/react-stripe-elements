@@ -1,4 +1,5 @@
 singleQuote: true
 trailingComma: es5
 bracketSpacing: false
-parser: flow
+arrowParens: always
+proseWrap: always
