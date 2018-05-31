@@ -152,15 +152,24 @@ Please be sure the component that calls createSource or createToken is within an
       if (options && typeof options === 'object') {
         const {type, ...rest} = options; // eslint-disable-line no-unused-vars
         const specifiedType = typeof type === 'string' ? type : 'auto';
+
         const element = this.findElement(specifiedType);
         if (element) {
+          if (
+            specifiedType === 'auto' &&
+            window.console &&
+            window.console.warn
+          ) {
+            console.warn(
+              "Inferred Source type of 'card' for createSource(). This behavior will be deprecated in a future version. Please pass the Source type to createSource() explicitly."
+            );
+          }
           return stripe.createSource(element, rest);
         } else if (specifiedType !== 'auto') {
           return stripe.createSource(options);
         } else {
           throw new Error(
-            `You did not specify the type of Source to create.
-          We also could not find any Elements in the current context.`
+            'You did not specify the type of Source to create. We also could not find any Elements in the current context.'
           );
         }
       } else {
