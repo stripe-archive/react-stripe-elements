@@ -161,24 +161,7 @@ describe('index', () => {
 
   describe('createSource', () => {
     it('should be called when set up properly', () => {
-      const Checkout = WrappedCheckout('source');
-      const app = mount(
-        <StripeProvider apiKey="pk_test_xxx">
-          <Elements>
-            <Checkout>
-              Hello world
-              <CardElement />
-            </Checkout>
-          </Elements>
-        </StripeProvider>
-      );
-      app.find('form').simulate('submit');
-      expect(stripeMock.createSource).toHaveBeenCalledTimes(1);
-      expect(stripeMock.createSource).toHaveBeenCalledWith(elementMock, {});
-    });
-
-    it('should take additional parameters', () => {
-      const Checkout = WrappedCheckout('source', {owner: {name: 'Michelle'}});
+      const Checkout = WrappedCheckout('source', {type: 'card'});
       const app = mount(
         <StripeProvider apiKey="pk_test_xxx">
           <Elements>
@@ -192,7 +175,50 @@ describe('index', () => {
       app.find('form').simulate('submit');
       expect(stripeMock.createSource).toHaveBeenCalledTimes(1);
       expect(stripeMock.createSource).toHaveBeenCalledWith(elementMock, {
+        type: 'card',
+      });
+    });
+
+    it('should take additional parameters', () => {
+      const Checkout = WrappedCheckout('source', {
+        type: 'card',
         owner: {name: 'Michelle'},
+      });
+      const app = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <Elements>
+            <Checkout>
+              Hello world
+              <CardElement />
+            </Checkout>
+          </Elements>
+        </StripeProvider>
+      );
+      app.find('form').simulate('submit');
+      expect(stripeMock.createSource).toHaveBeenCalledTimes(1);
+      expect(stripeMock.createSource).toHaveBeenCalledWith(elementMock, {
+        type: 'card',
+        owner: {name: 'Michelle'},
+      });
+    });
+
+    it('should be callable when no Element is found', () => {
+      const Checkout = WrappedCheckout('source', {
+        type: 'card',
+        token: 'tok_xxx',
+      });
+      const app = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <Elements>
+            <Checkout>Hello world</Checkout>
+          </Elements>
+        </StripeProvider>
+      );
+      app.find('form').simulate('submit');
+      expect(stripeMock.createSource).toHaveBeenCalledTimes(1);
+      expect(stripeMock.createSource).toHaveBeenCalledWith({
+        type: 'card',
+        token: 'tok_xxx',
       });
     });
 
@@ -229,17 +255,20 @@ describe('index', () => {
 
   describe('errors', () => {
     describe('createSource', () => {
-      it('should throw when no Element found', () => {
+      it('should throw if no source type is specified', () => {
         const Checkout = WrappedCheckout('source');
         const app = mount(
           <StripeProvider apiKey="pk_test_xxx">
             <Elements>
-              <Checkout>Hello world</Checkout>
+              <Checkout>
+                Hello world
+                <CardElement />
+              </Checkout>
             </Elements>
           </StripeProvider>
         );
         expect(() => app.find('form').simulate('submit')).toThrowError(
-          /did not specify/
+          /Invalid Source type/
         );
       });
     });

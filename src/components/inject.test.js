@@ -159,12 +159,12 @@ describe('injectStripe()', () => {
       });
 
       const props = wrapper.props();
-      expect(() => props.stripe.createToken()).toThrow(
+      expect(props.stripe.createToken).toThrow(
         /We could not infer which Element you want to use for this operation./
       );
     });
 
-    it('props.stripe.createSource calls createSource with element and empty options when called with no arguments', () => {
+    it('props.stripe.createSource errors when called without a type', () => {
       const Injected = injectStripe(WrappedComponent);
 
       const wrapper = shallow(<Injected />, {
@@ -172,8 +172,21 @@ describe('injectStripe()', () => {
       });
 
       const props = wrapper.props();
-      props.stripe.createSource();
-      expect(createSource).toHaveBeenCalledWith(elementMock.element, {});
+      expect(props.stripe.createSource).toThrow(/Invalid Source type/);
+    });
+
+    it('props.stripe.createSource calls createSource with element and type when only type is passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.createSource({type: 'card'});
+      expect(createSource).toHaveBeenCalledWith(elementMock.element, {
+        type: 'card',
+      });
     });
 
     it('props.stripe.createSource calls createSource with options', () => {
@@ -186,6 +199,7 @@ describe('injectStripe()', () => {
       const props = wrapper.props();
       props.stripe.createSource({type: 'card', foo: 'bar'});
       expect(createSource).toHaveBeenCalledWith(elementMock.element, {
+        type: 'card',
         foo: 'bar',
       });
     });
@@ -212,22 +226,6 @@ describe('injectStripe()', () => {
       const props = wrapper.props();
       expect(() => props.stripe.createSource(1)).toThrow(
         'Invalid options passed to createSource. Expected an object, got number.'
-      );
-    });
-
-    it('props.stripe.createSource throws when called without element/source-type and no elements are in the tree', () => {
-      const Injected = injectStripe(WrappedComponent);
-
-      const wrapper = shallow(<Injected />, {
-        context: {
-          ...context,
-          getRegisteredElements: () => [],
-        },
-      });
-
-      const props = wrapper.props();
-      expect(() => props.stripe.createSource()).toThrow(
-        /You did not specify the type of Source to create/
       );
     });
 
@@ -258,37 +256,6 @@ describe('injectStripe()', () => {
 
       const props = wrapper.props();
       expect(() => props.stripe.createSource({type: 'card'})).toThrow(
-        /We could not infer which Element you want to use for this operation/
-      );
-    });
-
-    it('props.stripe.createSource throws when called with no source type and tree has multiple elements', () => {
-      const Injected = injectStripe(WrappedComponent);
-
-      const wrapper = shallow(<Injected />, {
-        context: {
-          ...context,
-          getRegisteredElements: () => [
-            {
-              element: {
-                on: jest.fn(),
-              },
-              impliedTokenType: 'card',
-              impliedSourceType: 'card',
-            },
-            {
-              element: {
-                on: jest.fn(),
-              },
-              impliedTokenType: 'card',
-              impliedSourceType: 'card',
-            },
-          ],
-        },
-      });
-
-      const props = wrapper.props();
-      expect(() => props.stripe.createSource()).toThrow(
         /We could not infer which Element you want to use for this operation/
       );
     });
