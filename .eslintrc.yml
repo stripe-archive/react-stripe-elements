@@ -17,9 +17,6 @@ rules:
   no-duplicate-imports: 2 # doesn't support flow imports.
   no-console: 0
   func-style: 2
-  arrow-parens:
-    - 2
-    - 'as-needed'
   consistent-return: 2
   prefer-arrow-callback:
     - 2

@@ -16,10 +16,9 @@ The
 goes into more detail on the various customization options for Elements (e.g.
 styles, fonts).
 
+<!-- prettier-ignore-start -->
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 ## Table of Contents
 
 - [Demo](#demo)
@@ -51,6 +50,7 @@ styles, fonts).
 - [Development](#development)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- prettier-ignore-end -->
 
 ## Demo
 
