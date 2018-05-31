@@ -512,6 +512,8 @@ These components display the UI for Elements, and must be used within `StripePro
 - `CardCVCElement`
 - `PostalCodeElement`
 - `PaymentRequestButtonElement`
+- `IbanElement`
+- `IdealBankElement`
 
 #### Props shape
 
@@ -535,9 +537,10 @@ The props for the `PaymentRequestButtonElement` are:
 
 ```js
 type PaymentRequestButtonProps = {
-  paymentRequest: StripePaymentRequest,
   id?: string,
   className?: string,
+
+  paymentRequest: StripePaymentRequest,
 
   onBlur?: () => void,
   onClick?: () => void,
