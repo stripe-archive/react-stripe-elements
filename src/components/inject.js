@@ -95,13 +95,19 @@ Please be sure the component that calls createSource or createToken is within an
         createSource: this.wrappedCreateSource(stripe),
       };
     }
-    // Finds the element by the specified type. Throws if multiple Elements match.
-    findElement = (specifiedType: string): ?ElementShape => {
+
+    // Finds an Element by the specified type, if one exists.
+    // Throws if multiple Elements match.
+    findElement = (
+      filterBy: 'impliedTokenType' | 'impliedSourceType',
+      specifiedType: string
+    ): ?ElementShape => {
       const allElements = this.context.getRegisteredElements();
+      const filteredElements = allElements.filter(e => e[filterBy]);
       const matchingElements =
         specifiedType === 'auto'
-          ? allElements
-          : allElements.filter(({type}) => type === specifiedType);
+          ? filteredElements
+          : filteredElements.filter(e => e[filterBy] === specifiedType);
 
       if (matchingElements.length === 1) {
         return matchingElements[0].element;
@@ -114,9 +120,14 @@ Please be sure the component that calls createSource or createToken is within an
         return null;
       }
     };
-    // Require that exactly one Element is found.
-    requireElement = (specifiedType: string): ElementShape => {
-      const element = this.findElement(specifiedType);
+
+    // Require that exactly one Element is found for the specified type.
+    // Throws if no Element is found.
+    requireElement = (
+      filterBy: 'impliedTokenType' | 'impliedSourceType',
+      specifiedType: string
+    ): ElementShape => {
+      const element = this.findElement(filterBy, specifiedType);
       if (element) {
         return element;
       } else {
@@ -127,57 +138,64 @@ Please be sure the component that calls createSource or createToken is within an
       }
     };
 
-    // createToken has a bit of an unusual method signature for legacy reasons
-    // -- we're allowed to pass in the token type OR the element as the first parameter,
-    // so we need to check if we're passing in a string as the first parameter and
-    // just pass through the options if that's the case.
+    // Wraps createToken in order to infer the Element that is being tokenized.
     wrappedCreateToken = (stripe: StripeShape) => (
-      typeOrOptions: mixed = {},
+      tokenTypeOrOptions: mixed = {},
       options: mixed = {}
     ) => {
-      if (typeOrOptions && typeof typeOrOptions === 'object') {
-        const {type, ...rest} = typeOrOptions;
-        const specifiedType = typeof type === 'string' ? type : 'auto';
-        const element = this.requireElement(specifiedType);
+      if (tokenTypeOrOptions && typeof tokenTypeOrOptions === 'object') {
+        // First argument is options; infer the Element and tokenize
+        const opts = tokenTypeOrOptions;
+        const {type: tokenType, ...rest} = opts;
+        const specifiedType =
+          typeof tokenType === 'string' ? tokenType : 'auto';
+        // Since only options were passed in, a corresponding Element must exist
+        // for the tokenization to succeed -- thus we call requireElement.
+        const element = this.requireElement('impliedTokenType', specifiedType);
         return stripe.createToken(element, rest);
-      } else if (typeof typeOrOptions === 'string') {
-        return stripe.createToken(typeOrOptions, options);
+      } else if (typeof tokenTypeOrOptions === 'string') {
+        // First argument is token type; tokenize with token type and options
+        const tokenType = tokenTypeOrOptions;
+        return stripe.createToken(tokenType, options);
       } else {
+        // If a bad value was passed in for options, throw an error.
         throw new Error(
-          `Invalid options passed to createToken. Expected an object, got ${typeof typeOrOptions}.`
+          `Invalid options passed to createToken. Expected an object, got ${typeof tokenTypeOrOptions}.`
         );
       }
     };
+
+    // Wraps createSource in order to infer the Element that is being used for
+    // source creation.
     wrappedCreateSource = (stripe: StripeShape) => (options: mixed = {}) => {
       if (options && typeof options === 'object') {
-        const {type, ...rest} = options; // eslint-disable-line no-unused-vars
-        const specifiedType = typeof type === 'string' ? type : 'auto';
-
-        const element = this.findElement(specifiedType);
-        if (element) {
-          if (
-            specifiedType === 'auto' &&
-            window.console &&
-            window.console.warn
-          ) {
-            console.warn(
-              "Inferred Source type of 'card' for createSource(). This behavior will be deprecated in a future version. Please pass the Source type to createSource() explicitly."
-            );
-          }
-          return stripe.createSource(element, rest);
-        } else if (specifiedType !== 'auto') {
-          return stripe.createSource(options);
-        } else {
+        if (typeof options.type !== 'string') {
           throw new Error(
-            'You did not specify the type of Source to create. We also could not find any Elements in the current context.'
+            `Invalid Source type passed to createSource. Expected string, got ${typeof options.type}.`
           );
         }
+
+        const element = this.findElement('impliedSourceType', options.type);
+        if (element) {
+          // If an Element exists for the source type, use that to create the
+          // corresponding source.
+          //
+          // NOTE: this prevents users from independently creating sources of
+          // type `foo` if an Element that can create `foo` sources exists in
+          // the current <Elements /> context.
+          return stripe.createSource(element, options);
+        } else {
+          // If no Element exists for the source type, directly create a source.
+          return stripe.createSource(options);
+        }
       } else {
+        // If a bad value was passed in for options, throw an error.
         throw new Error(
           `Invalid options passed to createSource. Expected an object, got ${typeof options}.`
         );
       }
     };
+
     render() {
       return (
         <WrappedComponent

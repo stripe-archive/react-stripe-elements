@@ -158,8 +158,8 @@ form components in the `Elements` tree. The [Higher-Order Component][hoc]
 pattern in React can be unfamiliar to those who've never seen it before, so
 consider reading up before continuing. The `injectStripe` HOC provides the
 `this.props.stripe` property that manages your `Elements` groups. You can call
-`this.props.stripe.createToken` within a component that has been injected to
-submit payment data to Stripe.
+`this.props.stripe.createToken` or `this.props.stripe.createSource` within a
+component that has been injected to submit payment data to Stripe.
 
 [hoc]: https://facebook.github.io/react/docs/higher-order-components.html
 
@@ -189,7 +189,13 @@ class CheckoutForm extends React.Component {
     });
 
     // However, this line of code will do the same thing:
+    //
     // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
+
+    // You can also use createSource to create Sources. See our Sources
+    // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-source
+    //
+    // this.props.stripe.createSource({type: 'card', name: 'Jenny Rosen'});
   }
 
   render() {
@@ -583,7 +589,9 @@ function injectStripe(
   }
 ): ReactClass;
 ```
-Components that need to initiate Source or Token creations (e.g. a checkout form component) can access `stripe.createToken` via props of any component returned by the `injectStripe` HOC factory.
+Components that need to initiate Source or Token creations (e.g. a checkout
+form component) can access `stripe.createToken` or `stripe.createSource` via
+props of any component returned by the `injectStripe` HOC factory.
 
 If the `withRef` option is set to `true`, the wrapped component instance will be available with the `getWrappedInstance()` method of the wrapper component. This feature can not be used if the wrapped component is a stateless function component.
 
@@ -601,6 +609,7 @@ type FactoryProps = {
   | null
   | {
     createToken: (tokenParameters: {type?: string}) => Promise<{token?: Object, error?: Object}>,
+    createSource: (sourceParameters: {type?: string}) => Promise<{source?: Object, error?: Object}>,
     // and other functions available on the `stripe` object,
     // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
   },

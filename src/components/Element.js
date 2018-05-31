@@ -31,7 +31,10 @@ const _extractOptions = (props: Props): Object => {
   return options;
 };
 
-const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
+const Element = (
+  type: string,
+  hocOptions: {impliedTokenType?: string, impliedSourceType?: string} = {}
+) =>
   class extends React.Component<Props> {
     static propTypes = {
       id: PropTypes.string,
@@ -73,11 +76,18 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
         this._setupEventListeners(element);
 
         element.mount(this._ref);
-        if (hocOptions.sourceType) {
-          this.context.registerElement(hocOptions.sourceType, element);
+
+        // Register Element for automatic token / source creation
+        if (hocOptions.impliedTokenType || hocOptions.impliedSourceType) {
+          this.context.registerElement(
+            element,
+            hocOptions.impliedTokenType,
+            hocOptions.impliedSourceType
+          );
         }
       });
     }
+
     componentWillReceiveProps(nextProps: Props) {
       const options = _extractOptions(nextProps);
       if (
@@ -90,6 +100,7 @@ const Element = (type: string, hocOptions: {sourceType?: string} = {}) =>
         }
       }
     }
+
     componentWillUnmount() {
       if (this._element) {
         const element = this._element;

@@ -31,24 +31,37 @@ describe('Element', () => {
 
   it('should pass id to the DOM element', () => {
     const id = 'my-id';
-    const CardElement = Element('card', {sourceType: 'card'});
+    const CardElement = Element('card', {
+      impliedTokenType: 'card',
+      impliedSourceType: 'card',
+    });
     const element = shallow(<CardElement id={id} />, {context});
     expect(element.find('#my-id').length).toBe(1);
   });
 
   it('should pass className to the DOM element', () => {
     const className = 'my-class';
-    const CardElement = Element('card', {sourceType: 'card'});
+    const CardElement = Element('card', {
+      impliedTokenType: 'card',
+      impliedSourceType: 'card',
+    });
     const element = shallow(<CardElement className={className} />, {context});
     expect(element.first().hasClass(className)).toBeTruthy();
   });
 
-  it('should call the right hooks for a source Element', () => {
-    const SourceElement = Element('source', {sourceType: 'foobar'});
-    const element = mount(<SourceElement onChange={jest.fn()} />, {context});
+  it('should call the right hooks for a registered Element', () => {
+    const TestElement = Element('test', {
+      impliedTokenType: 'foo',
+      impliedSourceType: 'bar',
+    });
+    const element = mount(<TestElement onChange={jest.fn()} />, {context});
 
     expect(context.registerElement).toHaveBeenCalledTimes(1);
-    expect(context.registerElement).toHaveBeenCalledWith('foobar', elementMock);
+    expect(context.registerElement).toHaveBeenCalledWith(
+      elementMock,
+      'foo',
+      'bar'
+    );
 
     element.unmount();
     expect(elementMock.destroy).toHaveBeenCalledTimes(1);
@@ -56,9 +69,9 @@ describe('Element', () => {
     expect(context.unregisterElement).toHaveBeenCalledWith(elementMock);
   });
 
-  it('should call the right hooks for a non-source Element', () => {
-    const SourceElement = Element('source');
-    const element = mount(<SourceElement onChange={jest.fn()} />, {context});
+  it('should call the right hooks for a non-registered Element', () => {
+    const TestElement = Element('test');
+    const element = mount(<TestElement onChange={jest.fn()} />, {context});
 
     expect(context.registerElement).toHaveBeenCalledTimes(0);
 
@@ -69,7 +82,10 @@ describe('Element', () => {
   });
 
   it('should call onReady and elementRef', () => {
-    const CardElement = Element('card', {sourceType: 'card'});
+    const CardElement = Element('card', {
+      impliedTokenType: 'card',
+      impliedSourceType: 'card',
+    });
     const onReadyMock = jest.fn();
     const elementRefMock = jest.fn();
 
@@ -95,11 +111,13 @@ describe('Element', () => {
         fontSize: '16px',
       },
     };
-    const SourceElement = Element('source', {sourceType: 'foobar'});
-    const element = mount(
-      <SourceElement onChange={jest.fn()} style={style} />,
-      {context}
-    );
+    const TestElement = Element('test', {
+      impliedTokenType: 'foo',
+      impliedSourceType: 'bar',
+    });
+    const element = mount(<TestElement onChange={jest.fn()} style={style} />, {
+      context,
+    });
 
     expect(elementMock.update).toHaveBeenCalledTimes(0);
     element.setProps({style, onChange: jest.fn()});
@@ -120,7 +138,10 @@ describe('Element', () => {
     context.addElementsLoadListener = () => {};
 
     const placeholder = 'hello';
-    const CardElement = Element('card', {sourceType: 'card'});
+    const CardElement = Element('card', {
+      impliedTokenType: 'card',
+      impliedSourceType: 'card',
+    });
     const element = shallow(<CardElement placeholder={placeholder} />, {
       context,
     });
