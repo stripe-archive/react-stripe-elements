@@ -6,9 +6,10 @@
 
 <!-- Delete this section if this change involves no API changes. -->
 
-Copy
-[this template](https://github.com/stripe/react-stripe-elements/tree/master/.github/API_REVIEW.md)
-**or** link to an API review issue.
+Copy [this template] **or** link to an API review issue.
+
+[this template]:
+  https://github.com/stripe/react-stripe-elements/tree/master/.github/API_REVIEW.md
 
 ### Testing & documentation
 
