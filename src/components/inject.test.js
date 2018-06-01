@@ -63,7 +63,7 @@ describe('injectStripe()', () => {
     it('throws when StripeProvider is missing from ancestry', () => {
       // Prevent the expected console.error from react to keep the test output clean
       const originalConsoleError = global.console.error;
-      global.console.error = msg => {
+      global.console.error = (msg) => {
         if (
           !msg.startsWith(
             'Warning: Failed context type: The context `tag` is marked as required'
@@ -316,7 +316,7 @@ describe('injectStripe()', () => {
         context: {
           tag: 'async',
           // simulate StripeProvider eventually giving us a StripeShape
-          addStripeLoadListener: fn => {
+          addStripeLoadListener: (fn) => {
             fn({
               elements: jest.fn(),
               createSource,

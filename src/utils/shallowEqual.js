@@ -6,7 +6,7 @@ const shallowEqual = (a: Object, b: Object): boolean => {
 
   return (
     keysA.length === keysB.length &&
-    keysA.every(key => b.hasOwnProperty(key) && b[key] === a[key])
+    keysA.every((key) => b.hasOwnProperty(key) && b[key] === a[key])
   );
 };
 

@@ -14,7 +14,7 @@ import {
 const handleBlur = () => {
   console.log('[blur]');
 };
-const handleChange = change => {
+const handleChange = (change) => {
   console.log('[change]', change);
 };
 const handleFocus = () => {
@@ -41,12 +41,12 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 class _CardForm extends React.Component<InjectedProps> {
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
       this.props.stripe
         .createToken()
-        .then(payload => console.log('[token]', payload));
+        .then((payload) => console.log('[token]', payload));
     } else {
       console.log('Form submitted before Stripe.js loaded.');
     }

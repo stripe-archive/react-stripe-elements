@@ -106,7 +106,7 @@ const Element = (
         this.props.onReady(this._element);
       });
 
-      element.on('change', change => {
+      element.on('change', (change) => {
         this.props.onChange(change);
       });
 

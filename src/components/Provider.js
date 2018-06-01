@@ -12,7 +12,7 @@ type Meta =
   | {tag: 'sync', stripe: StripeShape}
   | {tag: 'async', stripe: StripeShape | null};
 
-type StripeLoadListener = StripeShape => void;
+type StripeLoadListener = (StripeShape) => void;
 
 // TODO(jez) 'sync' and 'async' are bad tag names.
 // TODO(jez) What if redux also uses this.context.tag?
@@ -22,7 +22,7 @@ export type SyncStripeContext = {
 };
 export type AsyncStripeContext = {
   tag: 'async',
-  addStripeLoadListener: StripeLoadListener => void,
+  addStripeLoadListener: (StripeLoadListener) => void,
 };
 
 export type ProviderContext = SyncStripeContext | AsyncStripeContext;
@@ -172,7 +172,7 @@ export default class Provider extends React.Component<Props> {
       this._didWakeUpListeners = true;
       const stripe = ensureStripeShape(nextProps.stripe);
       this._meta.stripe = stripe;
-      this._listeners.forEach(fn => {
+      this._listeners.forEach((fn) => {
         fn(stripe);
       });
     }

@@ -22,7 +22,7 @@ import {
 const handleBlur = () => {
   console.log('[blur]');
 };
-const handleChange = change => {
+const handleChange = (change) => {
   console.log('[change]', change);
 };
 const handleClick = () => {
@@ -56,12 +56,12 @@ const createOptions = (fontSize: string, padding: ?string) => {
 };
 
 class _CardForm extends React.Component<InjectedProps & {fontSize: string}> {
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
       this.props.stripe
         .createToken()
-        .then(payload => console.log('[token]', payload));
+        .then((payload) => console.log('[token]', payload));
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
@@ -87,12 +87,12 @@ class _CardForm extends React.Component<InjectedProps & {fontSize: string}> {
 const CardForm = injectStripe(_CardForm);
 
 class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
       this.props.stripe
         .createToken()
-        .then(payload => console.log('[token]', payload));
+        .then((payload) => console.log('[token]', payload));
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
@@ -172,7 +172,7 @@ class _PaymentRequestForm extends React.Component<
       complete('success');
     });
 
-    paymentRequest.canMakePayment().then(result => {
+    paymentRequest.canMakePayment().then((result) => {
       this.setState({canMakePayment: !!result});
     });
 
@@ -210,7 +210,7 @@ class _PaymentRequestForm extends React.Component<
 const PaymentRequestForm = injectStripe(_PaymentRequestForm);
 
 class _IbanForm extends React.Component<InjectedProps & {fontSize: string}> {
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
       this.props.stripe
@@ -221,8 +221,11 @@ class _IbanForm extends React.Component<InjectedProps & {fontSize: string}> {
             name: ev.target.name.value,
             email: ev.target.email.value,
           },
+          mandate: {
+            notification_method: 'email',
+          },
         })
-        .then(payload => console.log('[source]', payload));
+        .then((payload) => console.log('[source]', payload));
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
@@ -264,7 +267,7 @@ const IbanForm = injectStripe(_IbanForm);
 class _IdealBankForm extends React.Component<
   InjectedProps & {fontSize: string}
 > {
-  handleSubmit = ev => {
+  handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
       this.props.stripe
@@ -279,7 +282,7 @@ class _IdealBankForm extends React.Component<
             return_url: 'https://example.com',
           },
         })
-        .then(payload => console.log('[source]', payload));
+        .then((payload) => console.log('[source]', payload));
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }

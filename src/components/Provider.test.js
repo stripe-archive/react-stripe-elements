@@ -127,7 +127,7 @@ describe('StripeProvider', () => {
     expect(childContext).toHaveProperty('tag', 'async');
   });
 
-  it('addStripeLoadListener is called when stripe goes from null -> non-null', done => {
+  it('addStripeLoadListener is called when stripe goes from null -> non-null', (done) => {
     const wrapper = mount(
       <StripeProvider stripe={null}>
         <form />
@@ -135,7 +135,7 @@ describe('StripeProvider', () => {
     );
 
     const childContext = wrapper.node.getChildContext();
-    childContext.addStripeLoadListener(stripe => {
+    childContext.addStripeLoadListener((stripe) => {
       expect(stripe).toEqual(stripeMockResult);
       done();
     });
