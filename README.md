@@ -55,7 +55,7 @@ styles, fonts).
 ## Demo
 
 The fastest way to start playing around with `react-stripe-elements` is with
-this JSFiddle: <https://jsfiddle.net/g9rm5qkt/>.
+this JSFiddle: <https://jsfiddle.net/attystripe/xux7qzch/>.
 
 You can also play around with the demo locally. The source code is in
 [demo/](demo/). To run it:
