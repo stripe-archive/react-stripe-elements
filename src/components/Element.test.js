@@ -23,7 +23,7 @@ describe('Element', () => {
       create: jest.fn().mockReturnValue(elementMock),
     };
     context = {
-      addElementsLoadListener: fn => fn(elementsMock),
+      addElementsLoadListener: (fn) => fn(elementsMock),
       registerElement: jest.fn(),
       unregisterElement: jest.fn(),
     };

@@ -8,7 +8,7 @@ export type ElementsList = Array<{
   impliedTokenType?: string,
   impliedSourceType?: string,
 }>;
-export type ElementsLoadListener = ElementsShape => void;
+export type ElementsLoadListener = (ElementsShape) => void;
 
 type Props = {
   children?: any,
@@ -27,7 +27,7 @@ export const injectContextTypes = {
 };
 
 export type ElementContext = {
-  addElementsLoadListener: ElementsLoadListener => void,
+  addElementsLoadListener: (ElementsLoadListener) => void,
   registerElement: (
     element: ElementShape,
     impliedTokenType: ?string,
@@ -100,7 +100,7 @@ export default class Elements extends React.Component<Props, State> {
     impliedTokenType: ?string,
     impliedSourceType: ?string
   ) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       registeredElements: [
         ...prevState.registeredElements,
         {
@@ -113,7 +113,7 @@ export default class Elements extends React.Component<Props, State> {
   };
 
   handleUnregisterElement = (el: Object) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       registeredElements: prevState.registeredElements.filter(
         ({element}) => element !== el
       ),

@@ -103,11 +103,11 @@ Please be sure the component that calls createSource or createToken is within an
       specifiedType: string
     ): ?ElementShape => {
       const allElements = this.context.getRegisteredElements();
-      const filteredElements = allElements.filter(e => e[filterBy]);
+      const filteredElements = allElements.filter((e) => e[filterBy]);
       const matchingElements =
         specifiedType === 'auto'
           ? filteredElements
-          : filteredElements.filter(e => e[filterBy] === specifiedType);
+          : filteredElements.filter((e) => e[filterBy] === specifiedType);
 
       if (matchingElements.length === 1) {
         return matchingElements[0].element;
@@ -203,7 +203,7 @@ Please be sure the component that calls createSource or createToken is within an
           stripe={this.state.stripe}
           ref={
             withRef
-              ? c => {
+              ? (c) => {
                   this.wrappedInstance = c;
                 }
               : null

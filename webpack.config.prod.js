@@ -5,12 +5,12 @@ const reactExternal = {
   root: 'React',
   commonjs2: 'react',
   commonjs: 'react',
-  amd: 'react'
+  amd: 'react',
 };
 
 const config = {
   externals: {
-    'react': reactExternal,
+    react: reactExternal,
   },
   module: {
     loaders: [
