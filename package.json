@@ -1,6 +1,6 @@
 {
   "name": "react-stripe-elements",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "description": "React components for Stripe.js and Stripe Elements",
   "main": "./lib/index.js",
   "module": "es/index.js",
