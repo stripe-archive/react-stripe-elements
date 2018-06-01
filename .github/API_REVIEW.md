@@ -24,46 +24,46 @@ possible to omit some of the sections below.
 ```md
 #### Summary
 
-> A brief of the new API, including a code sample.
-> Consider where this feature would fit into our documentation,
-> and what the updated documentation would look like.
+> A brief of the new API, including a code sample. Consider where this feature
+> would fit into our documentation, and what the updated documentation would
+> look like.
 
 <!-- TODO -->
 
 #### Motivation
 
-> Describe the problem you are trying to solve with this API change.
-> What does this API enable that was previously not possible?
+> Describe the problem you are trying to solve with this API change. What does
+> this API enable that was previously not possible?
 
 <!-- TODO -->
 
 #### Similar APIs
 
-> Is this new API similar to an existing Stripe API?
-> Are there similar APIs or prior art in other popular projects?
+> Is this new API similar to an existing Stripe API? Are there similar APIs or
+> prior art in other popular projects?
 
 <!-- TODO -->
 
 #### Alternatives
 
-> How else could we implement this feature?
-> Are there any existing workarounds that would offer the same functionality?
-> Why should we chose this implementation over another?
+> How else could we implement this feature? Are there any existing workarounds
+> that would offer the same functionality? Why should we chose this
+> implementation over another?
 
 <!-- TODO -->
 
 #### Scope
 
-> Which interfaces will this apply to? For example, is this specific
-> to one component, or does it affect all Element components?
-> Does this set a precedent for future interfaces we'll add?
+> Which interfaces will this apply to? For example, is this specific to one
+> component, or does it affect all Element components? Does this set a precedent
+> for future interfaces we'll add?
 
 <!-- TODO -->
 
 #### Risks
 
-> Are there any security implications (for example, XSS)?
-> What are some ways users might get confused or misuse this feature?
+> Are there any security implications (for example, XSS)? What are some ways
+> users might get confused or misuse this feature?
 
 <!-- TODO -->
 ```

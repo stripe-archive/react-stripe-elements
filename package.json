@@ -15,8 +15,8 @@
     "flow": "flow",
     "build": "yarn run lint && yarn run flow && yarn run build:commonjs && yarn run build:es && yarn run build:umd && yarn run build:umd:min",
     "clean": "rimraf lib dist es",
-    "prettier": "prettier src/**/*.js demo/**/*.js --write",
-    "prettier-list-different": "prettier src/**/*.js demo/**/*.js --list-different",
+    "prettier": "prettier **/*.js **/*.css **/*.md --write",
+    "prettier-list-different": "prettier **/*.js **/*.css **/*.md --list-different",
     "prepublish": "yarn run clean && yarn run build",
     "demo": "webpack-dev-server --content-base dist",
     "doctoc": "doctoc README.md"
