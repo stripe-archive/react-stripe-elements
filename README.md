@@ -54,29 +54,11 @@ styles, fonts).
 
 ## Demo
 
-The fastest way to start playing around with `react-stripe-elements` is with
-this JSFiddle: <https://jsfiddle.net/attystripe/xux7qzch/>.
+The fastest way to start playing around with `react-stripe-elements` is with our [demo](http://stripe.github.io/react-stripe-elements/)
 
-You can also play around with the demo locally. The source code is in
-[demo/](demo/). To run it:
+![Screenshot of the demo running](demo/stripe-react-elements-demo.png)
 
-```shell
-git clone https://github.com/stripe/react-stripe-elements
-cd react-stripe-elements
-
-# (make sure you have yarn installed: https://yarnpkg.com/)
-
-yarn install
-yarn run demo
-```
-
-Now go to <http://localhost:8080/> to try it out!
-
-> :warning: `PaymentRequestButtonElement` will not render unless the page is
-> served over HTTPS. To demo `PaymentRequestButtonElement`, you can tunnel over
-> HTTPS to the local server using ngrok or a similar service.
-
-![Screenshot of the demo running](demo/demo.png)
+You can also [run it locally](/demo).
 
 ## Installation
 
@@ -530,14 +512,14 @@ These components display the UI for Elements, and must be used within
 
 (More to come!)
 
-- `CardElement`
-- `CardNumberElement`
-- `CardExpiryElement`
-- `CardCVCElement`
-- `PostalCodeElement`
-- `PaymentRequestButtonElement`
-- `IbanElement`
-- `IdealBankElement`
+- [`CardElement`](https://stripe.github.io/react-stripe-elements/#card)
+- [`CardNumberElement`](https://stripe.github.io/react-stripe-elements/#split-card)
+- [`CardExpiryElement`](https://stripe.github.io/react-stripe-elements/#split-card)
+- [`CardCVCElement`](https://stripe.github.io/react-stripe-elements/#split-card)
+- [`PostalCodeElement`](https://stripe.github.io/react-stripe-elements/#split-card)
+- [`PaymentRequestButtonElement`](https://stripe.github.io/react-stripe-elements/#payment-request)
+- [`IbanElement`](https://stripe.github.io/react-stripe-elements/#iban)
+- [`IdealBankElement`](https://stripe.github.io/react-stripe-elements/#ideal)
 
 #### Props shape
 
@@ -712,10 +694,6 @@ reach all components.
 Install dependencies:
 
     yarn install
-
-Run the demo:
-
-    yarn run demo
 
 Run the tests:
 

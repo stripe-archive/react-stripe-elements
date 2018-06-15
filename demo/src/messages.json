@@ -1,0 +1,38 @@
+{
+    "messages": {
+        "card":
+        {
+            "p1": "Need a <a href='https://stripe.com/docs/testing' target='_blank'>test card?</a> Try <span class='card'>4242 4242 4242 4242</span>, a valid expiration date in the future, and any CVC number and zip code.",
+            "p2": "Once you have your token you can send it to your server and <a href='https://stripe.com/docs/charges' target='_blank'>make a charge</a>."
+        },
+        "split-card":
+        {
+            "p1": "Need a <a href='https://stripe.com/docs/testing'>test card?</a> Try <span class='card'>4242 4242 4242 4242</span>, a valid expiration date in the future, and any CVC number and postal code.",
+            "p2": "Once you have your token you can send it to your server and <a href='https://stripe.com/docs/charges' target='_blank'>make a charge</a>."
+        },
+        "payment-request":
+        {
+            "p1": "The <a href='https://stripe.com/docs/stripe-js/elements/payment-request-button'>Payment Request Button</a> is a single integration that allows you to accept Apple Pay, Google Pay, Microsoft Pay, and the Payment Request API.",
+            "p2": "To test the Payment request button, add a <a href='https://stripe.com/docs/testing' target='_blank'>Stripe test card</a> (like <span class='card'>4242 4242 4242 4242</span>) to your browser and click the button!"
+        },
+        "iban":
+        {
+            "p1": "The <a href='https://stripe.com/docs/stripe-js/elements/iban' target='_blank'>IBAN Element</a> lets you collect International Bank Account Numbers in order to create <a href='https://stripe.com/docs/sources/sepa-debit'>SEPA Direct Debit sources</a> or <a href='https://stripe.com/docs/stripe-js/reference#collecting-bank-account-details'>bank_account tokens.</a>",
+            "p2": "You can use <span class='card'>DE89 3704 0044 0532 0130 00</span> as a test IBAN. Once you have the source you can immediately <a href='https://stripe.com/docs/sources/sepa-debit#charge-request' target='_blank'>charge it.</a>"
+
+        },
+        "ideal":
+        {
+            "p1": "iDEAL is the most popular payment method in the Netherlands and requires a redirect to a bank's website. You can use the <a href='https://stripe.com/docs/stripe-js/elements/ideal-bank' target='_blank'>iDEAL Element</a> to directly redirect your user to their specific bank's website.",
+            "p2": "Once you have your source, you can <a href='https://stripe.com/docs/stripe-js/elements/ideal-bank#redirect' target='_blank'>redirect your user</a> to the bank's website using the redirect url Stripe sends back."
+
+        },
+        "async":
+        {
+            "p1": "Loading Stripe.js <a href='https://github.com/stripe/react-stripe-elements#loading-stripejs-asynchronously'>asynchronously</a> can speed up your initial page load, especially if you don't show the payment form until the user interacts with your application in some way. Here we're programmically delaying loading the Stripe.js script for three seconds.",
+            "p2": "Once you have your token you can send it to your server and <a href='https://stripe.com/docs/charges' target='_blank'>make a charge</a>."
+
+        }
+    }
+
+}
