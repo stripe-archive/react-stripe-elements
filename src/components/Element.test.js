@@ -139,4 +139,9 @@ describe('Element', () => {
 
     expect(() => element.setProps({placeholder: 'placeholder'})).not.toThrow();
   });
+
+  it('should have a displayName based on the type argument', () => {
+    const TestElement = Element('test');
+    expect(TestElement.displayName).toEqual('TestElement');
+  });
 });
