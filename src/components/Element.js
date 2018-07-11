@@ -20,11 +20,15 @@ const _extractOptions = (props: Props): Object => {
   return options;
 };
 
+const capitalized = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 const Element = (
   type: string,
   hocOptions: {impliedTokenType?: string, impliedSourceType?: string} = {}
-) => {
-  class ElementWrapper extends React.Component<Props> {
+) =>
+  class extends React.Component<Props> {
     static propTypes = {
       id: PropTypes.string,
       className: PropTypes.string,
@@ -43,6 +47,8 @@ const Element = (
     };
 
     static contextTypes = elementContextTypes;
+
+    static displayName = `${capitalized(type)}Element`;
 
     constructor(props: Props, context: ElementContext) {
       super(props, context);
@@ -127,12 +133,6 @@ const Element = (
         />
       );
     }
-  }
-
-  const typeCapitalized = type.charAt(0).toUpperCase() + type.slice(1);
-  ElementWrapper.displayName = `${typeCapitalized}Element`;
-
-  return ElementWrapper;
-};
+  };
 
 export default Element;
