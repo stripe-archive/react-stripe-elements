@@ -20,6 +20,10 @@ const _extractOptions = (props: Props): Object => {
   return options;
 };
 
+const capitalized = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 const Element = (
   type: string,
   hocOptions: {impliedTokenType?: string, impliedSourceType?: string} = {}
@@ -43,6 +47,8 @@ const Element = (
     };
 
     static contextTypes = elementContextTypes;
+
+    static displayName = `${capitalized(type)}Element`;
 
     constructor(props: Props, context: ElementContext) {
       super(props, context);
