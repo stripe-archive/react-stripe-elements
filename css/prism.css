@@ -1,0 +1,164 @@
+pre .highlighted-line {
+    background: hsla(210, 14%, 45%, 0.08)
+  }
+  code .token {
+    padding: 0;
+    margin: 0;
+  }
+  code .token:not(.script) {
+    font-weight: normal;
+  }
+  code .token.property {
+    font-weight: 500;
+  }
+  
+  code .token.keyword,
+  code .token.atrule,
+  .language-php .token.operator {
+    color: #6772e5;
+  }
+  code .token.tag,
+  code .token.tag *,
+  code .token.attr-name,
+  code.language-markup .token.namespace,
+  code .token.selector {
+    color: #0075D6;
+  }
+  code .token.tag,
+  code .token.keyword,
+  code .token.atrule,
+  .language-php .token.operator {
+    font-weight: 600;
+  }
+  code .token.attr-name {
+    font-style: italic;
+  }
+  
+  code .token.comment {
+    font-weight: normal;
+    color: #91a2b0;
+  }
+  
+  code .token.function,
+  code .token.url,
+  code.language-url {
+    font-weight: 600;
+    color: #3297d3;
+  }
+  
+  code .token.boolean,
+  code .token.constant,
+  .language-ruby .token.constant + .token.punctuation,
+  .language-ruby .token.constant + .token.punctuation + .token.symbol,
+  code .token.class-name,
+  code .token.builtin,
+  code .token.namespace {
+    font-weight: 600;
+    color: #2191EF;
+  }
+  
+  code .token.number {
+    color: #fa755a;
+  }
+  
+  code .token.header {
+    font-weight: bold;
+  }
+  
+  /*.language-javascript,*/
+  code .token.variable,
+  code .token.curl,
+  code .token.option,
+  .language-bash .token.function {
+    color: teal;
+    font-weight: 600;
+  }
+  
+  code .token.curl,
+  code .token.option,
+  .language-bash .token.function {
+    font-weight: 500;
+  }
+  
+  code .token.symbol,
+  code .token.parameter,
+  .language-bash .token.option,
+  code.language-css .property {
+    font-weight: 500;
+    color: #d14;
+  }
+  code .token.attr-value,
+  code.language-html .token.attr-value > .punctuation:not(:first-child),
+  code.language-markup .token.attr-value > .punctuation:not(:first-child),
+  code .token.string,
+  code .token.stripe,
+  code .token.macro,
+  code .token.value {
+    font-weight: normal;
+    color: #159570;
+  }
+  
+  code .token.macro .keyword {
+    color: #064508;
+  }
+  
+  code .token.secret-key,
+  code .token.publishable-key,
+  code .token.token-tooltip {
+    background: #eceff1;
+    border-radius: 3px;
+    padding: 2px;
+    margin: -2px;
+  }
+  code .token.secret-key.enabled,
+  code .token.publishable-key.enabled,
+  code .token.token-tooltip.enabled {
+    background: #dfe3e6;
+  }
+  
+  pre {
+    position: relative;
+      color: #424770;
+  }
+  
+  pre .line-numbers {
+    position: absolute;
+    pointer-events: none;
+    top: 11px;
+    left: 29px;
+    width: 16px;
+    counter-reset: linenumber;
+    line-height: 19px;
+    font-family: "Source Code Pro", monospace;
+  }
+  
+  pre .line-numbers > span {
+    pointer-events: none;
+    display: block;
+    counter-increment: linenumber;
+  }
+  
+  pre .line-numbers > span:before {
+    content: counter(linenumber);
+    color: #BEC5CA;
+    display: block;
+    font-size: 13px;
+    text-align: right;
+    user-select: none;
+  }
+  
+  pre .line-numbers > span.highlighted:before {
+    color: #858c90;
+    font-weight: 500;
+  }
+  
+  pre.language-bash .line-numbers > span:before,
+  pre.language-curl .line-numbers > span:before {
+    content: '>';
+  }
+  
+  pre.language-bash .line-numbers > span:first-child:before,
+  pre.language-curl .line-numbers > span:first-child:before {
+    content: '$';
+  }
+  
