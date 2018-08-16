@@ -23,6 +23,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.js"></script>
   <script src="https://js.stripe.com/v3/" id="stripe-script"></script>
+  <script>
+    (() => {
+    const script = document.createElement('script');
+    script.src = 'https://js.stripe.com/internal/v2/analytics.min.js';
+    script.async = true;
+
+    script.onload = (e) => {
+        Analytics.viewed('react_stripe_elements_demo');
+    }
+
+    document.head.appendChild(script);
+    })()    
+  </script>
 </body>
 
 </html>
