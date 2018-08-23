@@ -636,11 +636,11 @@ The following props will be available to this component:
 ```js
 type FactoryProps = {
   stripe: null | {
-    createToken: (tokenParameters: {type?: string}) => Promise<{
+    createToken: (tokenData: {type?: string}) => Promise<{
       token?: Object,
       error?: Object,
     }>,
-    createSource: (sourceParameters: {type?: string}) => Promise<{
+    createSource: (sourceData: {type?: string}) => Promise<{
       source?: Object,
       error?: Object,
     }>,
