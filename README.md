@@ -620,6 +620,12 @@ Components that need to initiate Source or Token creations (e.g. a checkout form
 component) can access `stripe.createToken` or `stripe.createSource` via props of
 any component returned by the `injectStripe` HOC factory.
 
+Within the context of `Elements`, `stripe.createToken` and `stripe.createSource`
+wrap methods of the same name in
+[Stripe.js](https://stripe.com/docs/stripe-js/reference#stripe-create-Token).
+Calls to them automatically infer and pass the `Element` object as the first
+argument.
+
 If the `withRef` option is set to `true`, the wrapped component instance will be
 available with the `getWrappedInstance()` method of the wrapper component. This
 feature can not be used if the wrapped component is a stateless function
