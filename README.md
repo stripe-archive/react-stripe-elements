@@ -389,9 +389,9 @@ class App extends React.Component {
 
 Inside `<InjectedCheckoutForm />`, `this.props.stripe` will either be `null` or
 a Stripe instance. React will re-render `<InjectedCheckoutForm>` when
-`this.props.stripe` changes from `null` to a Stripe instance. Note that when
-providing Stripe.js asynchronously, you can still wrap a component returned by the
-[`injectStripe` HOC](#injectstripe-hoc).
+`this.props.stripe` changes from `null` to a Stripe instance. When loading Stripe.js asynchronously, the `stripe` prop provided by injectStripe will be initially null, and will become the Stripe instance once the instance is passed in.
+
+When loading Stripe.js asynchronously, the stripe prop provided by injectStripe will be initially null, and will become the Stripe instance once the instance is passed in.
 
 You can find a working demo of this strategy in [async.js](demo/async/async.js).
 If you run the demo locally, you can view it at <http://localhost:8080/async/>.
@@ -634,7 +634,7 @@ the `stripe` prop.
 class CheckoutForm extends React.Component {
   render() { /* ... */ }
   onCompleteCheckout() {
-    this.props.createSource().then(/* ... */)
+    this.props.stripe.createSource().then(/* ... */)
   }
 }
 
