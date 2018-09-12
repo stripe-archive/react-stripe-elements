@@ -387,9 +387,11 @@ class App extends React.Component {
 }
 ```
 
-When loading Stripe.js asynchronously, the `stripe` prop provided by `injectStripe` will initially be `null`, and will update to the Stripe instance once you pass it in to your `StripeProvider`.
-You can find a working demo of this strategy in [async.js](demo/async/async.js).
-If you run the demo locally, you can view it at <http://localhost:8080/async/>.
+When loading Stripe.js asynchronously, the `stripe` prop provided by
+`injectStripe` will initially be `null`, and will update to the Stripe instance
+once you pass it in to your `StripeProvider`. You can find a working demo of
+this strategy in [async.js](demo/async/async.js). If you run the demo locally,
+you can view it at <http://localhost:8080/async/>.
 
 For alternatives to calling `setState`in `componentDidMount`, consider using a
 `setTimeout()`, moving the `if/else` statement to the `constructor`, or
@@ -613,23 +615,26 @@ function injectStripe(
 ): ReactClass;
 ```
 
-Use `injectStripe` to wrap a component that needs to interact with `Stripe.js` to
-create sources or tokens. 
+Use `injectStripe` to wrap a component that needs to interact with `Stripe.js`
+to create sources or tokens.
 
-1. First, create a component that accepts the `stripe` prop and calls
-`this.props.stripe.createToken` or `this.props.stripe.createSource` when necessary.
-2. Wrap that component by passing it to `injectStripe` so that it actually receives
-the `stripe` prop.
-3. Render the component that `injectStripe` returns.
+1.  First, create a component that accepts the `stripe` prop and calls
+    `this.props.stripe.createToken` or `this.props.stripe.createSource` when
+    necessary.
+2.  Wrap that component by passing it to `injectStripe` so that it actually
+    receives the `stripe` prop.
+3.  Render the component that `injectStripe` returns.
 
 ### Example
 
 ```js
 // 1. Create a component that uses this.props.stripe:
 class CheckoutForm extends React.Component {
-  render() { /* ... */ }
+  render() {
+    /* ... */
+  }
   onCompleteCheckout() {
-    this.props.stripe.createSource().then(/* ... */)
+    this.props.stripe.createSource().then(/* ... */);
   }
 }
 
@@ -637,13 +642,17 @@ class CheckoutForm extends React.Component {
 const InjectedCheckoutForm = injectStripe(CheckoutForm);
 
 // 3. Render the wrapped component in your app:
-const CheckoutRoute = (props) => <div><InjectedCheckoutForm/></div>
+const CheckoutRoute = (props) => (
+  <div>
+    <InjectedCheckoutForm />
+  </div>
+);
 ```
 
-`injectStripe` will work with any method of providing the actual Stripe instance with
-`StripeProvider`, whether you just give it an api key,
-[load Stripe.js asynchronously](#loading-stripejs-asynchronously),
-or [pass in an existing instance](#using-an-existing-stripe-instance).
+`injectStripe` will work with any method of providing the actual Stripe instance
+with `StripeProvider`, whether you just give it an api key,
+[load Stripe.js asynchronously](#loading-stripejs-asynchronously), or
+[pass in an existing instance](#using-an-existing-stripe-instance).
 
 Within the context of `Elements`, `stripe.createToken` and `stripe.createSource`
 wrap methods of the same name in
@@ -677,9 +686,9 @@ type FactoryProps = {
 
 The `stripe` prop can only be `null` if you are using one of the
 [Advanced integrations](#advanced-integrations) mentioned above, like loading
-Stripe.js asynchronously or providing an existing instance. If you are using
-a basic integration where you pass in an api key to `<StripeProvider/>`, it 
-will always be present.
+Stripe.js asynchronously or providing an existing instance. If you are using a
+basic integration where you pass in an api key to `<StripeProvider/>`, it will
+always be present.
 
 ## Troubleshooting
 
