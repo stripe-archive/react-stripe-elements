@@ -204,8 +204,9 @@ class CheckoutForm extends React.Component {
     // You can also use createSource to create Sources. See our Sources
     // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-source
     //
-    // this.props.stripe.createSource({type: 'card', name: 'Jenny Rosen'});
-  };
+    // this.props.stripe.createSource({type: 'card', owner: {
+    //   name: 'Jenny Rosen'
+    // }});
 
   render() {
     return (
@@ -634,7 +635,7 @@ class CheckoutForm extends React.Component {
     /* ... */
   }
   onCompleteCheckout() {
-    this.props.stripe.createSource().then(/* ... */);
+    this.props.stripe.createSource({type: 'card'}).then(/* ... */);
   }
 }
 
@@ -674,7 +675,7 @@ type FactoryProps = {
       token?: Object,
       error?: Object,
     }>,
-    createSource: (sourceData: {type?: string}) => Promise<{
+    createSource: (sourceData: {type: string}) => Promise<{
       source?: Object,
       error?: Object,
     }>,
