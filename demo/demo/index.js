@@ -166,16 +166,6 @@ class _PaymentRequestForm extends React.Component<
       },
     });
 
-    paymentRequest.on('token', ({complete, token, ...data}) => {
-      console.log('Received Stripe token: ', token);
-      console.log('Received customer information: ', data);
-      complete('success');
-    });
-
-    paymentRequest.canMakePayment().then((result) => {
-      this.setState({canMakePayment: !!result});
-    });
-
     this.state = {
       canMakePayment: false,
       paymentRequest,
@@ -186,6 +176,18 @@ class _PaymentRequestForm extends React.Component<
     canMakePayment: boolean,
     paymentRequest: Object,
   };
+
+  componentDidMount() {
+    this.state.paymentRequest.on('token', ({complete, token, ...data}) => {
+      console.log('Received Stripe token: ', token);
+      console.log('Received customer information: ', data);
+      complete('success');
+    });
+
+    this.state.paymentRequest.canMakePayment().then((result) => {
+      this.setState({canMakePayment: !!result});
+    });
+  }
 
   render() {
     return this.state.canMakePayment ? (
