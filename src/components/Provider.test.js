@@ -102,7 +102,7 @@ describe('StripeProvider', () => {
         <form />
       </StripeProvider>
     );
-    const childContext = wrapper.node.getChildContext();
+    const childContext = wrapper.instance().getChildContext();
     expect(childContext).toEqual({stripe: stripeMockResult, tag: 'sync'});
   });
 
@@ -112,7 +112,7 @@ describe('StripeProvider', () => {
         <form />
       </StripeProvider>
     );
-    const childContext = wrapper.node.getChildContext();
+    const childContext = wrapper.instance().getChildContext();
     expect(childContext).toEqual({stripe: stripeMockResult, tag: 'sync'});
   });
 
@@ -122,7 +122,7 @@ describe('StripeProvider', () => {
         <form />
       </StripeProvider>
     );
-    const childContext = wrapper.node.getChildContext();
+    const childContext = wrapper.instance().getChildContext();
     expect(childContext).toHaveProperty('addStripeLoadListener');
     expect(childContext).toHaveProperty('tag', 'async');
   });
@@ -134,7 +134,7 @@ describe('StripeProvider', () => {
       </StripeProvider>
     );
 
-    const childContext = wrapper.node.getChildContext();
+    const childContext = wrapper.instance().getChildContext();
     childContext.addStripeLoadListener((stripe) => {
       expect(stripe).toEqual(stripeMockResult);
       done();
@@ -152,7 +152,7 @@ describe('StripeProvider', () => {
         <form />
       </StripeProvider>
     );
-    let childContext = wrapper.node.getChildContext();
+    let childContext = wrapper.instance().getChildContext();
     const keyOneInstance = childContext.stripe;
     expect(keyOneInstance).toBeTruthy();
 
@@ -162,7 +162,7 @@ describe('StripeProvider', () => {
         <form />
       </StripeProvider>
     );
-    childContext = wrapper.node.getChildContext();
+    childContext = wrapper.instance().getChildContext();
     expect(childContext.stripe).toBe(keyOneInstance);
 
     // Create another, but with a different key!
@@ -171,7 +171,7 @@ describe('StripeProvider', () => {
         <form />
       </StripeProvider>
     );
-    childContext = wrapper.node.getChildContext();
+    childContext = wrapper.instance().getChildContext();
     expect(childContext.stripe).not.toBe(keyOneInstance);
   });
 
