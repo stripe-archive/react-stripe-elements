@@ -143,16 +143,16 @@ export default class Provider extends React.Component<Props> {
     }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     const apiKeyChanged =
       this.props.apiKey &&
-      nextProps.apiKey &&
-      this.props.apiKey !== nextProps.apiKey;
+      prevProps.apiKey &&
+      this.props.apiKey !== prevProps.apiKey;
 
     const stripeInstanceChanged =
       this.props.stripe &&
-      nextProps.stripe &&
-      this.props.stripe !== nextProps.stripe;
+      prevProps.stripe &&
+      this.props.stripe !== prevProps.stripe;
     if (
       !this._didWarn &&
       (apiKeyChanged || stripeInstanceChanged) &&
@@ -167,10 +167,10 @@ export default class Provider extends React.Component<Props> {
       return;
     }
 
-    if (!this._didWakeUpListeners && nextProps.stripe) {
+    if (!this._didWakeUpListeners && this.props.stripe) {
       // Wake up the listeners if we've finally been given a StripeShape
       this._didWakeUpListeners = true;
-      const stripe = ensureStripeShape(nextProps.stripe);
+      const stripe = ensureStripeShape(this.props.stripe);
       this._meta.stripe = stripe;
       this._listeners.forEach((fn) => {
         fn(stripe);
