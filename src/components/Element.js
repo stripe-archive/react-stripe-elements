@@ -53,7 +53,7 @@ const Element = (
     static contextTypes = elementContextTypes;
 
     static displayName = `${capitalized(type)}Element`;
-
+  
     constructor(props: Props, context: ElementContext) {
       super(props, context);
 
@@ -90,8 +90,8 @@ const Element = (
       });
     }
 
-    componentWillReceiveProps(nextProps: Props) {
-      const options = _extractOptions(nextProps);
+    componentDidUpdate() {
+      const options = _extractOptions(this.props);
       if (
         Object.keys(options).length !== 0 &&
         !isEqual(options, this._options)

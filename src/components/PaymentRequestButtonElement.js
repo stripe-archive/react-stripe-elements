@@ -83,13 +83,13 @@ class PaymentRequestButtonElement extends React.Component<Props> {
       this._element.mount(this._ref);
     });
   }
-  componentWillReceiveProps(nextProps: Props) {
-    if (this.props.paymentRequest !== nextProps.paymentRequest) {
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.paymentRequest !== prevProps.paymentRequest) {
       console.warn(
         'Unsupported prop change: paymentRequest is not a customizable property.'
       );
     }
-    const options = _extractOptions(nextProps);
+    const options = _extractOptions(this.props);
     if (
       Object.keys(options).length !== 0 &&
       !shallowEqual(options, this._options)
