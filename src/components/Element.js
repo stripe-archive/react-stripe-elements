@@ -49,7 +49,7 @@ const Element = (
     static contextTypes = elementContextTypes;
 
     static displayName = `${capitalized(type)}Element`;
-  
+
     constructor(props: Props, context: ElementContext) {
       super(props, context);
 
