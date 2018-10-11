@@ -114,7 +114,7 @@ In order for your application to have access to
 [the Stripe object](https://stripe.com/docs/elements/reference#the-stripe-object),
 let's add `StripeProvider` to our root React App component:
 
-```js
+```jsx
 // index.js
 import React from 'react';
 import {render} from 'react-dom';
@@ -140,7 +140,7 @@ wrap the `Elements` component around your `form`. This groups the set of Stripe
 Elements you're using together, so that we're able to pull data from groups of
 Elements when you're tokenizing.
 
-```js
+```jsx
 // MyStoreCheckout.js
 import React from 'react';
 import {Elements} from 'react-stripe-elements';
@@ -178,7 +178,7 @@ component that has been injected to submit payment data to Stripe.
 > under `<Elements>` but above any code where you'd like to access
 > `this.props.stripe`.
 
-```js
+```jsx
 // CheckoutForm.js
 import React from 'react';
 import {injectStripe} from 'react-stripe-elements';
@@ -227,7 +227,7 @@ export default injectStripe(CheckoutForm);
 Now, you can use individual `*Element` components, such as `CardElement`, to
 build your form.
 
-```js
+```jsx
 // CardSection.js
 import React from 'react';
 import {CardElement} from 'react-stripe-elements';
@@ -259,7 +259,7 @@ You can then conditionally render the `PaymentRequestButtonElement` based on the
 result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object
 as a prop.
 
-```js
+```jsx
 class PaymentRequestForm extends React.Component {
   constructor(props) {
     super(props);
@@ -358,7 +358,7 @@ application in some way.
 Initialize `this.state.stripe` to `null` in the `constructor`, then update it in
 `componentDidMount` when the script tag has loaded.
 
-```js
+```jsx
 class App extends React.Component {
   constructor() {
     super();
@@ -412,7 +412,7 @@ section (initialize `this.state.stripe` to `null` in `constructor`, update in
 `componentDidMount`), but this time we don't have to wait for the script tag to
 load in `componentDidMount`; we can use `window.Stripe` directly.
 
-```js
+```jsx
 class App extends React.Component {
   constructor() {
     super();
@@ -451,7 +451,7 @@ instance that `<StripeProvider>` uses. For example, if you have a `stripe`
 instance in a Redux store that you pass to your `<App />` as a prop, you can
 pass that instance directly into `<StripeProvider>`:
 
-```js
+```jsx
 class App extends React.Component {
   render() {
     return (
@@ -491,7 +491,7 @@ context.
 
 There are two _distinct_ props shapes you can pass to `<StripeProvider>`.
 
-```js
+```jsx
 type StripeProviderProps =
   | { apiKey: string, ... }
   | { stripe: StripeObject | null };
@@ -513,7 +513,7 @@ cases, you want to wrap this around your checkout form.
 This component accepts all `options` that can be passed into
 `stripe.elements(options)` as props.
 
-```js
+```jsx
 type ElementsProps = {
   locale?: string,
   fonts?: Array<Object>,
@@ -544,7 +544,7 @@ These components display the UI for Elements, and must be used within
 These components accept all `options` that can be passed into
 `elements.create(type, options)` as props.
 
-```js
+```jsx
 type ElementProps = {
   id?: string,
   className?: string,
@@ -560,7 +560,7 @@ type ElementProps = {
 
 The props for the `PaymentRequestButtonElement` are:
 
-```js
+```jsx
 type PaymentRequestButtonProps = {
   id?: string,
   className?: string,
@@ -582,7 +582,7 @@ methods that a Stripe Element supports.
 
 For example, you can use `onReady` to force your element to focus:
 
-```js
+```jsx
 // CardSection.js
 import React from 'react';
 import {CardElement} from 'react-stripe-elements';
@@ -607,7 +607,7 @@ export default CardSection;
 
 ### `injectStripe` HOC
 
-```js
+```jsx
 function injectStripe(
   WrappedComponent: ReactClass,
   options?: {
@@ -628,7 +628,7 @@ to create sources or tokens.
 
 ### Example
 
-```js
+```jsx
 // 1. Create a component that uses this.props.stripe:
 class CheckoutForm extends React.Component {
   render() {
@@ -668,7 +668,7 @@ component.
 
 Within the wrapped component, the `stripe` prop has the type:
 
-```js
+```jsx
 type FactoryProps = {
   stripe: null | {
     createToken: (tokenData: {type?: string}) => Promise<{
@@ -704,7 +704,7 @@ For example, when using `react-stripe-elements` together with
 [`react-redux`](https://github.com/reactjs/react-redux) doing the following will
 not work:
 
-```js
+```jsx
 const Component = connect()(injectStripe(_Component));
 ```
 
@@ -721,7 +721,7 @@ There are two ways to prevent this issue:
 1.  Change the order of the functions to have `injectStripe` be the outermost
     one:
 
-    ```js
+    ```jsx
     const Component = injectStripe(connect()(_CardForm));
     ```
 
@@ -731,7 +731,7 @@ reach all components.
 
 2.  You can use the [`pure: false`][pure-false] option for redux-connect:
 
-    ```js
+    ```jsx
     const Component = connect(
       mapStateToProps,
       mapDispatchToProps,
