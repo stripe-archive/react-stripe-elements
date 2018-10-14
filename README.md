@@ -345,9 +345,9 @@ application in some way.
 <head>
   <!-- ... -->
 
-  <!-- Note the 'id' and 'async' attributes:                         -->
-  <!--    ┌────────────┐                                 ┌───┐       -->
-  <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
+  <!-- Note the 'async' attribute:                    -->
+  <!--                                    ┌───┐       -->
+  <script src="https://js.stripe.com/v3/" async></script>
 
   <!-- ... -->
 </head>
@@ -368,10 +368,12 @@ class App extends React.Component {
     if (window.Stripe) {
       this.setState({stripe: window.Stripe('pk_test_12345')});
     } else {
-      document.querySelector('#stripe-js').addEventListener('load', () => {
-        // Create Stripe instance once Stripe.js loads
-        this.setState({stripe: window.Stripe('pk_test_12345')});
-      });
+      document
+        .querySelector('script[src="https://js.stripe.com/v3/]"')
+        .addEventListener('load', () => {
+          // Create Stripe instance once Stripe.js loads
+          this.setState({stripe: window.Stripe('pk_test_12345')});
+        });
     }
   }
   render() {
