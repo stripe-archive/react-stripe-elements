@@ -207,6 +207,7 @@ class CheckoutForm extends React.Component {
     // this.props.stripe.createSource({type: 'card', owner: {
     //   name: 'Jenny Rosen'
     // }});
+  };
 
   render() {
     return (
