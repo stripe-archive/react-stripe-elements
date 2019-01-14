@@ -62,7 +62,7 @@
     "flow-bin": "0.73.0",
     "html-webpack-plugin": "^2.30.1",
     "jest": "23.0.1",
-    "prettier": "1.13.2",
+    "prettier": "1.15.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-test-renderer": "^15.6.1",
