@@ -39,8 +39,10 @@ const isEqual = (left: mixed, right: mixed): boolean => {
     return false;
   }
 
+  const l = left;
+  const r = right;
   const pred = (key) => {
-    return isEqual(left[key], right[key]);
+    return isEqual(l[key], r[key]);
   };
 
   return allKeys.every(pred);
