@@ -343,16 +343,16 @@ application in some way.
 
 ```html
 <html>
-<head>
-  <!-- ... -->
+  <head>
+    <!-- ... -->
 
-  <!-- Note the 'id' and 'async' attributes:                         -->
-  <!--    ┌────────────┐                                 ┌───┐       -->
-  <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
+    <!-- Note the 'id' and 'async' attributes:                         -->
+    <!--    ┌────────────┐                                 ┌───┐       -->
+    <script id="stripe-js" src="https://js.stripe.com/v3/" async></script>
 
+    <!-- ... -->
+  </head>
   <!-- ... -->
-</head>
-<!-- ... -->
 </html>
 ```
 
@@ -494,8 +494,8 @@ There are two _distinct_ props shapes you can pass to `<StripeProvider>`.
 
 ```jsx
 type StripeProviderProps =
-  | { apiKey: string, ... }
-  | { stripe: StripeObject | null };
+  | {apiKey: string, ...}
+  | {stripe: StripeObject | null};
 ```
 
 See [Advanced integrations](#advanced-integrations) for more information on when
