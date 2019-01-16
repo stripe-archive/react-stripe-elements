@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import PropTypes from 'prop-types';
-import shallowEqual from '../utils/shallowEqual';
+import isEqual from '../utils/isEqual';
 import {type ElementContext, elementContextTypes} from './Elements';
 
 type Props = {
@@ -85,7 +85,7 @@ const Element = (
       const options = _extractOptions(nextProps);
       if (
         Object.keys(options).length !== 0 &&
-        !shallowEqual(options, this._options)
+        !isEqual(options, this._options)
       ) {
         this._options = options;
         if (this._element) {
