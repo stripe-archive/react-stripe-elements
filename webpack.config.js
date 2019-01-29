@@ -3,10 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const config = {
+  mode: 'development',
   module: {
-    loaders: [
-      {test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/},
-    ],
+    rules: [{test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/}],
   },
   entry: {
     demo: ['./demo/demo/index.js'],
