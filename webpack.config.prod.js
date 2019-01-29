@@ -1,5 +1,5 @@
+// @noflow
 const webpack = require('webpack');
-const env = process.env.NODE_ENV;
 
 const reactExternal = {
   root: 'React',
@@ -9,38 +9,26 @@ const reactExternal = {
 };
 
 const config = {
+  mode: 'production',
   externals: {
     react: reactExternal,
   },
   module: {
-    loaders: [
-      {test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/},
-    ],
+    rules: [{test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/}],
   },
   output: {
     library: 'ReactStripeElements',
     libraryTarget: 'umd',
   },
-  plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(env),
-    }),
-  ],
+  plugins: [new webpack.optimize.OccurrenceOrderPlugin()],
 };
 
-if (env === 'production') {
-  config.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        pure_getters: true,
-        unsafe: true,
-        unsafe_comps: true,
-        screw_ie8: true,
-        warnings: false,
-      },
-    })
-  );
-}
+module.exports = (env) => {
+  if (env && env.noMinimize) {
+    config.optimization = {
+      minimize: false,
+    };
+  }
 
-module.exports = config;
+  return config;
+};
