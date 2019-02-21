@@ -22,7 +22,7 @@ const CardNumberElement = Element('cardNumber', {
   impliedSourceType: 'card',
 });
 const CardExpiryElement = Element('cardExpiry');
-const CardCVCElement = Element('cardCvc');
+const CardCvcElement = Element('cardCvc');
 const PostalCodeElement = Element('postalCode');
 
 // IBAN
@@ -41,7 +41,7 @@ export {
   CardElement,
   CardNumberElement,
   CardExpiryElement,
-  CardCVCElement,
+  CardCvcElement,
   PostalCodeElement,
   PaymentRequestButtonElement,
   IbanElement,
