@@ -382,7 +382,6 @@ const App = () => {
       </Elements>
     </StripeProvider>
   );
-  }
 }
 ```
 
