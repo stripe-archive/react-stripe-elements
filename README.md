@@ -373,7 +373,7 @@ const App = () => {
     }
   }, []);
    
-  // this.state.stripe will either be null or a Stripe instance
+  // stripe will either be null or a Stripe instance
   // depending on whether Stripe.js has loaded.
   return (
     <StripeProvider stripe={stripe}>
