@@ -261,6 +261,8 @@ result of `paymentRequest.canMakePayment` and pass the `PaymentRequest` Object
 as a prop.
 
 ```jsx
+import {PaymentRequestButtonElement} from 'react-stripe-elements';
+
 class PaymentRequestForm extends React.Component {
   constructor(props) {
     super(props);
