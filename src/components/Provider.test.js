@@ -13,6 +13,7 @@ describe('StripeProvider', () => {
       elements: jest.fn(),
       createToken: jest.fn(),
       createSource: jest.fn(),
+      createPaymentMethod: jest.fn(),
     };
     stripeMockFn = jest.fn().mockReturnValue(stripeMockResult);
     window.Stripe = stripeMockFn;

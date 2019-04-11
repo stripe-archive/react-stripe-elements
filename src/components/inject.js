@@ -19,6 +19,7 @@ type Options = {
 type WrappedStripeShape = {
   createToken: Function,
   createSource: Function,
+  createPaymentMethod: Function,
 };
 
 type State = {stripe: WrappedStripeShape | null};
@@ -93,6 +94,7 @@ Please be sure the component that calls createSource or createToken is within an
         // These are the only functions that take elements.
         createToken: this.wrappedCreateToken(stripe),
         createSource: this.wrappedCreateSource(stripe),
+        createPaymentMethod: this.wrappedCreatePaymentMethod(stripe),
       };
     }
 
@@ -192,6 +194,45 @@ Please be sure the component that calls createSource or createToken is within an
         // If a bad value was passed in for options, throw an error.
         throw new Error(
           `Invalid options passed to createSource. Expected an object, got ${typeof options}.`
+        );
+      }
+    };
+
+    // Wraps createPaymentMethod in order to infer the Element that is being tokenized.
+    // Use the impliedSourceType first
+    wrappedCreatePaymentMethod = (stripe: StripeShape) => (
+      paymentMethodType: string = 'card',
+      data: mixed = {}
+    ) => {
+      if (!['card'].includes(paymentMethodType)) {
+        throw new Error(
+            `Invalid PaymentMethod type passed to createPaymentMethod. ${paymentMethodType} is not yet supported.`
+          );
+      }
+
+      if (paymentMethodType && typeof paymentMethodType === 'string') {
+        // Second argument is options; infer the Element and tokenize
+        const specifiedType = paymentMethodType;
+
+        if (data && typeof data !== 'object') {
+          throw new Error(
+            `Invalid data passed to createPaymentMethod. Expected an object, got ${typeof data}.`
+          );
+        }
+
+        // Since only options were passed in, a corresponding Element must exist
+        // for the tokenization to succeed -- thus we call requireElement.
+        const element = this.requireElement('impliedSourceType', specifiedType);
+
+        if (data) {
+          return stripe.createPaymentMethod(paymentMethodType, element, data);
+        } else {
+          return stripe.createPaymentMethod(paymentMethodType, element);
+        }
+      } else {
+        // If a bad value was passed in for options, throw an error.
+        throw new Error(
+          `Invalid type passed to createPaymentMethod. Expected a string, got ${typeof paymentMethodType}.`
         );
       }
     };

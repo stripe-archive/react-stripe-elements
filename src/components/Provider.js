@@ -51,7 +51,7 @@ const getOrCreateStripe = (apiKey: string, options: mixed): StripeShape => {
 };
 
 const ensureStripeShape = (stripe: mixed): StripeShape => {
-  if (stripe && stripe.elements && stripe.createSource && stripe.createToken) {
+  if (stripe && stripe.elements && stripe.createSource && stripe.createToken && stripe.createPaymentMethod) {
     return ((stripe: any): StripeShape);
   } else {
     throw new Error(

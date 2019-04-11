@@ -44,9 +44,12 @@ class _CardForm extends React.Component<InjectedProps> {
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
+      // this.props.stripe
+      //   .createToken()
+      //   .then((payload) => console.log('[token]', payload));
       this.props.stripe
-        .createToken()
-        .then((payload) => console.log('[token]', payload));
+        .createPaymentMethod()
+        .then((payload) => console.log('[paymentMethod]', payload));
     } else {
       console.log('Form submitted before Stripe.js loaded.');
     }
