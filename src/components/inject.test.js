@@ -273,7 +273,11 @@ describe('injectStripe()', () => {
 
       const props = wrapper.props();
       props.stripe.createPaymentMethod('card');
-      expect(createPaymentMethod).toHaveBeenCalledWith('card', elementMock.element, {});
+      expect(createPaymentMethod).toHaveBeenCalledWith(
+        'card',
+        elementMock.element,
+        {}
+      );
     });
 
     it('props.stripe.createPaymentMethod calls createPaymentMethod with data options', () => {
@@ -289,11 +293,15 @@ describe('injectStripe()', () => {
           name: 'Jenny Rosen',
         },
       });
-      expect(createPaymentMethod).toHaveBeenCalledWith('card', elementMock.element, {
-        billing_details: {
-          name: 'Jenny Rosen',
-        },
-      });
+      expect(createPaymentMethod).toHaveBeenCalledWith(
+        'card',
+        elementMock.element,
+        {
+          billing_details: {
+            name: 'Jenny Rosen',
+          },
+        }
+      );
     });
 
     it('throws when `getWrappedInstance` is called without `{withRef: true}` option.', () => {

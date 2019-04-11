@@ -28,6 +28,6 @@ declare type StripeShape = {
   createPaymentMethod: (
     type: string,
     element: ElementShape,
-    data: mixed,
+    data: mixed
   ) => Promise<{paymentMethod?: MixedObject, error?: MixedObject}>,
 };

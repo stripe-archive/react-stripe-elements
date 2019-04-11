@@ -206,8 +206,8 @@ Please be sure the component that calls createSource or createToken is within an
     ) => {
       if (!['card'].includes(paymentMethodType)) {
         throw new Error(
-            `Invalid PaymentMethod type passed to createPaymentMethod. ${paymentMethodType} is not yet supported.`
-          );
+          `Invalid PaymentMethod type passed to createPaymentMethod. ${paymentMethodType} is not yet supported.`
+        );
       }
 
       if (paymentMethodType && typeof paymentMethodType === 'string') {
