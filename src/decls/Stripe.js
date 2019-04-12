@@ -33,6 +33,6 @@ declare type StripeShape = {
   handleCardPayment: (
     clientSecret: string,
     element: ElementShape | MixedObject,
-    options: ?{}
+    options: mixed
   ) => Promise<{paymentIntent?: MixedObject, error?: MixedObject}>,
 };

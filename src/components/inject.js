@@ -100,6 +100,17 @@ Please be sure the component that calls createSource or createToken is within an
       };
     }
 
+    parseElementOrData = (elementOrOptions: any) =>
+      elementOrOptions &&
+      typeof elementOrOptions === 'object' &&
+      elementOrOptions._frame &&
+      typeof elementOrOptions._frame === 'object' &&
+      elementOrOptions._frame.id &&
+      typeof elementOrOptions._frame.id === 'string' &&
+      typeof elementOrOptions._componentName === 'string'
+        ? {type: 'element', element: (elementOrOptions: ElementShape)}
+        : {type: 'data', data: (elementOrOptions: mixed)};
+
     // Finds an Element by the specified type, if one exists.
     // Throws if multiple Elements match.
     findElement = (
@@ -210,48 +221,56 @@ Please be sure the component that calls createSource or createToken is within an
     // used for PaymentMethod creation.
     wrappedCreatePaymentMethod = (stripe: StripeShape) => (
       paymentMethodType: string = 'card',
-      data: mixed = {}
+      elementOrData?: mixed,
+      maybeData?: mixed
     ) => {
+      if (!paymentMethodType || typeof paymentMethodType !== 'string') {
+        throw new Error(
+          `Invalid type passed to createPaymentMethod. Expected a string, got ${typeof paymentMethodType}.`
+        );
+      }
+
       if (!['card'].includes(paymentMethodType)) {
         throw new Error(
           `Invalid PaymentMethod type passed to createPaymentMethod. ${paymentMethodType} is not yet supported.`
         );
       }
 
-      if (paymentMethodType && typeof paymentMethodType === 'string') {
-        // Second argument is options; infer the Element and tokenize
-        const specifiedType = paymentMethodType;
+      const elementOrDataResult = this.parseElementOrData(elementOrData);
 
-        if (data && typeof data !== 'object') {
-          throw new Error(
-            `Invalid data passed to createPaymentMethod. Expected an object, got ${typeof data}.`
+      // Second argument is Element; use passed in Element
+      if (elementOrDataResult.type === 'element') {
+        const {element} = elementOrDataResult;
+        if (maybeData) {
+          return stripe.createPaymentMethod(
+            paymentMethodType,
+            element,
+            maybeData
           );
-        }
-
-        // Since only options were passed in, a corresponding Element must exist
-        // for the tokenization to succeed -- thus we call requireElement.
-        const element = this.requireElement(
-          'impliedPaymentMethodType',
-          specifiedType
-        );
-
-        if (data) {
-          return stripe.createPaymentMethod(paymentMethodType, element, data);
         } else {
           return stripe.createPaymentMethod(paymentMethodType, element);
         }
+      }
+
+      // Second argument is data or undefined; infer the Element
+      const {data} = elementOrDataResult;
+      const element = this.requireElement(
+        'impliedPaymentMethodType',
+        paymentMethodType
+      );
+
+      if (data) {
+        return stripe.createPaymentMethod(paymentMethodType, element, data);
       } else {
-        // If a bad value was passed in for options, throw an error.
-        throw new Error(
-          `Invalid type passed to createPaymentMethod. Expected a string, got ${typeof paymentMethodType}.`
-        );
+        return stripe.createPaymentMethod(paymentMethodType, element);
       }
     };
 
     // Wraps handleCardPayment in order to infer the Element that is being tokenized.
     wrappedHandleCardPayment = (stripe: StripeShape) => (
       clientSecret: mixed,
-      options: mixed = {}
+      elementOrData?: mixed,
+      maybeData?: mixed
     ) => {
       if (!clientSecret || typeof clientSecret !== 'string') {
         // If a bad value was passed in for clientSecret, throw an error.
@@ -260,27 +279,44 @@ Please be sure the component that calls createSource or createToken is within an
         );
       }
 
-      if (options && typeof options === 'object') {
-        const element = this.findElement('impliedPaymentMethodType', 'card');
+      const elementOrDataResult = this.parseElementOrData(elementOrData);
 
-        if (element) {
-          // If an Element exists that can create card payment_methods, use that
-          // to create the corresponding payment_method.
-          //
-          // NOTE: this prevents users from using handleCardPayment with an existing
-          // source or payment_method if an Element that can create card payment_methods
-          // exists in the current <Elements /> context.
-          return stripe.handleCardPayment(clientSecret, element, options);
+      // Second argument is Element; handleCardPayment with element
+      if (elementOrDataResult.type === 'element') {
+        const {element} = elementOrDataResult;
+        if (maybeData) {
+          return stripe.handleCardPayment(clientSecret, element, maybeData);
         } else {
-          // If no Element exists that can create a card payment_method,
-          // directly call handleCardPayment.
-          return stripe.handleCardPayment(clientSecret, options);
+          return stripe.handleCardPayment(clientSecret, element);
+        }
+      }
+
+      // Second argument is data or undefined; infer the Element and create PaymentMethod
+      const {data} = elementOrDataResult;
+      const element = this.findElement('impliedPaymentMethodType', 'card');
+
+      if (element) {
+        // If an Element exists that can create card payment_methods, use that
+        // to create the corresponding payment_method.
+        //
+        // NOTE: this prevents users from using handleCardPayment with an existing
+        // source or payment_method if an Element that can create card payment_methods
+        // exists in the current <Elements /> context.
+        if (data) {
+          return stripe.handleCardPayment(clientSecret, element, data);
+        } else {
+          return stripe.handleCardPayment(clientSecret, element);
         }
       } else {
-        // If a bad value was passed in for options, throw an error.
-        throw new Error(
-          `Invalid options passed to handleCardPayment. Expected an object, got ${typeof options}.`
-        );
+        if (!data || typeof data !== 'object') {
+          throw new Error(
+            `Invalid data passed to handleCardPayment. Expected an object, got ${typeof data}.`
+          );
+        }
+
+        // If no Element exists that can create a card payment_method,
+        // directly call handleCardPayment.
+        return stripe.handleCardPayment(clientSecret, data);
       }
     };
 

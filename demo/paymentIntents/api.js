@@ -23,7 +23,7 @@ const createPaymentIntent = (options: {}): Promise<string> => {
   if (!STRIPE_SECRET_KEY) {
     return Promise.reject(
       new Error(
-        `A secret key is required to to run PaymentIntents demo. Please set the following environment variable: \n\nSTRIPE_SECRET_KEY=<your secret key>`
+        `A secret key is required to create PaymentIntents for handleCardPayment. Please set the following environment variable: \n\nSTRIPE_SECRET_KEY=<your secret key>`
       )
     );
   }
