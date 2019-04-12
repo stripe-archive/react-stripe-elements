@@ -101,7 +101,10 @@ Please be sure the component that calls createSource or createToken is within an
     // Finds an Element by the specified type, if one exists.
     // Throws if multiple Elements match.
     findElement = (
-      filterBy: 'impliedTokenType' | 'impliedSourceType',
+      filterBy:
+        | 'impliedTokenType'
+        | 'impliedSourceType'
+        | 'impliedPaymentMethodType',
       specifiedType: string
     ): ?ElementShape => {
       const allElements = this.context.getRegisteredElements();
@@ -115,7 +118,7 @@ Please be sure the component that calls createSource or createToken is within an
         return matchingElements[0].element;
       } else if (matchingElements.length > 1) {
         throw new Error(
-          `You did not specify the type of Source or Token to create.
+          `You did not specify the type of Source, Token, or PaymentMethod to create.
         We could not infer which Element you want to use for this operation.`
         );
       } else {
@@ -126,7 +129,10 @@ Please be sure the component that calls createSource or createToken is within an
     // Require that exactly one Element is found for the specified type.
     // Throws if no Element is found.
     requireElement = (
-      filterBy: 'impliedTokenType' | 'impliedSourceType',
+      filterBy:
+        | 'impliedTokenType'
+        | 'impliedSourceType'
+        | 'impliedPaymentMethodType',
       specifiedType: string
     ): ElementShape => {
       const element = this.findElement(filterBy, specifiedType);
@@ -134,7 +140,7 @@ Please be sure the component that calls createSource or createToken is within an
         return element;
       } else {
         throw new Error(
-          `You did not specify the type of Source or Token to create.
+          `You did not specify the type of Source, Token, or PaymentMethod to create.
         We could not infer which Element you want to use for this operation.`
         );
       }
@@ -198,8 +204,8 @@ Please be sure the component that calls createSource or createToken is within an
       }
     };
 
-    // Wraps createPaymentMethod in order to infer the Element that is being tokenized.
-    // Use the impliedSourceType first
+    // Wraps createPaymentMethod in order to infer the Element that is being
+    // used for PaymentMethod creation.
     wrappedCreatePaymentMethod = (stripe: StripeShape) => (
       paymentMethodType: string = 'card',
       data: mixed = {}
@@ -222,7 +228,10 @@ Please be sure the component that calls createSource or createToken is within an
 
         // Since only options were passed in, a corresponding Element must exist
         // for the tokenization to succeed -- thus we call requireElement.
-        const element = this.requireElement('impliedSourceType', specifiedType);
+        const element = this.requireElement(
+          'impliedPaymentMethodType',
+          specifiedType
+        );
 
         if (data) {
           return stripe.createPaymentMethod(paymentMethodType, element, data);

@@ -12,6 +12,7 @@ import PaymentRequestButtonElement from './components/PaymentRequestButtonElemen
 const CardElement = Element('card', {
   impliedTokenType: 'card',
   impliedSourceType: 'card',
+  impliedPaymentMethodType: 'card',
 });
 
 // Split Fields

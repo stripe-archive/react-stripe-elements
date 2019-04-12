@@ -23,6 +23,7 @@ describe('injectStripe()', () => {
       },
       impliedTokenType: 'card',
       impliedSourceType: 'card',
+      impliedPaymentMethodType: 'card',
     };
     WrappedComponent = () => <div />;
     WrappedComponent.displayName = 'WrappedComponent';
