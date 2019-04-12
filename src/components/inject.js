@@ -20,6 +20,7 @@ type WrappedStripeShape = {
   createToken: Function,
   createSource: Function,
   createPaymentMethod: Function,
+  handleCardPayment: Function,
 };
 
 type State = {stripe: WrappedStripeShape | null};
@@ -95,6 +96,7 @@ Please be sure the component that calls createSource or createToken is within an
         createToken: this.wrappedCreateToken(stripe),
         createSource: this.wrappedCreateSource(stripe),
         createPaymentMethod: this.wrappedCreatePaymentMethod(stripe),
+        handleCardPayment: this.wrappedHandleCardPayment(stripe),
       };
     }
 
@@ -242,6 +244,42 @@ Please be sure the component that calls createSource or createToken is within an
         // If a bad value was passed in for options, throw an error.
         throw new Error(
           `Invalid type passed to createPaymentMethod. Expected a string, got ${typeof paymentMethodType}.`
+        );
+      }
+    };
+
+    // Wraps handleCardPayment in order to infer the Element that is being tokenized.
+    wrappedHandleCardPayment = (stripe: StripeShape) => (
+      clientSecret: mixed,
+      options: mixed = {}
+    ) => {
+      if (!clientSecret || typeof clientSecret !== 'string') {
+        // If a bad value was passed in for clientSecret, throw an error.
+        throw new Error(
+          `Invalid PaymentIntent clientSecret passed to handleCardPayment. Expected string, got ${typeof clientSecret}.`
+        );
+      }
+
+      if (options && typeof options === 'object') {
+        const element = this.findElement('impliedPaymentMethodType', 'card');
+
+        if (element) {
+          // If an Element exists that can create card payment_methods, use that
+          // to create the corresponding payment_method.
+          //
+          // NOTE: this prevents users from using handleCardPayment with an existing
+          // source or payment_method if an Element that can create card payment_methods
+          // exists in the current <Elements /> context.
+          return stripe.handleCardPayment(clientSecret, element, options);
+        } else {
+          // If no Element exists that can create a card payment_method,
+          // directly call handleCardPayment.
+          return stripe.handleCardPayment(clientSecret, options);
+        }
+      } else {
+        // If a bad value was passed in for options, throw an error.
+        throw new Error(
+          `Invalid options passed to handleCardPayment. Expected an object, got ${typeof options}.`
         );
       }
     };

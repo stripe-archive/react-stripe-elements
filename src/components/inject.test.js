@@ -10,6 +10,7 @@ describe('injectStripe()', () => {
   let createSource;
   let createToken;
   let createPaymentMethod;
+  let handleCardPayment;
   let elementMock;
 
   // Before ALL tests (sync or async)
@@ -17,6 +18,7 @@ describe('injectStripe()', () => {
     createSource = jest.fn();
     createToken = jest.fn();
     createPaymentMethod = jest.fn();
+    handleCardPayment = jest.fn();
     elementMock = {
       element: {
         on: jest.fn(),
@@ -39,6 +41,7 @@ describe('injectStripe()', () => {
           createSource,
           createToken,
           createPaymentMethod,
+          handleCardPayment,
         },
         getRegisteredElements: () => [elementMock],
       };
@@ -100,6 +103,7 @@ describe('injectStripe()', () => {
       expect(props).toHaveProperty('stripe.createSource');
       expect(props).toHaveProperty('stripe.createToken');
       expect(props).toHaveProperty('stripe.createPaymentMethod');
+      expect(props).toHaveProperty('stripe.handleCardPayment');
     });
 
     it('props.stripe.createToken calls createToken with element and empty options when called with no arguments', () => {
@@ -305,6 +309,46 @@ describe('injectStripe()', () => {
       );
     });
 
+    it('props.stripe.handleCardPayment calls handleCardPayment with element and clientSecret when only clientSecret is passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.handleCardPayment('clientSecret');
+      expect(handleCardPayment).toHaveBeenCalledWith(
+        'clientSecret',
+        elementMock.element,
+        {}
+      );
+    });
+
+    it('props.stripe.handleCardPayment calls handleCardPayment with data options', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.handleCardPayment('clientSecret', {
+        billing_details: {
+          name: 'Jenny Rosen',
+        },
+      });
+      expect(handleCardPayment).toHaveBeenCalledWith(
+        'clientSecret',
+        elementMock.element,
+        {
+          billing_details: {
+            name: 'Jenny Rosen',
+          },
+        }
+      );
+    });
+
     it('throws when `getWrappedInstance` is called without `{withRef: true}` option.', () => {
       const Injected = injectStripe(WrappedComponent);
 
@@ -367,6 +411,7 @@ describe('injectStripe()', () => {
               createSource,
               createToken,
               createPaymentMethod,
+              handleCardPayment,
             });
           },
           getRegisteredElements: () => [elementMock],
@@ -377,6 +422,7 @@ describe('injectStripe()', () => {
       expect(props).toHaveProperty('stripe');
       expect(props).toHaveProperty('stripe.createToken');
       expect(props).toHaveProperty('stripe.createSource');
+      expect(props).toHaveProperty('stripe.createPaymentMethod');
       expect(props).toHaveProperty('stripe.createPaymentMethod');
     });
   });

@@ -56,7 +56,8 @@ const ensureStripeShape = (stripe: mixed): StripeShape => {
     stripe.elements &&
     stripe.createSource &&
     stripe.createToken &&
-    stripe.createPaymentMethod
+    stripe.createPaymentMethod &&
+    stripe.handleCardPayment
   ) {
     return ((stripe: any): StripeShape);
   } else {

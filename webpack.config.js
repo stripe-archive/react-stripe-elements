@@ -1,6 +1,7 @@
 // @noflow
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const webpack = require('webpack');
 
 const config = {
   mode: 'development',
@@ -31,6 +32,11 @@ const config = {
       inject: false,
       filename: 'paymentIntents/index.html',
       template: './demo/paymentIntents/index.html',
+    }),
+    new webpack.DefinePlugin({
+      'process.env.STRIPE_SECRET_KEY': JSON.stringify(
+        process.env.STRIPE_SECRET_KEY
+      ),
     }),
   ],
 };

@@ -4,6 +4,7 @@ import React from 'react';
 import {render} from 'react-dom';
 
 import type {InjectedProps} from '../../src/components/inject';
+import api from './api';
 
 import {
   CardElement,
@@ -11,8 +12,6 @@ import {
   Elements,
   injectStripe,
 } from '../../src/index';
-
-import api from './api';
 
 const handleBlur = () => {
   console.log('[blur]');
@@ -46,71 +45,6 @@ const createOptions = (fontSize: string, padding: ?string) => {
     },
   };
 };
-
-class _CreatePaymentMethod extends React.Component<
-  InjectedProps & {fontSize: string},
-  {
-    error: string | null,
-    processing: boolean,
-    message: string | null,
-  }
-> {
-  state = {
-    error: null,
-    processing: false,
-    message: null,
-  };
-
-  handleSubmit = (ev) => {
-    ev.preventDefault();
-    if (this.props.stripe) {
-      this.props.stripe.createPaymentMethod().then((payload) => {
-        if (payload.error) {
-          this.setState({
-            error: `Failed to create PaymentMethod: ${payload.error.message}`,
-            processing: false,
-          });
-          console.log('[error]', payload.error);
-        } else {
-          this.setState({
-            message: `Created PaymentMethod: ${payload.paymentMethod.id}`,
-            processing: false,
-          });
-          console.log('[paymentMethod]', payload.paymentMethod);
-        }
-      });
-      this.setState({processing: true});
-    } else {
-      console.log("Stripe.js hasn't loaded yet.");
-    }
-  };
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          stripe.createPaymentMethod
-          <CardElement
-            onBlur={handleBlur}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onReady={handleReady}
-            {...createOptions(this.props.fontSize)}
-          />
-        </label>
-        {this.state.error && <div className="error">{this.state.error}</div>}
-        {this.state.message && (
-          <div className="message">{this.state.message}</div>
-        )}
-        <button disabled={this.state.processing}>
-          {this.state.processing ? 'Processing…' : 'Pay'}
-        </button>
-      </form>
-    );
-  }
-}
-
-const CreatePaymentMethod = injectStripe(_CreatePaymentMethod);
 
 class _HandleCardPayment extends React.Component<
   InjectedProps & {fontSize: string},
@@ -204,6 +138,71 @@ class _HandleCardPayment extends React.Component<
 
 const HandleCardPayment = injectStripe(_HandleCardPayment);
 
+class _CreatePaymentMethod extends React.Component<
+  InjectedProps & {fontSize: string},
+  {
+    error: string | null,
+    processing: boolean,
+    message: string | null,
+  }
+> {
+  state = {
+    error: null,
+    processing: false,
+    message: null,
+  };
+
+  handleSubmit = (ev) => {
+    ev.preventDefault();
+    if (this.props.stripe) {
+      this.props.stripe.createPaymentMethod().then((payload) => {
+        if (payload.error) {
+          this.setState({
+            error: `Failed to create PaymentMethod: ${payload.error.message}`,
+            processing: false,
+          });
+          console.log('[error]', payload.error);
+        } else {
+          this.setState({
+            message: `Created PaymentMethod: ${payload.paymentMethod.id}`,
+            processing: false,
+          });
+          console.log('[paymentMethod]', payload.paymentMethod);
+        }
+      });
+      this.setState({processing: true});
+    } else {
+      console.log("Stripe.js hasn't loaded yet.");
+    }
+  };
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          stripe.createPaymentMethod
+          <CardElement
+            onBlur={handleBlur}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onReady={handleReady}
+            {...createOptions(this.props.fontSize)}
+          />
+        </label>
+        {this.state.error && <div className="error">{this.state.error}</div>}
+        {this.state.message && (
+          <div className="message">{this.state.message}</div>
+        )}
+        <button disabled={this.state.processing}>
+          {this.state.processing ? 'Processing…' : 'Pay'}
+        </button>
+      </form>
+    );
+  }
+}
+
+const CreatePaymentMethod = injectStripe(_CreatePaymentMethod);
+
 class Checkout extends React.Component<{}, {elementFontSize: string}> {
   constructor() {
     super();
@@ -226,12 +225,12 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
     const {elementFontSize} = this.state;
     return (
       <div className="Checkout">
-        <h1>React Stripe Elements with PaymentIntents</h1>
-        <Elements>
-          <CreatePaymentMethod fontSize={elementFontSize} />
-        </Elements>
+        <h1>Checkout with Payment Intents</h1>
         <Elements>
           <HandleCardPayment fontSize={elementFontSize} />
+        </Elements>
+        <Elements>
+          <CreatePaymentMethod fontSize={elementFontSize} />
         </Elements>
       </div>
     );
