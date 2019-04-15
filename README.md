@@ -166,9 +166,16 @@ Use the `injectStripe` [Higher-Order Component][hoc] (HOC) to build your payment
 form components in the `Elements` tree. The [Higher-Order Component][hoc]
 pattern in React can be unfamiliar to those who've never seen it before, so
 consider reading up before continuing. The `injectStripe` HOC provides the
-`this.props.stripe` property that manages your `Elements` groups. You can call
-`this.props.stripe.createToken` or `this.props.stripe.createSource` within a
-component that has been injected to submit payment data to Stripe.
+`this.props.stripe` property that manages your `Elements` groups. Within an
+injected component, you can call any of the following:
+
+- `this.props.stripe.createPaymentMethod`
+- `this.props.stripe.createToken`
+- `this.props.stripe.createSource`
+- `this.props.stripe.handleCardPayment`
+
+Calling any of these methods will collect data from the appropriate Element and
+use it to submit payment data to Stripe.
 
 [hoc]: https://facebook.github.io/react/docs/higher-order-components.html
 
@@ -191,22 +198,41 @@ class CheckoutForm extends React.Component {
     // We don't want to let default form submission happen here, which would refresh the page.
     ev.preventDefault();
 
-    // Within the context of `Elements`, this call to createToken knows which Element to
-    // tokenize, since there's only one in this group.
-    this.props.stripe.createToken({name: 'Jenny Rosen'}).then(({token}) => {
-      console.log('Received Stripe token:', token);
-    });
+    // Within the context of `Elements`, this call to createPaymentMethod knows from which Element to
+    // create the PaymentMethod, since there's only one in this group.
+    const data = {
+      billing_details: {
+        name: 'Jenny Rosen',
+      },
+    };
 
-    // However, this line of code will do the same thing:
-    //
-    // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
+    this.props.stripe
+      .createPaymentMethod('card', data)
+      .then(({paymentMethod}) => {
+        console.log('Received Stripe PaymentMethod:', paymentMethod);
+      });
+
+    // You can also use handleCardPayment with the Payment Intents API automatic confirmation flow
+    // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-handle-card-payment
+    this.props.stripe.handleCardPayment('{PAYMENT_INTENT_CLIENT_SECRET}', data);
+
+    // You can also use createToken to create tokens. See our tokens
+    // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-token
+    this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
 
     // You can also use createSource to create Sources. See our Sources
     // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-source
-    //
-    // this.props.stripe.createSource({type: 'card', owner: {
-    //   name: 'Jenny Rosen'
-    // }});
+    this.props.stripe.createSource({
+      type: 'card',
+      owner: {
+        name: 'Jenny Rosen',
+      },
+    });
+
+    // token and source type can optionally be inferred if there is only one one Element
+    // with which to create tokens
+    // this.props.stripe.createToken({name: 'Jenny Rosen'});
+    // this.props.stripe.createSource({owner: {name: 'Jenny Rosen'}});
   };
 
   render() {
@@ -635,7 +661,7 @@ class CheckoutForm extends React.Component {
     /* ... */
   }
   onCompleteCheckout() {
-    this.props.stripe.createSource({type: 'card'}).then(/* ... */);
+    this.props.stripe.createPaymentMethod('card').then(/* ... */);
   }
 }
 
@@ -677,6 +703,20 @@ type FactoryProps = {
     }>,
     createSource: (sourceData: {type: string}) => Promise<{
       source?: Object,
+      error?: Object,
+    }>,
+    createPaymentMethod: (
+      type: string,
+      paymentMethodData?: Object
+    ) => Promise<{
+      paymentMethod?: Object,
+      error?: Object,
+    }>,
+    handleCardPayment: (
+      clientSecret: string,
+      paymentMethodData?: Object
+    ) => Promise<{
+      paymentIntent?: Object,
       error?: Object,
     }>,
     // and other functions available on the `stripe` object,
