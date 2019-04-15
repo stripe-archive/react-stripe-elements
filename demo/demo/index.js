@@ -58,12 +58,9 @@ class _CardForm extends React.Component<InjectedProps & {fontSize: string}> {
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
-      // this.props.stripe
-      //   .createToken()
-      //   .then((payload) => console.log('[token]', payload));
       this.props.stripe
-        .createPaymentMethod()
-        .then((payload) => console.log('[paymentMethod]', payload));
+        .createToken()
+        .then((payload) => console.log('[token]', payload));
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }
@@ -92,12 +89,9 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
-      // this.props.stripe
-      //   .createToken()
-      //   .then((payload) => console.log('[token]', payload));
       this.props.stripe
-        .createPaymentMethod()
-        .then((payload) => console.log('[paymentMethod]', payload));
+        .createToken()
+        .then((payload) => console.log('[token]', payload));
     } else {
       console.log("Stripe.js hasn't loaded yet.");
     }

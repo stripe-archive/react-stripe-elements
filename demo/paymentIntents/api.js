@@ -34,6 +34,11 @@ const createPaymentIntent = (options: {}): Promise<string> => {
   // We are doing this here purely for demonstration reasons.
   // In the real world, creating PaymentIntents needs to be done
   // on your backend server.
+  //
+  // Including your secret key on your frontend enables others
+  // to make charges on your behalf. Fraudsters will find your
+  // secret key and use it to test stolen card numbers, which will
+  // get your business banned from accepting credit card payments.
   return window
     .fetch(`https://api.stripe.com/v1/payment_intents`, {
       method: 'POST',
