@@ -220,13 +220,13 @@ Please be sure the component that calls createSource or createToken is within an
     // Wraps createPaymentMethod in order to infer the Element that is being
     // used for PaymentMethod creation.
     wrappedCreatePaymentMethod = (stripe: StripeShape) => (
-      paymentMethodType: string = 'card',
+      paymentMethodType: string,
       elementOrData?: mixed,
       maybeData?: mixed
     ) => {
       if (!paymentMethodType || typeof paymentMethodType !== 'string') {
         throw new Error(
-          `Invalid type passed to createPaymentMethod. Expected a string, got ${typeof paymentMethodType}.`
+          `Invalid PaymentMethod type passed to createPaymentMethod. Expected a string, got ${typeof paymentMethodType}.`
         );
       }
 
@@ -254,15 +254,24 @@ Please be sure the component that calls createSource or createToken is within an
 
       // Second argument is data or undefined; infer the Element
       const {data} = elementOrDataResult;
-      const element = this.requireElement(
+      const element = this.findElement(
         'impliedPaymentMethodType',
         paymentMethodType
       );
 
-      if (data) {
-        return stripe.createPaymentMethod(paymentMethodType, element, data);
+      if (element) {
+        return data
+          ? stripe.createPaymentMethod(paymentMethodType, element, data)
+          : stripe.createPaymentMethod(paymentMethodType, element);
+      }
+
+      if (data && typeof data === 'object') {
+        return stripe.createPaymentMethod(paymentMethodType, data);
       } else {
-        return stripe.createPaymentMethod(paymentMethodType, element);
+        // If a bad value was passed in for data, throw an error.
+        throw new Error(
+          `Invalid data passed to createPaymentMethod. Expected an object, got ${typeof data}.`
+        );
       }
     };
 
