@@ -10,7 +10,6 @@ import {
   CardNumberElement,
   CardExpiryElement,
   CardCVCElement,
-  PostalCodeElement,
 } from './index';
 
 class PureWrapper extends React.PureComponent {
@@ -122,7 +121,6 @@ describe('index', () => {
               <CardNumberElement />
               <CardExpiryElement />
               <CardCVCElement />
-              <PostalCodeElement />
             </Checkout>
           </Elements>
         </StripeProvider>
