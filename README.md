@@ -219,6 +219,9 @@ class CheckoutForm extends React.Component {
     // You can also use createToken to create tokens. See our tokens
     // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-token
     this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
+    // token type can optionally be inferred if there is only one one Element
+    // with which to create tokens
+    // this.props.stripe.createToken({name: 'Jenny Rosen'});
 
     // You can also use createSource to create Sources. See our Sources
     // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-source
@@ -228,11 +231,6 @@ class CheckoutForm extends React.Component {
         name: 'Jenny Rosen',
       },
     });
-
-    // token and source type can optionally be inferred if there is only one one Element
-    // with which to create tokens
-    // this.props.stripe.createToken({name: 'Jenny Rosen'});
-    // this.props.stripe.createSource({owner: {name: 'Jenny Rosen'}});
   };
 
   render() {
