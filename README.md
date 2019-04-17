@@ -200,31 +200,30 @@ class CheckoutForm extends React.Component {
 
     // Within the context of `Elements`, this call to createPaymentMethod knows from which Element to
     // create the PaymentMethod, since there's only one in this group.
-    const data = {
-      billing_details: {
-        name: 'Jenny Rosen',
-      },
-    };
-
+    // See our createPaymentMethod documentation for more:
+    // https://stripe.com/docs/stripe-js/reference#stripe-create-payment-method
     this.props.stripe
-      .createPaymentMethod('card', data)
+      .createPaymentMethod('card', {billing_details: {name: 'Jenny Rosen'}})
       .then(({paymentMethod}) => {
         console.log('Received Stripe PaymentMethod:', paymentMethod);
       });
 
     // You can also use handleCardPayment with the Payment Intents API automatic confirmation flow.
-    // See more at: https://stripe.com/docs/stripe-js/reference#stripe-handle-card-payment
+    // See our handleCardPayment documentation for more:
+    // https://stripe.com/docs/stripe-js/reference#stripe-handle-card-payment
     this.props.stripe.handleCardPayment('{PAYMENT_INTENT_CLIENT_SECRET}', data);
 
-    // You can also use createToken to create tokens. See our tokens.
-    // See more at: https://stripe.com/docs/stripe-js/reference#stripe-create-token
+    // You can also use createToken to create tokens.
+    // See our tokens documentation for more:
+    // https://stripe.com/docs/stripe-js/reference#stripe-create-token
     this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
     // token type can optionally be inferred if there is only one one Element
     // with which to create tokens
     // this.props.stripe.createToken({name: 'Jenny Rosen'});
 
-    // You can also use createSource to create Sources. See our Sources.
-    // See more at: https://stripe.com/docs/stripe-js/reference#stripe-create-source
+    // You can also use createSource to create Sources.
+    // See our Sources documentation for more:
+    // https://stripe.com/docs/stripe-js/reference#stripe-create-source
     this.props.stripe.createSource({
       type: 'card',
       owner: {

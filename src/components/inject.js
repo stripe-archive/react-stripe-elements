@@ -288,7 +288,7 @@ Please be sure the component that calls createSource or createToken is within an
       if (!clientSecret || typeof clientSecret !== 'string') {
         // If a bad value was passed in for clientSecret, throw an error.
         throw new Error(
-          `Invalid PaymentIntent Client Secret passed to handleCardPayment. Expected string, got ${typeof clientSecret}.`
+          `Invalid PaymentIntent client secret passed to handleCardPayment. Expected string, got ${typeof clientSecret}.`
         );
       }
 

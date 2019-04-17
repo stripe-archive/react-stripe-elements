@@ -527,7 +527,7 @@ describe('index', () => {
           </StripeProvider>
         );
         expect(() => app.find('form').simulate('submit')).toThrowError(
-          /Invalid PaymentIntent Client Secret/
+          /Invalid PaymentIntent client secret/
         );
       });
       it('should throw if no card element is present and no elmenent or payment data is passed in', () => {
