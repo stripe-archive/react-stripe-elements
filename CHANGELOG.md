@@ -7,6 +7,7 @@
 
 ### New Features
 
+- added a [changelog](/CHANGELOG.md)
 - added support for `stripe.handleCardPayment` and `stripe.createPaymentMethod`.
   These methods allow you to easily integrate Stripe's new Payment Intents API.
   Like `createToken` and `createSource`, these new methods will automatically
