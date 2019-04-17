@@ -212,19 +212,19 @@ class CheckoutForm extends React.Component {
         console.log('Received Stripe PaymentMethod:', paymentMethod);
       });
 
-    // You can also use handleCardPayment with the Payment Intents API automatic confirmation flow
-    // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-handle-card-payment
+    // You can also use handleCardPayment with the Payment Intents API automatic confirmation flow.
+    // See more at: https://stripe.com/docs/stripe-js/reference#stripe-handle-card-payment
     this.props.stripe.handleCardPayment('{PAYMENT_INTENT_CLIENT_SECRET}', data);
 
-    // You can also use createToken to create tokens. See our tokens
-    // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-token
+    // You can also use createToken to create tokens. See our tokens.
+    // See more at: https://stripe.com/docs/stripe-js/reference#stripe-create-token
     this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
     // token type can optionally be inferred if there is only one one Element
     // with which to create tokens
     // this.props.stripe.createToken({name: 'Jenny Rosen'});
 
-    // You can also use createSource to create Sources. See our Sources
-    // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-source
+    // You can also use createSource to create Sources. See our Sources.
+    // See more at: https://stripe.com/docs/stripe-js/reference#stripe-create-source
     this.props.stripe.createSource({
       type: 'card',
       owner: {

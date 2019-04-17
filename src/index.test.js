@@ -11,6 +11,7 @@ import {
   CardExpiryElement,
   CardCVCElement,
   PostalCodeElement,
+  IbanElement,
 } from './index';
 
 class PureWrapper extends React.PureComponent {
@@ -347,6 +348,107 @@ describe('index', () => {
     });
   });
 
+  describe('handleCardPayment', () => {
+    it('should be called when set up properly', () => {
+      const Checkout = WrappedCheckout((props) =>
+        props.stripe.handleCardPayment('client_secret')
+      );
+      const app = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <Elements>
+            <Checkout>
+              Hello world
+              <CardElement />
+            </Checkout>
+          </Elements>
+        </StripeProvider>
+      );
+      app.find('form').simulate('submit');
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledTimes(1);
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledWith(
+        'client_secret',
+        elementMock
+      );
+    });
+
+    it('should take additional parameters', () => {
+      const Checkout = WrappedCheckout((props) =>
+        props.stripe.handleCardPayment('client_secret', {
+          billing_details: {name: 'Michelle'},
+        })
+      );
+      const app = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <Elements>
+            <Checkout>
+              Hello world
+              <CardElement />
+            </Checkout>
+          </Elements>
+        </StripeProvider>
+      );
+      app.find('form').simulate('submit');
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledTimes(1);
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledWith(
+        'client_secret',
+        elementMock,
+        {
+          billing_details: {name: 'Michelle'},
+        }
+      );
+    });
+
+    it('should be callable when no Element is found', () => {
+      const Checkout = WrappedCheckout((props) =>
+        props.stripe.handleCardPayment('client_secret', {
+          payment_method: 'pm_xxx',
+        })
+      );
+      const app = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <Elements>
+            <Checkout>Hello world</Checkout>
+          </Elements>
+        </StripeProvider>
+      );
+      app.find('form').simulate('submit');
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledTimes(1);
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledWith(
+        'client_secret',
+        {
+          payment_method: 'pm_xxx',
+        }
+      );
+    });
+
+    it('should be callable when an Element is passed in', () => {
+      const Checkout = WrappedCheckout((props) =>
+        props.stripe.handleCardPayment('client_secret', rawElementMock, {
+          billing_details: {name: 'David'},
+        })
+      );
+      const app = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <Elements>
+            <Checkout>
+              Hello world
+              <CardElement />
+            </Checkout>
+          </Elements>
+        </StripeProvider>
+      );
+      app.find('form').simulate('submit');
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledTimes(1);
+      expect(stripeMock.handleCardPayment).toHaveBeenCalledWith(
+        'client_secret',
+        rawElementMock,
+        {
+          billing_details: {name: 'David'},
+        }
+      );
+    });
+  });
+
   describe('errors', () => {
     describe('createSource', () => {
       it('should throw if no source type is specified', () => {
@@ -386,6 +488,61 @@ describe('index', () => {
         );
         expect(() => app.find('form').simulate('submit')).toThrowError(
           /Invalid PaymentMethod type/
+        );
+      });
+
+      it('should throw if no element corresponding to Payment Method type is found', () => {
+        const Checkout = WrappedCheckout((props) =>
+          props.stripe.createPaymentMethod('card')
+        );
+        const app = mount(
+          <StripeProvider apiKey="pk_test_xxx">
+            <Elements>
+              <Checkout>
+                Hello world
+                <IbanElement />
+              </Checkout>
+            </Elements>
+          </StripeProvider>
+        );
+        expect(() => app.find('form').simulate('submit')).toThrowError(
+          /Could not find an Element/
+        );
+      });
+    });
+
+    describe('handleCardPayment', () => {
+      it('should throw if no Slient Secret is specified', () => {
+        const Checkout = WrappedCheckout((props) =>
+          props.stripe.handleCardPayment()
+        );
+        const app = mount(
+          <StripeProvider apiKey="pk_test_xxx">
+            <Elements>
+              <Checkout>
+                Hello world
+                <CardElement />
+              </Checkout>
+            </Elements>
+          </StripeProvider>
+        );
+        expect(() => app.find('form').simulate('submit')).toThrowError(
+          /Invalid PaymentIntent Client Secret/
+        );
+      });
+      it('should throw if no card element is present and no elmenent or payment data is passed in', () => {
+        const Checkout = WrappedCheckout((props) =>
+          props.stripe.handleCardPayment('client_secret')
+        );
+        const app = mount(
+          <StripeProvider apiKey="pk_test_xxx">
+            <Elements>
+              <Checkout>Hello world</Checkout>
+            </Elements>
+          </StripeProvider>
+        );
+        expect(() => app.find('form').simulate('submit')).toThrowError(
+          /Could not find a CardElement or CardNumberElement/
         );
       });
     });

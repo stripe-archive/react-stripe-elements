@@ -267,6 +267,10 @@ Please be sure the component that calls createSource or createToken is within an
 
       if (data && typeof data === 'object') {
         return stripe.createPaymentMethod(paymentMethodType, data);
+      } else if (!data) {
+        throw new Error(
+          `Could not find an Element that can be used to create a PaymentMethod of type: ${paymentMethodType}.`
+        );
       } else {
         // If a bad value was passed in for data, throw an error.
         throw new Error(
@@ -284,7 +288,7 @@ Please be sure the component that calls createSource or createToken is within an
       if (!clientSecret || typeof clientSecret !== 'string') {
         // If a bad value was passed in for clientSecret, throw an error.
         throw new Error(
-          `Invalid PaymentIntent clientSecret passed to handleCardPayment. Expected string, got ${typeof clientSecret}.`
+          `Invalid PaymentIntent Client Secret passed to handleCardPayment. Expected string, got ${typeof clientSecret}.`
         );
       }
 
@@ -317,7 +321,11 @@ Please be sure the component that calls createSource or createToken is within an
           return stripe.handleCardPayment(clientSecret, element);
         }
       } else {
-        if (!data || typeof data !== 'object') {
+        if (!data) {
+          throw new Error(
+            `Could not find a CardElement or CardNumberElement which which to perform handleCardPayment.`
+          );
+        } else if (typeof data !== 'object') {
           throw new Error(
             `Invalid data passed to handleCardPayment. Expected an object, got ${typeof data}.`
           );
