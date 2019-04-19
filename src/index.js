@@ -25,7 +25,6 @@ const CardNumberElement = Element('cardNumber', {
 });
 const CardExpiryElement = Element('cardExpiry');
 const CardCVCElement = Element('cardCvc');
-const PostalCodeElement = Element('postalCode');
 
 // IBAN
 const IbanElement = Element('iban', {
@@ -44,7 +43,6 @@ export {
   CardNumberElement,
   CardExpiryElement,
   CardCVCElement,
-  PostalCodeElement,
   PaymentRequestButtonElement,
   IbanElement,
   IdealBankElement,

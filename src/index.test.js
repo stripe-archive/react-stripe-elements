@@ -10,7 +10,6 @@ import {
   CardNumberElement,
   CardExpiryElement,
   CardCVCElement,
-  PostalCodeElement,
   IbanElement,
 } from './index';
 
@@ -128,7 +127,6 @@ describe('index', () => {
               <CardNumberElement />
               <CardExpiryElement />
               <CardCVCElement />
-              <PostalCodeElement />
             </Checkout>
           </Elements>
         </StripeProvider>
