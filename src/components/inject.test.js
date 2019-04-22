@@ -9,18 +9,30 @@ describe('injectStripe()', () => {
   let context;
   let createSource;
   let createToken;
+  let createPaymentMethod;
+  let handleCardPayment;
   let elementMock;
+  let rawElementMock;
 
   // Before ALL tests (sync or async)
   beforeEach(() => {
     createSource = jest.fn();
     createToken = jest.fn();
+    createPaymentMethod = jest.fn();
+    handleCardPayment = jest.fn();
+    rawElementMock = {
+      _frame: {
+        id: 'id',
+      },
+      _componentName: 'name',
+    };
     elementMock = {
       element: {
         on: jest.fn(),
       },
       impliedTokenType: 'card',
       impliedSourceType: 'card',
+      impliedPaymentMethodType: 'card',
     };
     WrappedComponent = () => <div />;
     WrappedComponent.displayName = 'WrappedComponent';
@@ -35,6 +47,8 @@ describe('injectStripe()', () => {
           elements: jest.fn(),
           createSource,
           createToken,
+          createPaymentMethod,
+          handleCardPayment,
         },
         getRegisteredElements: () => [elementMock],
       };
@@ -95,6 +109,8 @@ describe('injectStripe()', () => {
       expect(props).toHaveProperty('stripe');
       expect(props).toHaveProperty('stripe.createSource');
       expect(props).toHaveProperty('stripe.createToken');
+      expect(props).toHaveProperty('stripe.createPaymentMethod');
+      expect(props).toHaveProperty('stripe.handleCardPayment');
     });
 
     it('props.stripe.createToken calls createToken with element and empty options when called with no arguments', () => {
@@ -260,6 +276,155 @@ describe('injectStripe()', () => {
       );
     });
 
+    it('props.stripe.createPaymentMethod calls createPaymentMethod with element and type when only type is passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.createPaymentMethod('card');
+      expect(createPaymentMethod).toHaveBeenCalledWith(
+        'card',
+        elementMock.element
+      );
+    });
+
+    it('props.stripe.createPaymentMethod calls createPaymentMethod with data options', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.createPaymentMethod('card', {
+        billing_details: {
+          name: 'Jenny Rosen',
+        },
+      });
+      expect(createPaymentMethod).toHaveBeenCalledWith(
+        'card',
+        elementMock.element,
+        {
+          billing_details: {
+            name: 'Jenny Rosen',
+          },
+        }
+      );
+    });
+
+    it('props.stripe.createPaymentMethod calls createPaymentMethod with element from arguments when passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.createPaymentMethod('card', rawElementMock);
+      expect(createPaymentMethod).toHaveBeenCalledWith('card', rawElementMock);
+    });
+
+    it('props.stripe.createPaymentMethod calls createPaymentMethod with element and options from arguments when passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.createPaymentMethod('card', rawElementMock, {
+        billing_details: {
+          name: 'Jenny Rosen',
+        },
+      });
+      expect(createPaymentMethod).toHaveBeenCalledWith('card', rawElementMock, {
+        billing_details: {
+          name: 'Jenny Rosen',
+        },
+      });
+    });
+
+    it('props.stripe.handleCardPayment calls handleCardPayment with element and clientSecret when only clientSecret is passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.handleCardPayment('clientSecret');
+      expect(handleCardPayment).toHaveBeenCalledWith(
+        'clientSecret',
+        elementMock.element
+      );
+    });
+
+    it('props.stripe.handleCardPayment calls handleCardPayment with data options', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.handleCardPayment('clientSecret', {
+        billing_details: {
+          name: 'Jenny Rosen',
+        },
+      });
+      expect(handleCardPayment).toHaveBeenCalledWith(
+        'clientSecret',
+        elementMock.element,
+        {
+          billing_details: {
+            name: 'Jenny Rosen',
+          },
+        }
+      );
+    });
+
+    it('props.stripe.handleCardPayment calls handleCardPayment with element from arguments when passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.handleCardPayment('clientSecret', rawElementMock);
+      expect(handleCardPayment).toHaveBeenCalledWith(
+        'clientSecret',
+        rawElementMock
+      );
+    });
+
+    it('props.stripe.handleCardPayment calls handleCardPayment with element and data from arguments when passed in', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      props.stripe.handleCardPayment('clientSecret', rawElementMock, {
+        billing_details: {
+          name: 'Jenny Rosen',
+        },
+      });
+      expect(handleCardPayment).toHaveBeenCalledWith(
+        'clientSecret',
+        rawElementMock,
+        {
+          billing_details: {
+            name: 'Jenny Rosen',
+          },
+        }
+      );
+    });
+
     it('throws when `getWrappedInstance` is called without `{withRef: true}` option.', () => {
       const Injected = injectStripe(WrappedComponent);
 
@@ -321,6 +486,8 @@ describe('injectStripe()', () => {
               elements: jest.fn(),
               createSource,
               createToken,
+              createPaymentMethod,
+              handleCardPayment,
             });
           },
           getRegisteredElements: () => [elementMock],
@@ -331,6 +498,8 @@ describe('injectStripe()', () => {
       expect(props).toHaveProperty('stripe');
       expect(props).toHaveProperty('stripe.createToken');
       expect(props).toHaveProperty('stripe.createSource');
+      expect(props).toHaveProperty('stripe.createPaymentMethod');
+      expect(props).toHaveProperty('stripe.createPaymentMethod');
     });
   });
 });

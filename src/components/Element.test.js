@@ -34,6 +34,7 @@ describe('Element', () => {
     const CardElement = Element('card', {
       impliedTokenType: 'card',
       impliedSourceType: 'card',
+      impliedPaymentMethodType: 'card',
     });
     const element = shallow(<CardElement id={id} />, {context});
     expect(element.find('#my-id').length).toBe(1);
@@ -44,6 +45,7 @@ describe('Element', () => {
     const CardElement = Element('card', {
       impliedTokenType: 'card',
       impliedSourceType: 'card',
+      impliedPaymentMethodType: 'card',
     });
     const element = shallow(<CardElement className={className} />, {context});
     expect(element.first().hasClass(className)).toBeTruthy();
@@ -53,6 +55,7 @@ describe('Element', () => {
     const TestElement = Element('test', {
       impliedTokenType: 'foo',
       impliedSourceType: 'bar',
+      impliedPaymentMethodType: 'baz',
     });
     const element = mount(<TestElement onChange={jest.fn()} />, {context});
 
@@ -60,7 +63,8 @@ describe('Element', () => {
     expect(context.registerElement).toHaveBeenCalledWith(
       elementMock,
       'foo',
-      'bar'
+      'bar',
+      'baz'
     );
 
     element.unmount();
@@ -85,6 +89,7 @@ describe('Element', () => {
     const CardElement = Element('card', {
       impliedTokenType: 'card',
       impliedSourceType: 'card',
+      impliedPaymentMethodType: 'card',
     });
     const onReadyMock = jest.fn();
 
@@ -105,6 +110,7 @@ describe('Element', () => {
     const TestElement = Element('test', {
       impliedTokenType: 'foo',
       impliedSourceType: 'bar',
+      impliedPaymentMethodType: 'card',
     });
     const element = mount(<TestElement onChange={jest.fn()} style={style} />, {
       context,
@@ -132,6 +138,7 @@ describe('Element', () => {
     const CardElement = Element('card', {
       impliedTokenType: 'card',
       impliedSourceType: 'card',
+      impliedPaymentMethodType: 'card',
     });
     const element = shallow(<CardElement placeholder={placeholder} />, {
       context,

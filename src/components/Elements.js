@@ -7,6 +7,7 @@ export type ElementsList = Array<{
   element: ElementShape,
   impliedTokenType?: string,
   impliedSourceType?: string,
+  impliedPaymentMethodType?: string,
 }>;
 export type ElementsLoadListener = (ElementsShape) => void;
 
@@ -31,7 +32,8 @@ export type ElementContext = {
   registerElement: (
     element: ElementShape,
     impliedTokenType: ?string,
-    impliedSourceType: ?string
+    impliedSourceType: ?string,
+    impliedPaymentMethodType: ?string
   ) => void,
   unregisterElement: (element: ElementShape) => void,
 };
@@ -98,7 +100,8 @@ export default class Elements extends React.Component<Props, State> {
   handleRegisterElement = (
     element: Object,
     impliedTokenType: ?string,
-    impliedSourceType: ?string
+    impliedSourceType: ?string,
+    impliedPaymentMethodType: ?string
   ) => {
     this.setState((prevState) => ({
       registeredElements: [
@@ -107,6 +110,7 @@ export default class Elements extends React.Component<Props, State> {
           element,
           ...(impliedTokenType ? {impliedTokenType} : {}),
           ...(impliedSourceType ? {impliedSourceType} : {}),
+          ...(impliedPaymentMethodType ? {impliedPaymentMethodType} : {}),
         },
       ],
     }));
