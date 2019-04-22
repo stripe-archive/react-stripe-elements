@@ -18,6 +18,7 @@ describe('Elements', () => {
         .mockReturnValueOnce(true),
       createToken: jest.fn(),
       createSource: jest.fn(),
+      createPaymentMethod: jest.fn(),
     };
   });
 

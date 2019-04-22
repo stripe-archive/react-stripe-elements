@@ -1,6 +1,7 @@
 // @noflow
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const webpack = require('webpack');
 
 const config = {
   mode: 'development',
@@ -10,6 +11,7 @@ const config = {
   entry: {
     demo: ['./demo/demo/index.js'],
     async: ['./demo/async/main.js'],
+    paymentIntents: ['./demo/paymentIntents/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -25,6 +27,16 @@ const config = {
       inject: false,
       filename: 'async/index.html',
       template: './demo/async/index.html',
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: 'paymentIntents/index.html',
+      template: './demo/paymentIntents/index.html',
+    }),
+    new webpack.DefinePlugin({
+      'process.env.STRIPE_SECRET_KEY': JSON.stringify(
+        process.env.STRIPE_SECRET_KEY
+      ),
     }),
   ],
 };
