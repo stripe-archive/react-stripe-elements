@@ -37,8 +37,60 @@
 - If you were already using `handleCardPayment` or `createPaymentMethod` with
   `react-stripe-elements`, you should upgrade your integration. These methods
   will now automatically find and use valid Elements.
-- Beta versions of Payment Intents with Stripe.js are not supported.
-- `PostalCodeElement` has been removed. Users are suggested to build their own
+
+  #### Old Way
+
+  ```js
+  <CardElement
+    ...
+    onReady={this.handleReady}
+  />
+
+  handleReady = (element) => {
+    this.setState({cardElement: element}) ;
+  };
+
+  let { paymentIntent, error } = await this.props.stripe.handleCardPayment(
+    intent.client_secret, this.state.cardElement, {}
+  );
+  ```
+
+  #### New Way
+
+  ```js
+  <CardElement />;
+
+  let {paymentIntent, error} = await this.props.stripe.handleCardPayment(
+    intent.client_secret,
+    {}
+  );
+  ```
+
+- Passing a beta flag to Stripe.js to use one of the PaymentIntents betas is not
+  supported.
+
+  #### Old Way
+
+  ```js
+  const stripe = window.Stripe(
+    publicKey,
+    {betas: ['payment_intent_beta_3']},
+  );
+
+  <StripeProvider stripe={stripe}>
+    <YourCheckoutComponent>
+  </StripeProvider>
+  ```
+
+  #### New Way
+
+  ```js
+  <StripeProvider apiKey={publicKey}>
+    <YourCheckoutComponent>
+  </StripeProvider>
+  ```
+
+- `PostalCodeElement` has been removed. We suggest that you build your own
   postal code input.
 
 ## v2.0.3 - 2019-01-25
