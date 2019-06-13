@@ -217,7 +217,7 @@ class CheckoutForm extends React.Component {
     // See our tokens documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-create-token
     this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
-    // token type can optionally be inferred if there is only one one Element
+    // token type can optionally be inferred if there is only one Element
     // with which to create tokens
     // this.props.stripe.createToken({name: 'Jenny Rosen'});
 
