@@ -525,7 +525,12 @@ See [Advanced integrations](#advanced-integrations) for more information on when
 to use each.
 
 The `...` above represents that this component accepts props for any option that
-can be passed into `Stripe(apiKey, options)`.
+can be passed into `Stripe(apiKey, options)`. For example, if you are using
+[Stripe Connect](https://stripe.com/connect) and want to act on behalf of a
+connected account, you can pass `stripeAccount="acct_123"` as a property to
+`<StripeProvider>`. This will get used just like passing `stripeAccount` in the
+options of the `Stripe` constructor or like using `stripe_account` when your
+backend calls the Stripe API directly
 
 ### `<Elements>`
 
