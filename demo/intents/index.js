@@ -14,6 +14,8 @@ import {
 
 import api from './api';
 
+const {STRIPE_PUBLISHABLE_KEY} = process.env;
+
 const handleBlur = () => {
   console.log('[blur]');
 };
@@ -162,11 +164,11 @@ class _HandleCardPayment extends React.Component<
           } else {
             this.setState({
               succeeded: true,
-              message: `Charge succeeded! Payment intent is in state: ${
+              message: `Charge succeeded! PaymentIntent is in state: ${
                 payload.paymentIntent.status
               }`,
             });
-            console.log('[paymentIntent]', payload.paymentIntent);
+            console.log('[PaymentIntent]', payload.paymentIntent);
           }
         });
       this.setState({disabled: true, processing: true});
@@ -204,6 +206,96 @@ class _HandleCardPayment extends React.Component<
 
 const HandleCardPayment = injectStripe(_HandleCardPayment);
 
+class _HandleCardSetup extends React.Component<
+  InjectedProps & {fontSize: string},
+  {
+    clientSecret: string | null,
+    error: string | null,
+    disabled: boolean,
+    succeeded: boolean,
+    processing: boolean,
+    message: string | null,
+  }
+> {
+  state = {
+    clientSecret: null,
+    error: null,
+    disabled: true,
+    succeeded: false,
+    processing: false,
+    message: null,
+  };
+
+  componentDidMount() {
+    api
+      .createSetupIntent({
+        payment_method_types: ['card'],
+      })
+      .then((clientSecret) => {
+        this.setState({clientSecret, disabled: false});
+      })
+      .catch((err) => {
+        this.setState({error: err.message});
+      });
+  }
+
+  handleSubmit = (ev) => {
+    ev.preventDefault();
+    if (this.props.stripe) {
+      this.props.stripe
+        .handleCardSetup(this.state.clientSecret)
+        .then((payload) => {
+          if (payload.error) {
+            this.setState({
+              error: `Setup failed: ${payload.error.message}`,
+              disabled: false,
+            });
+            console.log('[error]', payload.error);
+          } else {
+            this.setState({
+              succeeded: true,
+              message: `Setup succeeded! SetupIntent is in state: ${
+                payload.setupIntent.status
+              }`,
+            });
+            console.log('[SetupIntent]', payload.setupIntent);
+          }
+        });
+      this.setState({disabled: true, processing: true});
+    } else {
+      console.log("Stripe.js hasn't loaded yet.");
+    }
+  };
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          stripe.handleCardSetup
+          <CardElement
+            onBlur={handleBlur}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onReady={handleReady}
+            {...createOptions(this.props.fontSize)}
+          />
+        </label>
+        {this.state.error && <div className="error">{this.state.error}</div>}
+        {this.state.message && (
+          <div className="message">{this.state.message}</div>
+        )}
+        {!this.state.succeeded && (
+          <button disabled={this.state.disabled}>
+            {this.state.processing ? 'Processing…' : 'Pay'}
+          </button>
+        )}
+      </form>
+    );
+  }
+}
+
+const HandleCardSetup = injectStripe(_HandleCardSetup);
+
 class Checkout extends React.Component<{}, {elementFontSize: string}> {
   constructor() {
     super();
@@ -233,6 +325,9 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
         <Elements>
           <HandleCardPayment fontSize={elementFontSize} />
         </Elements>
+        <Elements>
+          <HandleCardSetup fontSize={elementFontSize} />
+        </Elements>
       </div>
     );
   }
@@ -240,7 +335,9 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
 
 const App = () => {
   return (
-    <StripeProvider apiKey="pk_test_dCyfhfyeO2CZkcvT5xyIDdJj">
+    <StripeProvider
+      apiKey={STRIPE_PUBLISHABLE_KEY || 'pk_test_dCyfhfyeO2CZkcvT5xyIDdJj'}
+    >
       <Checkout />
     </StripeProvider>
   );
