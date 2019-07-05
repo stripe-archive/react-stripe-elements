@@ -305,7 +305,7 @@ Please be sure the component that calls createSource or createToken is within an
       }
 
       // Second argument is data or undefined; see if we can find a mounted Element
-      // than can create card PaymentMethods
+      // that can create card PaymentMethods
       const {data} = elementOrDataResult;
       const element = this.findElement('impliedPaymentMethodType', 'card');
 
