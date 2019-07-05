@@ -9,7 +9,7 @@ import {
   CardElement,
   CardNumberElement,
   CardExpiryElement,
-  CardCVCElement,
+  CardCvcElement,
   PaymentRequestButtonElement,
   IbanElement,
   IdealBankElement,
@@ -121,7 +121,7 @@ class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
         </label>
         <label>
           CVC
-          <CardCVCElement
+          <CardCvcElement
             onBlur={handleBlur}
             onChange={handleChange}
             onFocus={handleFocus}
