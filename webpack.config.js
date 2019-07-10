@@ -37,6 +37,9 @@ const config = {
       'process.env.STRIPE_SECRET_KEY': JSON.stringify(
         process.env.STRIPE_SECRET_KEY
       ),
+      'process.env.STRIPE_PUBLISHABLE_KEY': JSON.stringify(
+        process.env.STRIPE_PUBLISHABLE_KEY
+      ),
     }),
   ],
 };
