@@ -3,6 +3,64 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v4.0.0 - 2019-07-05
+
+### New Features
+
+- Renamed `CardCVCElement` to `CardCvcElement` which better mirrors the Elements
+  API. We will keep the old component name around as an alias until 5.0.0.
+- Added support for `stripe.handleCardSetup`
+
+  ```js
+    stripe.handleCardSetup(
+      clientSecret: string,
+      data?: Object
+    ): Promise<{error?: Object, setupIntent?: Object}>
+  ```
+
+  For more information, please review the Stripe Docs:
+
+  - [`stripe.handleCardSetup`](https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup)
+
+### Deprecations
+
+- `CardCVCElement` has been renamed to `CardCvcElement`. `CardCVCElement` will
+  be removed in version 5.0.0.
+
+### Breaking Changes
+
+- If you were already using `handleCardSetup` with `react-stripe-elements`, you
+  should upgrade your integration. This method will now automatically find and
+  use valid Elements.
+
+  #### Old Way
+
+  ```js
+  <CardElement
+    ...
+    onReady={this.handleReady}
+  />
+
+  handleReady = (element) => {
+    this.setState({cardElement: element}) ;
+  };
+
+  const {setupIntent, error} = await this.props.stripe.handleCardSetup(
+    intent.client_secret, this.state.cardElement, {}
+  );
+  ```
+
+  #### New Way
+
+  ```js
+  <CardElement />;
+
+  const {setupIntent, error} = await this.props.stripe.handleCardSetup(
+    intent.client_secret,
+    {}
+  );
+  ```
+
 ## v3.0.0 - 2019-04-17
 
 ### New Features
@@ -21,7 +79,7 @@
 
     stripe.handleCardPayment(
       clientSecret: string,
-      paymentMethodDetails: Object
+      data?: Object
     ): Promise<{error?: Object, paymentIntent?: Object}>
   ```
 

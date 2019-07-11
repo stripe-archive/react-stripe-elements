@@ -24,7 +24,8 @@ const CardNumberElement = Element('cardNumber', {
   impliedPaymentMethodType: 'card',
 });
 const CardExpiryElement = Element('cardExpiry');
-const CardCVCElement = Element('cardCvc');
+const CardCvcElement = Element('cardCvc');
+const CardCVCElement = CardCvcElement; // deprecated in favor of CardCvcElement which better matches Elements API
 
 // IBAN
 const IbanElement = Element('iban', {
@@ -42,6 +43,7 @@ export {
   CardElement,
   CardNumberElement,
   CardExpiryElement,
+  CardCvcElement,
   CardCVCElement,
   PaymentRequestButtonElement,
   IbanElement,
