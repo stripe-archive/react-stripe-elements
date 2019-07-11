@@ -21,6 +21,7 @@ type WrappedStripeShape = {
   createSource: Function,
   createPaymentMethod: Function,
   handleCardPayment: Function,
+  handleCardSetup: Function,
 };
 
 type State = {stripe: WrappedStripeShape | null};
@@ -96,7 +97,8 @@ Please be sure the component that calls createSource or createToken is within an
         createToken: this.wrappedCreateToken(stripe),
         createSource: this.wrappedCreateSource(stripe),
         createPaymentMethod: this.wrappedCreatePaymentMethod(stripe),
-        handleCardPayment: this.wrappedHandleCardPayment(stripe),
+        handleCardPayment: this.wrappedHandleCardX(stripe, 'handleCardPayment'),
+        handleCardSetup: this.wrappedHandleCardX(stripe, 'handleCardSetup'),
       };
     }
 
@@ -279,12 +281,10 @@ Please be sure the component that calls createSource or createToken is within an
       }
     };
 
-    // Wraps handleCardPayment in order to infer the Element that is being tokenized.
-    wrappedHandleCardPayment = (stripe: StripeShape) => (
-      clientSecret: mixed,
-      elementOrData?: mixed,
-      maybeData?: mixed
-    ) => {
+    wrappedHandleCardX = (
+      stripe: StripeShape,
+      method: 'handleCardPayment' | 'handleCardSetup'
+    ) => (clientSecret: mixed, elementOrData?: mixed, maybeData?: mixed) => {
       if (!clientSecret || typeof clientSecret !== 'string') {
         // If a bad value was passed in for clientSecret, throw an error.
         throw new Error(
@@ -294,31 +294,32 @@ Please be sure the component that calls createSource or createToken is within an
 
       const elementOrDataResult = this.parseElementOrData(elementOrData);
 
-      // Second argument is Element; handleCardPayment with element
+      // Second argument is Element; handle with element
       if (elementOrDataResult.type === 'element') {
         const {element} = elementOrDataResult;
         if (maybeData) {
-          return stripe.handleCardPayment(clientSecret, element, maybeData);
+          return stripe[method](clientSecret, element, maybeData);
         } else {
-          return stripe.handleCardPayment(clientSecret, element);
+          return stripe[method](clientSecret, element);
         }
       }
 
-      // Second argument is data or undefined; infer the Element and create PaymentMethod
+      // Second argument is data or undefined; see if we can find a mounted Element
+      // that can create card PaymentMethods
       const {data} = elementOrDataResult;
       const element = this.findElement('impliedPaymentMethodType', 'card');
 
       if (element) {
-        // If an Element exists that can create card payment_methods, use that
-        // to create the corresponding payment_method.
+        // If an Element exists that can create card PaymentMethods use it. Otherwise
+        // assume that we must be calling with data only.
         //
-        // NOTE: this prevents users from using handleCardPayment with an existing
-        // source or payment_method if an Element that can create card payment_methods
+        // NOTE: this prevents users from using handleCard* with an existing
+        // Source or PaymentMethod if an Element that can create card PaymentMethods
         // exists in the current <Elements /> context.
         if (data) {
-          return stripe.handleCardPayment(clientSecret, element, data);
+          return stripe[method](clientSecret, element, data);
         } else {
-          return stripe.handleCardPayment(clientSecret, element);
+          return stripe[method](clientSecret, element);
         }
       } else {
         if (!data) {
@@ -331,9 +332,9 @@ Please be sure the component that calls createSource or createToken is within an
           );
         }
 
-        // If no Element exists that can create a card payment_method,
-        // directly call handleCardPayment.
-        return stripe.handleCardPayment(clientSecret, data);
+        // If no Element exists that can create a card PaymentMethod,
+        // directly call handleCard*.
+        return stripe[method](clientSecret, data);
       }
     };
 

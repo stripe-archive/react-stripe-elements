@@ -11,7 +11,7 @@ const config = {
   entry: {
     demo: ['./demo/demo/index.js'],
     async: ['./demo/async/main.js'],
-    paymentIntents: ['./demo/paymentIntents/index.js'],
+    paymentIntents: ['./demo/intents/index.js'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -30,12 +30,15 @@ const config = {
     }),
     new HtmlWebpackPlugin({
       inject: false,
-      filename: 'paymentIntents/index.html',
-      template: './demo/paymentIntents/index.html',
+      filename: 'intents/index.html',
+      template: './demo/intents/index.html',
     }),
     new webpack.DefinePlugin({
       'process.env.STRIPE_SECRET_KEY': JSON.stringify(
         process.env.STRIPE_SECRET_KEY
+      ),
+      'process.env.STRIPE_PUBLISHABLE_KEY': JSON.stringify(
+        process.env.STRIPE_PUBLISHABLE_KEY
       ),
     }),
   ],
