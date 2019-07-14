@@ -33,7 +33,7 @@ describe('Elements', () => {
       </Elements>,
       {context: syncContext}
     );
-    const childContext = wrapper.node.getChildContext();
+    const childContext = wrapper.instance().getChildContext();
     expect(Object.keys(childContext)).toEqual([
       'addElementsLoadListener',
       'registerElement',
@@ -53,7 +53,7 @@ describe('Elements', () => {
       </Elements>,
       {context: syncContext}
     );
-    const childContext = wrapper.node.getChildContext();
+    const childContext = wrapper.instance().getChildContext();
 
     const mockCallback = jest.fn();
     childContext.addElementsLoadListener(mockCallback);
@@ -77,7 +77,7 @@ describe('Elements', () => {
       </Elements>,
       {context: asyncContext}
     );
-    const childContext = wrapper.node.getChildContext();
+    const childContext = wrapper.instance().getChildContext();
 
     const a = new Promise((resolve) =>
       childContext.addElementsLoadListener((first) => {
