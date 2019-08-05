@@ -22,6 +22,7 @@ type WrappedStripeShape = {
   createPaymentMethod: Function,
   handleCardPayment: Function,
   handleCardSetup: Function,
+  handleCardAction: Function,
 };
 
 type State = {stripe: WrappedStripeShape | null};
@@ -99,6 +100,7 @@ Please be sure the component that calls createSource or createToken is within an
         createPaymentMethod: this.wrappedCreatePaymentMethod(stripe),
         handleCardPayment: this.wrappedHandleCardX(stripe, 'handleCardPayment'),
         handleCardSetup: this.wrappedHandleCardX(stripe, 'handleCardSetup'),
+        handleCardAction: this.wrappedHandleCardX(stripe, 'handleCardAction'),
       };
     }
 
@@ -283,7 +285,7 @@ Please be sure the component that calls createSource or createToken is within an
 
     wrappedHandleCardX = (
       stripe: StripeShape,
-      method: 'handleCardPayment' | 'handleCardSetup'
+      method: 'handleCardPayment' | 'handleCardSetup' | 'handleCardAction'
     ) => (clientSecret: mixed, elementOrData?: mixed, maybeData?: mixed) => {
       if (!clientSecret || typeof clientSecret !== 'string') {
         // If a bad value was passed in for clientSecret, throw an error.
