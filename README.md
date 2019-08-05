@@ -174,6 +174,7 @@ injected component, you can call any of the following:
 - `this.props.stripe.createSource`
 - `this.props.stripe.handleCardPayment`
 - `this.props.stripe.handleCardSetup`
+- `this.props.stripe.handleCardAction`
 
 Calling any of these methods will collect data from the appropriate Element and
 use it to submit payment data to Stripe.
@@ -218,6 +219,11 @@ class CheckoutForm extends React.Component {
     // See our handleCardSetup documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup
     this.props.stripe.handleCardSetup('{PAYMENT_INTENT_CLIENT_SECRET}', data);
+
+    // You can also use handleCardAction with the SetupIntents API.
+    // See our handleCardAction documentation for more:
+    // https://stripe.com/docs/stripe-js/reference#stripe-handle-card-action
+    this.props.stripe.handleCardAction('{PAYMENT_INTENT_CLIENT_SECRET}');
 
     // You can also use createToken to create tokens.
     // See our tokens documentation for more:
@@ -732,6 +738,12 @@ type FactoryProps = {
       paymentMethodData?: Object
     ) => Promise<{
       setupIntent?: Object,
+      error?: Object,
+    }>,
+    handleCardAction: (
+      clientSecret: string
+    ) => Promise<{
+      paymentIntent?: Object,
       error?: Object,
     }>,
     // and other functions available on the `stripe` object,
