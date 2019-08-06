@@ -14,8 +14,6 @@ import {
 
 import api from './api';
 
-const {STRIPE_PUBLISHABLE_KEY} = process.env;
-
 const handleBlur = () => {
   console.log('[blur]');
 };
@@ -66,7 +64,7 @@ class _CreatePaymentMethod extends React.Component<
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
-      this.props.stripe.createPaymentMethod().then((payload) => {
+      this.props.stripe.createPaymentMethod('card').then((payload) => {
         if (payload.error) {
           this.setState({
             error: `Failed to create PaymentMethod: ${payload.error.message}`,
@@ -105,7 +103,7 @@ class _CreatePaymentMethod extends React.Component<
           <div className="message">{this.state.message}</div>
         )}
         <button disabled={this.state.processing}>
-          {this.state.processing ? 'Processing…' : 'Pay'}
+          {this.state.processing ? 'Processing…' : 'Create'}
         </button>
       </form>
     );
@@ -286,7 +284,7 @@ class _HandleCardSetup extends React.Component<
         )}
         {!this.state.succeeded && (
           <button disabled={this.state.disabled}>
-            {this.state.processing ? 'Processing…' : 'Pay'}
+            {this.state.processing ? 'Processing…' : 'Setup'}
           </button>
         )}
       </form>
@@ -335,9 +333,7 @@ class Checkout extends React.Component<{}, {elementFontSize: string}> {
 
 const App = () => {
   return (
-    <StripeProvider
-      apiKey={STRIPE_PUBLISHABLE_KEY || 'pk_test_dCyfhfyeO2CZkcvT5xyIDdJj'}
-    >
+    <StripeProvider apiKey="pk_test_6pRNASCoBOKtIshFeQd4XMUh">
       <Checkout />
     </StripeProvider>
   );
