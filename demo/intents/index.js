@@ -64,7 +64,7 @@ class _CreatePaymentMethod extends React.Component<
   handleSubmit = (ev) => {
     ev.preventDefault();
     if (this.props.stripe) {
-      this.props.stripe.createPaymentMethod().then((payload) => {
+      this.props.stripe.createPaymentMethod('card').then((payload) => {
         if (payload.error) {
           this.setState({
             error: `Failed to create PaymentMethod: ${payload.error.message}`,
