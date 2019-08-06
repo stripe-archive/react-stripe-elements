@@ -33,14 +33,6 @@ const config = {
       filename: 'intents/index.html',
       template: './demo/intents/index.html',
     }),
-    new webpack.DefinePlugin({
-      'process.env.STRIPE_SECRET_KEY': JSON.stringify(
-        process.env.STRIPE_SECRET_KEY
-      ),
-      'process.env.STRIPE_PUBLISHABLE_KEY': JSON.stringify(
-        process.env.STRIPE_PUBLISHABLE_KEY
-      ),
-    }),
   ],
 };
 
