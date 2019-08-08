@@ -47,6 +47,7 @@ describe('index', () => {
       createPaymentMethod: jest.fn(),
       handleCardPayment: jest.fn(),
       handleCardSetup: jest.fn(),
+      handleCardAction: jest.fn(),
     };
 
     window.Stripe = jest.fn().mockReturnValue(stripeMock);
@@ -546,6 +547,26 @@ describe('index', () => {
     });
   });
 
+  describe('handleCardAction', () => {
+    it('should be called when set up properly', () => {
+      const Checkout = WrappedCheckout((props) =>
+        props.stripe.handleCardAction('client_secret')
+      );
+      const app = mount(
+        <StripeProvider apiKey="pk_test_xxx">
+          <Elements>
+            <Checkout>
+              Hello world
+              <CardElement />
+            </Checkout>
+          </Elements>
+        </StripeProvider>
+      );
+      app.find('form').simulate('submit');
+      expect(stripeMock.handleCardAction).toHaveBeenCalledTimes(1);
+      expect(stripeMock.handleCardAction).toHaveBeenCalledWith('client_secret');
+    });
+  });
   describe('errors', () => {
     describe('createSource', () => {
       it('should throw if no source type is specified', () => {
