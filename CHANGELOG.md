@@ -3,6 +3,13 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v4.0.1 - 2019-08-14
+
+### Bug Fixes
+
+- Fixes a bug where calling `stripe.handleCardPayment` with only a client secret
+  caused an error to be thrown.
+
 ## v4.0.0 - 2019-07-05
 
 ### New Features
