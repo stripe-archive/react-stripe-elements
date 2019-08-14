@@ -609,7 +609,7 @@ describe('index', () => {
     });
 
     describe('handleCardPayment', () => {
-      it('should throw if no Slient Secret is specified', () => {
+      it('should throw if no client secret is specified', () => {
         const Checkout = WrappedCheckout((props) =>
           props.stripe.handleCardPayment()
         );
@@ -625,21 +625,6 @@ describe('index', () => {
         );
         expect(() => app.find('form').simulate('submit')).toThrowError(
           /Invalid PaymentIntent client secret/
-        );
-      });
-      it('should throw if no card element is present and no elmenent or payment data is passed in', () => {
-        const Checkout = WrappedCheckout((props) =>
-          props.stripe.handleCardPayment('client_secret')
-        );
-        const app = mount(
-          <StripeProvider apiKey="pk_test_xxx">
-            <Elements>
-              <Checkout>Hello world</Checkout>
-            </Elements>
-          </StripeProvider>
-        );
-        expect(() => app.find('form').simulate('submit')).toThrowError(
-          /Could not find a CardElement or CardNumberElement/
         );
       });
     });

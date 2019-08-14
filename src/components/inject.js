@@ -284,7 +284,7 @@ Please be sure the component that calls createSource or createToken is within an
     wrappedHandleCardX = (
       stripe: StripeShape,
       method: 'handleCardPayment' | 'handleCardSetup'
-    ) => (clientSecret: mixed, elementOrData?: mixed, maybeData?: mixed) => {
+    ) => (clientSecret: mixed, elementOrData: mixed, maybeData: mixed) => {
       if (!clientSecret || typeof clientSecret !== 'string') {
         // If a bad value was passed in for clientSecret, throw an error.
         throw new Error(
@@ -321,20 +321,12 @@ Please be sure the component that calls createSource or createToken is within an
         } else {
           return stripe[method](clientSecret, element);
         }
-      } else {
-        if (!data) {
-          throw new Error(
-            `Could not find a CardElement or CardNumberElement which which to perform handleCardPayment.`
-          );
-        } else if (typeof data !== 'object') {
-          throw new Error(
-            `Invalid data passed to handleCardPayment. Expected an object, got ${typeof data}.`
-          );
-        }
-
-        // If no Element exists that can create a card PaymentMethod,
-        // directly call handleCard*.
+      } else if (data) {
+        // if no element exists call handleCard* directly (with data)
         return stripe[method](clientSecret, data);
+      } else {
+        // if no element exists call handleCard* directly (with only the clientSecret)
+        return stripe[method](clientSecret);
       }
     };
 
