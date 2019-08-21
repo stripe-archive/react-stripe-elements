@@ -50,14 +50,14 @@ describe('index', () => {
       handleCardSetup: jest.fn(),
     };
 
-    jest.spyOn(console, 'error');
-    console.error.mockImplementation(() => {});
+    // jest.spyOn(console, 'error');
+    // console.error.mockImplementation(() => {});
 
     window.Stripe = jest.fn().mockReturnValue(stripeMock);
   });
 
   afterEach(() => {
-    console.error.mockRestore();
+    // console.error.mockRestore();
   });
 
   const WrappedCheckout = (onSubmit) => {
@@ -105,7 +105,14 @@ describe('index', () => {
         </Elements>
       </StripeProvider>
     );
+
+    // Prevent the console.errors to keep the test output clean
+    jest.spyOn(console, 'error');
+    console.error.mockImplementation(() => {});
+
     expect(() => app.find('form').simulate('submit')).not.toThrow();
+
+    console.error.mockRestore();
   });
 
   describe('createToken', () => {
@@ -555,6 +562,16 @@ describe('index', () => {
   });
 
   describe('errors', () => {
+    beforeEach(() => {
+      // Prevent the console.error to keep the test output clean
+      jest.spyOn(console, 'error');
+      console.error.mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      console.error.mockRestore();
+    });
+
     describe('createSource', () => {
       it('should throw if no source type is specified', () => {
         const Checkout = WrappedCheckout((props) =>
