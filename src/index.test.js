@@ -24,6 +24,7 @@ describe('index', () => {
   let elementsMock;
   let stripeMock;
   let rawElementMock;
+
   beforeEach(() => {
     elementMock = {
       mount: jest.fn(),
@@ -49,7 +50,14 @@ describe('index', () => {
       handleCardSetup: jest.fn(),
     };
 
+    jest.spyOn(console, 'error');
+    console.error.mockImplementation(() => {});
+
     window.Stripe = jest.fn().mockReturnValue(stripeMock);
+  });
+
+  afterEach(() => {
+    console.error.mockRestore();
   });
 
   const WrappedCheckout = (onSubmit) => {
