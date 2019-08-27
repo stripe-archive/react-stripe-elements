@@ -3,6 +3,18 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v5.0.0 - 2019-08-27
+
+### New Features
+
+- React 16.9 compatibility.
+
+### Breaking Changes
+
+- We replaced the internal use of deprecated `componentWillReceiveProps`. This
+  internal movement of logic between lifecycle methods is likely safe for almost
+  all apps and should not require any changes.
+
 ## v4.0.1 - 2019-08-14
 
 ### Bug Fixes
