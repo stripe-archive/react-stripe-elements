@@ -3,6 +3,12 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v5.0.1 - 2019-09-18
+
+### Bug Fixes
+
+- Fixes a bug where calling `stripe.createPaymentMethod` would error in IE.
+
 ## v5.0.0 - 2019-08-27
 
 ### New Features
