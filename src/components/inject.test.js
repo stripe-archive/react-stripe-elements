@@ -294,19 +294,6 @@ describe('injectStripe()', () => {
       );
     });
 
-    it('props.stripe.createPaymentMethod errors when an invalid type is passed in', () => {
-      const Injected = injectStripe(WrappedComponent);
-
-      const wrapper = shallow(<Injected />, {
-        context,
-      });
-
-      const props = wrapper.props();
-      expect(() => props.stripe.createPaymentMethod('ideal')).toThrow(
-        `Invalid PaymentMethod type passed to createPaymentMethod. ideal is not yet supported.`
-      );
-    });
-
     it('props.stripe.createPaymentMethod calls createPaymentMethod with data options', () => {
       const Injected = injectStripe(WrappedComponent);
 

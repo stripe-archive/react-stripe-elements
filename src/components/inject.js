@@ -232,12 +232,6 @@ Please be sure the component that calls createSource or createToken is within an
         );
       }
 
-      if (['card'].indexOf(paymentMethodType) === -1) {
-        throw new Error(
-          `Invalid PaymentMethod type passed to createPaymentMethod. ${paymentMethodType} is not yet supported.`
-        );
-      }
-
       const elementOrDataResult = this.parseElementOrData(elementOrData);
 
       // Second argument is Element; use passed in Element
