@@ -151,4 +151,24 @@ describe('Element', () => {
     const TestElement = Element('test');
     expect(TestElement.displayName).toEqual('TestElement');
   });
+
+  it('Do not create element if component is not mounted', () => {
+    const listeners = [];
+    context.addElementsLoadListener = (fn) => listeners.push(fn);
+
+    const CardElement = Element('card', {
+      impliedTokenType: 'card',
+      impliedSourceType: 'card',
+      impliedPaymentMethodType: 'card',
+    });
+    const element = mount(<CardElement />, {context});
+    element.unmount();
+
+    // ensure listener was called on mount
+    expect(listeners).toHaveLength(1);
+    // simulate load complete after unmount
+    listeners[0](elementsMock);
+    // listener should do nothing since it's unmounted
+    expect(elementsMock.create).toHaveBeenCalledTimes(0);
+  });
 });

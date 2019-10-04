@@ -67,6 +67,10 @@ const Element = (
 
     componentDidMount() {
       this.context.addElementsLoadListener((elements: ElementsShape) => {
+        if (!this._ref) {
+          return;
+        }
+
         const element = elements.create(type, this._options);
         this._element = element;
 
