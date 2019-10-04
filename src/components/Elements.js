@@ -3,54 +3,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {type ProviderContext, providerContextTypes} from './Provider';
 
-export type ElementsList = Array<{
-  element: ElementShape,
-  impliedTokenType?: string,
-  impliedSourceType?: string,
-  impliedPaymentMethodType?: string,
-}>;
-export type ElementsLoadListener = (ElementsShape) => void;
-
 type Props = {
   children?: any,
 };
 
-type State = {
-  registeredElements: ElementsList,
-};
-
-export type InjectContext = {
-  getRegisteredElements: () => ElementsList,
-};
-
-export const injectContextTypes = {
-  getRegisteredElements: PropTypes.func.isRequired,
-};
-
 export type ElementContext = {
-  addElementsLoadListener: (ElementsLoadListener) => void,
-  registerElement: (
-    element: ElementShape,
-    impliedTokenType: ?string,
-    impliedSourceType: ?string,
-    impliedPaymentMethodType: ?string
-  ) => void,
-  unregisterElement: (element: ElementShape) => void,
+  elementsPromise: Promise<ElementsShape>,
 };
 
 export const elementContextTypes = {
-  addElementsLoadListener: PropTypes.func.isRequired,
-  registerElement: PropTypes.func.isRequired,
-  unregisterElement: PropTypes.func.isRequired,
+  elementsPromise: PropTypes.object.isRequired,
 };
 
-type ChildContext = InjectContext & ElementContext;
-
-export default class Elements extends React.Component<Props, State> {
-  static childContextTypes = {
-    ...injectContextTypes,
-    ...elementContextTypes,
-  };
+export default class Elements extends React.Component<Props> {
+  static childContextTypes = elementContextTypes;
   static contextTypes = providerContextTypes;
   static defaultProps = {
     children: null,
@@ -58,71 +24,27 @@ export default class Elements extends React.Component<Props, State> {
 
   constructor(props: Props, context: ProviderContext) {
     super(props, context);
-
-    this.state = {
-      registeredElements: [],
-    };
+    const {children, ...options} = this.props;
+    this._elementsPromise = new Promise((resolve) => {
+      if (this.context.tag === 'sync') {
+        resolve(this.context.stripe.elements(options));
+      } else {
+        this.context.addStripeLoadListener((stripe: StripeShape) => {
+          resolve(stripe.elements(options));
+        });
+      }
+    });
   }
 
-  getChildContext(): ChildContext {
+  getChildContext(): ElementContext {
     return {
-      addElementsLoadListener: (fn: ElementsLoadListener) => {
-        // Return the existing elements instance if we already have one.
-        if (this._elements) {
-          fn(this._elements);
-          return;
-        }
-        const {children, ...options} = this.props;
-        if (this.context.tag === 'sync') {
-          this._elements = this.context.stripe.elements(options);
-          fn(this._elements);
-        } else {
-          this.context.addStripeLoadListener((stripe: StripeShape) => {
-            if (this._elements) {
-              fn(this._elements);
-            } else {
-              this._elements = stripe.elements(options);
-              fn(this._elements);
-            }
-          });
-        }
-      },
-      registerElement: this.handleRegisterElement,
-      unregisterElement: this.handleUnregisterElement,
-      getRegisteredElements: () => this.state.registeredElements,
+      elementsPromise: this._elementsPromise,
     };
   }
 
   props: Props;
   context: ProviderContext;
-  _elements: ElementsShape;
-
-  handleRegisterElement = (
-    element: Object,
-    impliedTokenType: ?string,
-    impliedSourceType: ?string,
-    impliedPaymentMethodType: ?string
-  ) => {
-    this.setState((prevState) => ({
-      registeredElements: [
-        ...prevState.registeredElements,
-        {
-          element,
-          ...(impliedTokenType ? {impliedTokenType} : {}),
-          ...(impliedSourceType ? {impliedSourceType} : {}),
-          ...(impliedPaymentMethodType ? {impliedPaymentMethodType} : {}),
-        },
-      ],
-    }));
-  };
-
-  handleUnregisterElement = (el: Object) => {
-    this.setState((prevState) => ({
-      registeredElements: prevState.registeredElements.filter(
-        ({element}) => element !== el
-      ),
-    }));
-  };
+  _elementsPromise: Promise<ElementsShape>;
 
   render() {
     return React.Children.only(this.props.children);

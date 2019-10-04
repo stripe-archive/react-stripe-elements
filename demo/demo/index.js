@@ -54,17 +54,10 @@ const createOptions = (fontSize: string, padding: ?string) => {
   };
 };
 
-class _CardForm extends React.Component<InjectedProps & {fontSize: string}> {
-  handleSubmit = (ev) => {
-    ev.preventDefault();
-    if (this.props.stripe) {
-      this.props.stripe
-        .createToken()
-        .then((payload) => console.log('[token]', payload));
-    } else {
-      console.log("Stripe.js hasn't loaded yet.");
-    }
-  };
+type CommonProps = InjectedProps & {fontSize: string};
+
+class _CardForm extends React.Component<> {
+  handleSubmit = (
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -83,7 +76,19 @@ class _CardForm extends React.Component<InjectedProps & {fontSize: string}> {
     );
   }
 }
-const CardForm = injectStripe(_CardForm);
+
+const CardForm = injectStripe((props: CommonProps) => {
+  const ref = useRef();
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+    if (ref.current) {
+      ref.current.getElement().then(element => this.props.stripe
+        .createToken(element))
+      
+        .then((payload) => console.log('[token]', payload));
+    }
+  };
+});
 
 class _SplitForm extends React.Component<InjectedProps & {fontSize: string}> {
   handleSubmit = (ev) => {

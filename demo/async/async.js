@@ -1,8 +1,8 @@
 // @flow
 /* eslint-disable no-console, react/no-multi-comp */
-import React from 'react';
+import React, {useRef} from 'react';
 
-import type {InjectedProps} from '../../src/components/inject';
+import type {AsyncInjectedProps} from '../../src/components/inject';
 
 import {
   CardElement,
@@ -40,53 +40,47 @@ const CARD_ELEMENT_OPTIONS = {
   },
 };
 
-class _CardForm extends React.Component<InjectedProps> {
-  handleSubmit = (ev) => {
-    ev.preventDefault();
-    if (this.props.stripe) {
-      this.props.stripe
-        .createToken()
-        .then((payload) => console.log('[token]', payload));
-    } else {
-      console.log('Form submitted before Stripe.js loaded.');
+const CardFormCheckout = injectStripe(({stripe}: AsyncInjectedProps) => {
+  const ref = useRef();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (stripe && ref.current) {
+      ref.current
+        .getElement()
+        .then((element) => stripe.createToken(element))
+        .then((payload) => {
+          console.log('[token]', payload);
+        });
     }
   };
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>Card details</label>
-        {this.props.stripe ? (
-          <CardElement
-            onBlur={handleBlur}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onReady={handleReady}
-            {...CARD_ELEMENT_OPTIONS}
-          />
-        ) : (
-          <div className="StripeElement loading" />
-        )}
-        <button disabled={!this.props.stripe}>Pay</button>
-      </form>
-    );
-  }
-}
-const CardForm = injectStripe(_CardForm);
 
-const Checkout = () => {
   return (
-    <div className="Checkout">
-      <Elements>
-        <CardForm />
-      </Elements>
-    </div>
+    <Elements>
+      <div className="Checkout">
+        <form onSubmit={handleSubmit}>
+          <label>Card details</label>
+          {stripe ? (
+            <CardElement
+              ref={ref}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              onFocus={handleFocus}
+              onReady={handleReady}
+              {...CARD_ELEMENT_OPTIONS}
+            />
+          ) : (
+            <div className="StripeElement loading" />
+          )}
+          <button disabled={!stripe}>Pay</button>
+        </form>
+      </div>
+    </Elements>
   );
-};
+});
 
 export class App extends React.Component<{}, {stripe: null | StripeShape}> {
   constructor() {
     super();
-
     this.state = {
       stripe: null,
     };
@@ -116,7 +110,7 @@ export class App extends React.Component<{}, {stripe: null | StripeShape}> {
   render() {
     return (
       <StripeProvider stripe={this.state.stripe}>
-        <Checkout />
+        <CardFormCheckout />
       </StripeProvider>
     );
   }

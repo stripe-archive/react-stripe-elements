@@ -24,14 +24,7 @@ const capitalized = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const Element = (
-  type: string,
-  hocOptions: {
-    impliedTokenType?: string,
-    impliedSourceType?: string,
-    impliedPaymentMethodType?: string,
-  } = {}
-) =>
+const Element = (type: string) =>
   class extends React.Component<Props> {
     static propTypes = {
       id: PropTypes.string,
@@ -60,33 +53,22 @@ const Element = (
       this._element = null;
 
       const options = _extractOptions(this.props);
+      this._elementPromise = new Promise((resolve) => {
+        this._resolveElementPromise = resolve;
+      });
       // We keep track of the extracted options on this._options to avoid re-rendering.
       // (We would unnecessarily re-render if we were tracking them with state.)
       this._options = options;
     }
 
     componentDidMount() {
-      this.context.addElementsLoadListener((elements: ElementsShape) => {
+      this.context.elementsPromise.then((elements) => {
         const element = elements.create(type, this._options);
         this._element = element;
 
         this._setupEventListeners(element);
 
         element.mount(this._ref);
-
-        // Register Element for automatic token / source / paymentMethod creation
-        if (
-          hocOptions.impliedTokenType ||
-          hocOptions.impliedSourceType ||
-          hocOptions.impliedPaymentMethodType
-        ) {
-          this.context.registerElement(
-            element,
-            hocOptions.impliedTokenType,
-            hocOptions.impliedSourceType,
-            hocOptions.impliedPaymentMethodType
-          );
-        }
       });
     }
 
@@ -107,18 +89,24 @@ const Element = (
       if (this._element) {
         const element = this._element;
         element.destroy();
-        this.context.unregisterElement(element);
       }
     }
 
-    context: ElementContext;
+    getElement = () => {
+      return this._elementPromise;
+    };
+
+    _resolveElementPromise: (ElementShape) => void;
+    _elementPromise: Promise<ElementShape>;
     _element: ElementShape | null;
     _ref: ?HTMLElement;
     _options: Object;
+    context: ElementContext;
 
     _setupEventListeners(element: ElementShape) {
       element.on('ready', () => {
         this.props.onReady(this._element);
+        this._resolveElementPromise(element);
       });
 
       element.on('change', (change) => {

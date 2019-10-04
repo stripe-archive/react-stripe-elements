@@ -5,36 +5,13 @@ import Elements from './components/Elements';
 import Element from './components/Element';
 import PaymentRequestButtonElement from './components/PaymentRequestButtonElement';
 
-// Define Elements, and register their implied token / source types for
-// automatic token / source creation.
-
-// Card
-const CardElement = Element('card', {
-  impliedTokenType: 'card',
-  impliedSourceType: 'card',
-  impliedPaymentMethodType: 'card',
-});
-
-// Split Fields
-// Note: we only register the CardNumberElement for split fields so that we have
-// a unique Element to infer when calling `wrappedCreateToken` or `wrappedCreateSource`.
-const CardNumberElement = Element('cardNumber', {
-  impliedTokenType: 'card',
-  impliedSourceType: 'card',
-  impliedPaymentMethodType: 'card',
-});
+const CardElement = Element('card');
+const CardNumberElement = Element('cardNumber');
 const CardExpiryElement = Element('cardExpiry');
 const CardCvcElement = Element('cardCvc');
 const CardCVCElement = CardCvcElement; // deprecated in favor of CardCvcElement which better matches Elements API
-
-// IBAN
-const IbanElement = Element('iban', {
-  impliedTokenType: 'bank_account',
-  impliedSourceType: 'sepa_debit',
-});
-
-// iDEAL Bank
-const IdealBankElement = Element('idealBank', {impliedSourceType: 'ideal'});
+const IbanElement = Element('iban');
+const IdealBankElement = Element('idealBank');
 
 export {
   StripeProvider,

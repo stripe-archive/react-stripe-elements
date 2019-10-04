@@ -69,7 +69,7 @@ class PaymentRequestButtonElement extends React.Component<Props> {
   }
 
   componentDidMount() {
-    this.context.addElementsLoadListener((elements: ElementsShape) => {
+    this.context.elementsPromise.then((elements) => {
       this._element = elements.create('paymentRequestButton', {
         paymentRequest: this.props.paymentRequest,
         ...this._options,
