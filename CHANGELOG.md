@@ -3,6 +3,16 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v5.1.0 - 2019-10-22
+
+### New Features
+
+- Add support for accessing the underlying Element using refs via `getElement`.
+
+### Bug Fixes
+
+- Fix crash when trying to create element while unmounting. Thanks @CarsonF!
+
 ## v5.0.1 - 2019-09-18
 
 ### Bug Fixes
