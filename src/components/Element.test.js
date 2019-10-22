@@ -151,4 +151,15 @@ describe('Element', () => {
     const TestElement = Element('test');
     expect(TestElement.displayName).toEqual('TestElement');
   });
+
+  it('should expose the underlying element instance ', () => {
+    const CardElement = Element('card');
+    const element = mount(<CardElement />, {context});
+    const rawElement = element
+      .find(CardElement)
+      .instance()
+      .getElement();
+
+    expect(rawElement).toEqual(elementMock);
+  });
 });
