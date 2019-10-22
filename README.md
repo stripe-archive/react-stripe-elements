@@ -44,6 +44,7 @@ styles, fonts).
     - [Available components](#available-components)
     - [Props shape](#props-shape-2)
     - [Using `onReady`](#using-onready)
+    - [Using `getElement`](#using-getelement)
   - [`injectStripe` HOC](#injectstripe-hoc)
     - [Example](#example)
 - [Troubleshooting](#troubleshooting)
@@ -638,6 +639,45 @@ export default CardSection;
 (Note that this functionality is new as of react-stripe-elements v1.6.0.)
 
 [element]: https://stripe.com/docs/stripe-js/reference#other-methods
+
+#### Using `getElement`
+
+In addition to `onReady`, you can also access to the underlying Element by using
+a [ref] to the access the component instance and calling `getElement()`.
+
+Note that if you are async loading Stripe.js, until it loads `getElement` will
+return `null`.
+
+```jsx
+// CardSection.js
+import React from 'react';
+import {CardElement} from 'react-stripe-elements';
+
+class CardSection extends React.Component {
+  ref = React.createRef();
+
+  focus() {
+    const element = this.ref.current.getElement();
+
+    if (element) {
+      element.focus();
+    }
+  }
+
+  render = () => {
+    return (
+      <label>
+        Card details
+        <CardElement ref={this.ref} />
+      </label>
+    );
+  };
+}
+
+export default CardSection;
+```
+
+[ref]: https://reactjs.org/docs/refs-and-the-dom.html
 
 ### `injectStripe` HOC
 
