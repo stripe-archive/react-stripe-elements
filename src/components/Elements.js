@@ -21,10 +21,12 @@ type State = {
 
 export type InjectContext = {
   getRegisteredElements: () => ElementsList,
+  elements: ElementsShape | null,
 };
 
 export const injectContextTypes = {
   getRegisteredElements: PropTypes.func.isRequired,
+  elements: PropTypes.object,
 };
 
 export type ElementContext = {
@@ -59,6 +61,12 @@ export default class Elements extends React.Component<Props, State> {
   constructor(props: Props, context: ProviderContext) {
     super(props, context);
 
+    const {children, ...options} = this.props;
+
+    if (this.context.tag === 'sync') {
+      this._elements = this.context.stripe.elements(options);
+    }
+
     this.state = {
       registeredElements: [],
     };
@@ -68,19 +76,21 @@ export default class Elements extends React.Component<Props, State> {
     return {
       addElementsLoadListener: (fn: ElementsLoadListener) => {
         // Return the existing elements instance if we already have one.
-        if (this._elements) {
-          fn(this._elements);
-          return;
-        }
-        const {children, ...options} = this.props;
         if (this.context.tag === 'sync') {
-          this._elements = this.context.stripe.elements(options);
+          // This is impossible, but we need to make flow happy.
+          if (!this._elements) {
+            throw new Error(
+              'Expected elements to be instantiated but it was not.'
+            );
+          }
+
           fn(this._elements);
         } else {
           this.context.addStripeLoadListener((stripe: StripeShape) => {
             if (this._elements) {
               fn(this._elements);
             } else {
+              const {children, ...options} = this.props;
               this._elements = stripe.elements(options);
               fn(this._elements);
             }
@@ -90,12 +100,13 @@ export default class Elements extends React.Component<Props, State> {
       registerElement: this.handleRegisterElement,
       unregisterElement: this.handleUnregisterElement,
       getRegisteredElements: () => this.state.registeredElements,
+      elements: this._elements,
     };
   }
 
   props: Props;
   context: ProviderContext;
-  _elements: ElementsShape;
+  _elements: ElementsShape | null = null;
 
   handleRegisterElement = (
     element: Object,

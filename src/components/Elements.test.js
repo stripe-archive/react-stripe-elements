@@ -6,6 +6,7 @@ import Elements from './Elements';
 
 describe('Elements', () => {
   let stripeMock;
+  const elementsMock = {};
 
   beforeEach(() => {
     stripeMock = {
@@ -15,7 +16,7 @@ describe('Elements', () => {
             'elements() should not be called twice in this test.'
           );
         })
-        .mockReturnValueOnce(true),
+        .mockReturnValueOnce(elementsMock),
       createToken: jest.fn(),
       createSource: jest.fn(),
       createPaymentMethod: jest.fn(),
@@ -39,6 +40,7 @@ describe('Elements', () => {
       'registerElement',
       'unregisterElement',
       'getRegisteredElements',
+      'elements',
     ]);
   });
 
@@ -58,10 +60,26 @@ describe('Elements', () => {
     const mockCallback = jest.fn();
     childContext.addElementsLoadListener(mockCallback);
     expect(mockCallback).toHaveBeenCalledTimes(1);
-    expect(mockCallback).toHaveBeenLastCalledWith(true);
+    expect(mockCallback).toHaveBeenLastCalledWith(elementsMock);
     childContext.addElementsLoadListener(mockCallback);
     expect(mockCallback).toHaveBeenCalledTimes(2);
-    expect(mockCallback).toHaveBeenCalledWith(true);
+    expect(mockCallback).toHaveBeenCalledWith(elementsMock);
+  });
+
+  it('with sync context, elements is instantiated right away', () => {
+    const syncContext = {
+      tag: 'sync',
+      stripe: stripeMock,
+    };
+    const wrapper = mount(
+      <Elements>
+        <div />
+      </Elements>,
+      {context: syncContext}
+    );
+    const childContext = wrapper.instance().getChildContext();
+
+    expect(childContext.elements).not.toBe(null);
   });
 
   it('with async context: addElementsLoadListener returns the same elements instance ', () => {
@@ -79,15 +97,17 @@ describe('Elements', () => {
     );
     const childContext = wrapper.instance().getChildContext();
 
+    expect(childContext.elements).toBe(null);
+
     const a = new Promise((resolve) =>
       childContext.addElementsLoadListener((first) => {
-        expect(first).toEqual(true);
+        expect(first).toEqual(elementsMock);
         resolve();
       })
     );
     const b = new Promise((resolve) =>
       childContext.addElementsLoadListener((second) => {
-        expect(second).toEqual(true);
+        expect(second).toEqual(elementsMock);
         resolve();
       })
     );

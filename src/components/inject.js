@@ -329,6 +329,7 @@ Please be sure the component that calls createSource or createToken is within an
         <WrappedComponent
           {...this.props}
           stripe={this.state.stripe}
+          elements={this.context.elements}
           ref={
             withRef
               ? (c) => {
