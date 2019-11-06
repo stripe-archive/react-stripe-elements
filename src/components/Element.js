@@ -115,8 +115,6 @@ const Element = (
       }
     }
 
-    getElement = () => this._element;
-
     context: ElementContext;
     _element: ElementShape | null;
     _ref: ?HTMLElement;
