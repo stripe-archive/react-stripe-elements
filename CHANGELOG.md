@@ -3,6 +3,27 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v6.0.0 - 2019-11-05
+
+### New Features
+
+- `injectStripe` now injects a reference to the Elements instance created by
+  `<Elements>` as the prop `elements`.
+
+The primary reason you would want an Elements instance is to use
+[`elements.getElement()`](https://stripe.com/docs/stripe-js/reference#elements-get-element).
+which provides an easy way to get a reference to an Element. You will need to
+get a refrence to an Element to use
+[`confirmCardPayment`](https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-payment),
+[`confirmCardSetup()`](https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-setup),
+or
+[`createPaymentMethod()`](https://stripe.com/docs/stripe-js/reference#stripe-create-payment-method).
+
+### Breaking Changes
+
+- We have removed the `getElement` method on RSE components that we introduced
+  in v5.1.0 in favor of the above change. Sorry for the churn.
+
 ## v5.1.0 - 2019-10-22
 
 ### New Features

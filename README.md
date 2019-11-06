@@ -29,6 +29,7 @@ styles, fonts).
   - [The Stripe context (`StripeProvider`)](#the-stripe-context-stripeprovider)
   - [Element groups (`Elements`)](#element-groups-elements)
   - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
+  - [Using Stripe.js methods that do not have automatic element detection](#using-methods-that-do-not-have-automatic-element-detection)
   - [Using individual `*Element` components](#using-individual-element-components)
   - [Using the `PaymentRequestButtonElement`](#using-the-paymentrequestbuttonelement)
 - [Advanced integrations](#advanced-integrations)
@@ -44,7 +45,6 @@ styles, fonts).
     - [Available components](#available-components)
     - [Props shape](#props-shape-2)
     - [Using `onReady`](#using-onready)
-    - [Using `getElement`](#using-getelement)
   - [`injectStripe` HOC](#injectstripe-hoc)
     - [Example](#example)
 - [Troubleshooting](#troubleshooting)
@@ -167,19 +167,13 @@ Use the `injectStripe` [Higher-Order Component][hoc] (HOC) to build your payment
 form components in the `Elements` tree. The [Higher-Order Component][hoc]
 pattern in React can be unfamiliar to those who've never seen it before, so
 consider reading up before continuing. The `injectStripe` HOC provides the
-`this.props.stripe` property that manages your `Elements` groups. Within an
-injected component, you can call any of the following:
-
-- `this.props.stripe.createPaymentMethod`
-- `this.props.stripe.createToken`
-- `this.props.stripe.createSource`
-- `this.props.stripe.handleCardPayment`
-- `this.props.stripe.handleCardSetup`
-
-Calling any of these methods will collect data from the appropriate Element and
-use it to submit payment data to Stripe.
+`this.props.stripe` and `this.props.elements` properties that manage your
+`Elements` groups. Within an injected component, you can call any of the methods
+on the [Stripe][stripe] or [Elements][elements] objects.
 
 [hoc]: https://facebook.github.io/react/docs/higher-order-components.html
+[stripe]: https://stripe.com/docs/stripe-js/reference#the-stripe-object
+[elements]: https://stripe.com/docs/stripe-js/reference#the-elements-object
 
 > :warning: NOTE `injectStripe` cannot be used on the same element that renders
 > the `Elements` component; it must be used on the child component of
@@ -200,29 +194,47 @@ class CheckoutForm extends React.Component {
     // We don't want to let default form submission happen here, which would refresh the page.
     ev.preventDefault();
 
-    // Within the context of `Elements`, this call to createPaymentMethod knows from which Element to
-    // create the PaymentMethod, since there's only one in this group.
+    // Use Elements to get a reference to the Card Element mounted somewhere
+    // in your <Elements> tree. Elements will know how to find your Card Element
+    // becase only one is allowed.
+    const cardElement = this.props.elements.getElement('card');
+
+    // From here we cal call createPaymentMethod to create a PaymentMethod
     // See our createPaymentMethod documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-create-payment-method
     this.props.stripe
-      .createPaymentMethod('card', {billing_details: {name: 'Jenny Rosen'}})
+      .createPaymentMethod({
+        type: 'card',
+        card: cardElement,
+        billing_details: {name: 'Jenny Rosen'},
+      })
       .then(({paymentMethod}) => {
         console.log('Received Stripe PaymentMethod:', paymentMethod);
       });
 
-    // You can also use handleCardPayment with the PaymentIntents API automatic confirmation flow.
-    // See our handleCardPayment documentation for more:
-    // https://stripe.com/docs/stripe-js/reference#stripe-handle-card-payment
-    this.props.stripe.handleCardPayment('{PAYMENT_INTENT_CLIENT_SECRET}', data);
+    // You can also use confirmCardPayment with the PaymentIntents API automatic confirmation flow.
+    // See our confirmCardPayment documentation for more:
+    // https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-payment
+    this.props.stripe.confirmCardPayment('{PAYMENT_INTENT_CLIENT_SECRET}', {
+      payment_method: {
+        card: cardElement,
+      },
+    });
 
-    // You can also use handleCardSetup with the SetupIntents API.
-    // See our handleCardSetup documentation for more:
+    // You can also use confirmCardSetup with the SetupIntents API.
+    // See our confirmCardSetup documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup
-    this.props.stripe.handleCardSetup('{PAYMENT_INTENT_CLIENT_SECRET}', data);
+    this.props.stripe.handleCardSetup('{PAYMENT_INTENT_CLIENT_SECRET}', {
+      payment_method: {
+        card: cardElement,
+      },
+    });
 
     // You can also use createToken to create tokens.
     // See our tokens documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-create-token
+    // With createToken, you will not need to pass in the reference to
+    // the Card Element. It will be inferred automatically.
     this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
     // token type can optionally be inferred if there is only one Element
     // with which to create tokens
@@ -231,6 +243,8 @@ class CheckoutForm extends React.Component {
     // You can also use createSource to create Sources.
     // See our Sources documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-create-source
+    // With createSource, you will not need to pass in the reference to
+    // the Card Element. It will be inferred automatically.
     this.props.stripe.createSource({
       type: 'card',
       owner: {
@@ -640,45 +654,6 @@ export default CardSection;
 
 [element]: https://stripe.com/docs/stripe-js/reference#other-methods
 
-#### Using `getElement`
-
-In addition to `onReady`, you can also access to the underlying Element by using
-a [ref] to the access the component instance and calling `getElement()`.
-
-Note that if you are async loading Stripe.js, until it loads `getElement` will
-return `null`.
-
-```jsx
-// CardSection.js
-import React from 'react';
-import {CardElement} from 'react-stripe-elements';
-
-class CardSection extends React.Component {
-  ref = React.createRef();
-
-  focus() {
-    const element = this.ref.current.getElement();
-
-    if (element) {
-      element.focus();
-    }
-  }
-
-  render = () => {
-    return (
-      <label>
-        Card details
-        <CardElement ref={this.ref} />
-      </label>
-    );
-  };
-}
-
-export default CardSection;
-```
-
-[ref]: https://reactjs.org/docs/refs-and-the-dom.html
-
 ### `injectStripe` HOC
 
 ```jsx
@@ -697,7 +672,7 @@ to create sources or tokens.
     `this.props.stripe.createToken` or `this.props.stripe.createSource` when
     necessary.
 2.  Wrap that component by passing it to `injectStripe` so that it actually
-    receives the `stripe` prop.
+    receives the `stripe` and `elements` props.
 3.  Render the component that `injectStripe` returns.
 
 ### Example
@@ -780,10 +755,13 @@ type FactoryProps = {
 };
 ```
 
-The `stripe` prop can only be `null` if you are using one of the
+In addition to the `stripe` prop, `injectStripe` also injects a reference to the
+Elements instance as the `elements` prop.
+
+The `stripe` and `elements` prop can only be `null` if you are using one of the
 [Advanced integrations](#advanced-integrations) mentioned above, like loading
 Stripe.js asynchronously or providing an existing instance. If you are using a
-basic integration where you pass in an api key to `<StripeProvider/>`, it will
+basic integration where you pass in an api key to `<StripeProvider/>`, they will
 always be present.
 
 ## Troubleshooting
