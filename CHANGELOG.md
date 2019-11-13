@@ -19,6 +19,23 @@ get a refrence to an Element to use
 or
 [`createPaymentMethod()`](https://stripe.com/docs/stripe-js/reference#stripe-create-payment-method).
 
+Note that the old API for `createPaymentMethod` will continue to work and
+provide automatic element injection, but we are updating documentation and
+examples to use the new argument shape:
+
+```js
+// old shape with automatic element detection - still works
+this.props.stripe.createPaymentMethod('card').then(/* ... */);
+
+// new shape without automatic element detection - recommended and will work with new non-card PaymentMethods
+this.props.stripe
+  .createPaymentMethod({
+    type: 'card',
+    card: this.props.elements.getElement('card'),
+  })
+  .then(/* ... */);
+```
+
 ### Breaking Changes
 
 - We have removed the `getElement` method on RSE components that we introduced
@@ -74,9 +91,11 @@ or
     ): Promise<{error?: Object, setupIntent?: Object}>
   ```
 
-  For more information, please review the Stripe Docs:
+````
 
-  - [`stripe.handleCardSetup`](https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup)
+For more information, please review the Stripe Docs:
+
+- [`stripe.handleCardSetup`](https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup)
 
 ### Deprecations
 
@@ -388,3 +407,4 @@ Initial release! Support for:
   - CardExpiryElement
   - CardCVCElement
   - PostalCodeElement
+````

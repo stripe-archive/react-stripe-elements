@@ -29,7 +29,6 @@ styles, fonts).
   - [The Stripe context (`StripeProvider`)](#the-stripe-context-stripeprovider)
   - [Element groups (`Elements`)](#element-groups-elements)
   - [Setting up your payment form (`injectStripe`)](#setting-up-your-payment-form-injectstripe)
-  - [Using Stripe.js methods that do not have automatic element detection](#using-methods-that-do-not-have-automatic-element-detection)
   - [Using individual `*Element` components](#using-individual-element-components)
   - [Using the `PaymentRequestButtonElement`](#using-the-paymentrequestbuttonelement)
 - [Advanced integrations](#advanced-integrations)
@@ -197,6 +196,8 @@ class CheckoutForm extends React.Component {
     // Use Elements to get a reference to the Card Element mounted somewhere
     // in your <Elements> tree. Elements will know how to find your Card Element
     // becase only one is allowed.
+    // See our getElement documentation for more:
+    // https://stripe.com/docs/stripe-js/reference#elements-get-element
     const cardElement = this.props.elements.getElement('card');
 
     // From here we cal call createPaymentMethod to create a PaymentMethod
@@ -223,8 +224,8 @@ class CheckoutForm extends React.Component {
 
     // You can also use confirmCardSetup with the SetupIntents API.
     // See our confirmCardSetup documentation for more:
-    // https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup
-    this.props.stripe.handleCardSetup('{PAYMENT_INTENT_CLIENT_SECRET}', {
+    // https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-setup
+    this.props.stripe.confirmCardSetpu('{PAYMENT_INTENT_CLIENT_SECRET}', {
       payment_method: {
         card: cardElement,
       },
@@ -234,7 +235,7 @@ class CheckoutForm extends React.Component {
     // See our tokens documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-create-token
     // With createToken, you will not need to pass in the reference to
-    // the Card Element. It will be inferred automatically.
+    // the Element. It will be inferred automatically.
     this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
     // token type can optionally be inferred if there is only one Element
     // with which to create tokens
@@ -244,7 +245,7 @@ class CheckoutForm extends React.Component {
     // See our Sources documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-create-source
     // With createSource, you will not need to pass in the reference to
-    // the Card Element. It will be inferred automatically.
+    // the Element. It will be inferred automatically.
     this.props.stripe.createSource({
       type: 'card',
       owner: {
@@ -668,14 +669,13 @@ function injectStripe(
 Use `injectStripe` to wrap a component that needs to interact with `Stripe.js`
 to create sources or tokens.
 
-1.  First, create a component that accepts the `stripe` prop and calls
-    `this.props.stripe.createToken` or `this.props.stripe.createSource` when
-    necessary.
+1.  First, create a component that accepts the `stripe` prop and calls one of
+    the Stripe or Elements methods when necessary.
 2.  Wrap that component by passing it to `injectStripe` so that it actually
     receives the `stripe` and `elements` props.
 3.  Render the component that `injectStripe` returns.
 
-### Example
+#### Example
 
 ```jsx
 // 1. Create a component that uses this.props.stripe:
@@ -684,7 +684,12 @@ class CheckoutForm extends React.Component {
     /* ... */
   }
   onCompleteCheckout() {
-    this.props.stripe.createPaymentMethod('card').then(/* ... */);
+    this.props.stripe
+      .createPaymentMethod({
+        type: 'card',
+        card: this.props.stripe.getElement('card'),
+      })
+      .then(/* ... */);
   }
 }
 
@@ -715,10 +720,15 @@ available with the `getWrappedInstance()` method of the wrapper component. This
 feature can not be used if the wrapped component is a stateless function
 component.
 
-Within the wrapped component, the `stripe` prop has the type:
+Within the wrapped component, the `stripe` and `elements` props have the type:
 
 ```jsx
 type FactoryProps = {
+  elements: null | {
+    getElement: (type: string) => Element | null,
+    // and other functions available on the `elements` object,
+    // as officially documented here: https://stripe.com/docs/elements/reference#the-elements-object
+  },
   stripe: null | {
     createToken: (tokenData: {type?: string}) => Promise<{
       token?: Object,
@@ -729,8 +739,7 @@ type FactoryProps = {
       error?: Object,
     }>,
     createPaymentMethod: (
-      type: string,
-      paymentMethodData?: Object
+      paymentMethodData: Object
     ) => Promise<{
       paymentMethod?: Object,
       error?: Object,
@@ -755,10 +764,7 @@ type FactoryProps = {
 };
 ```
 
-In addition to the `stripe` prop, `injectStripe` also injects a reference to the
-Elements instance as the `elements` prop.
-
-The `stripe` and `elements` prop can only be `null` if you are using one of the
+The `stripe` and `elements` props can only be `null` if you are using one of the
 [Advanced integrations](#advanced-integrations) mentioned above, like loading
 Stripe.js asynchronously or providing an existing instance. If you are using a
 basic integration where you pass in an api key to `<StripeProvider/>`, they will
@@ -805,14 +811,9 @@ reach all components.
 2.  You can use the [`pure: false`][pure-false] option for redux-connect:
 
     ```jsx
-    const Component = connect(
-      mapStateToProps,
-      mapDispatchToProps,
-      mergeProps,
-      {
-        pure: false,
-      }
-    )(injectStripe(_CardForm));
+    const Component = connect(mapStateToProps, mapDispatchToProps, mergeProps, {
+      pure: false,
+    })(injectStripe(_CardForm));
     ```
 
 [pure-false]:

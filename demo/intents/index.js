@@ -63,22 +63,27 @@ class _CreatePaymentMethod extends React.Component<
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    if (this.props.stripe) {
-      this.props.stripe.createPaymentMethod('card').then((payload) => {
-        if (payload.error) {
-          this.setState({
-            error: `Failed to create PaymentMethod: ${payload.error.message}`,
-            processing: false,
-          });
-          console.log('[error]', payload.error);
-        } else {
-          this.setState({
-            message: `Created PaymentMethod: ${payload.paymentMethod.id}`,
-            processing: false,
-          });
-          console.log('[paymentMethod]', payload.paymentMethod);
-        }
-      });
+    if (this.props.stripe && this.props.elements) {
+      this.props.stripe
+        .createPaymentMethod({
+          type: 'card',
+          card: this.props.elements.getElement('card'),
+        })
+        .then((payload) => {
+          if (payload.error) {
+            this.setState({
+              error: `Failed to create PaymentMethod: ${payload.error.message}`,
+              processing: false,
+            });
+            console.log('[error]', payload.error);
+          } else {
+            this.setState({
+              message: `Created PaymentMethod: ${payload.paymentMethod.id}`,
+              processing: false,
+            });
+            console.log('[paymentMethod]', payload.paymentMethod);
+          }
+        });
       this.setState({processing: true});
     } else {
       console.log("Stripe.js hasn't loaded yet.");
@@ -149,9 +154,13 @@ class _HandleCardPayment extends React.Component<
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    if (this.props.stripe) {
+    if (this.props.stripe && this.props.elements) {
       this.props.stripe
-        .handleCardPayment(this.state.clientSecret)
+        .confirmCardPayment(this.state.clientSecret, {
+          payment_method: {
+            card: this.props.elements.getElement('card'),
+          },
+        })
         .then((payload) => {
           if (payload.error) {
             this.setState({
@@ -162,9 +171,7 @@ class _HandleCardPayment extends React.Component<
           } else {
             this.setState({
               succeeded: true,
-              message: `Charge succeeded! PaymentIntent is in state: ${
-                payload.paymentIntent.status
-              }`,
+              message: `Charge succeeded! PaymentIntent is in state: ${payload.paymentIntent.status}`,
             });
             console.log('[PaymentIntent]', payload.paymentIntent);
           }
@@ -179,7 +186,7 @@ class _HandleCardPayment extends React.Component<
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
-          stripe.handleCardPayment
+          stripe.confirmCardPayment
           <CardElement
             onBlur={handleBlur}
             onChange={handleChange}
@@ -239,9 +246,13 @@ class _HandleCardSetup extends React.Component<
 
   handleSubmit = (ev) => {
     ev.preventDefault();
-    if (this.props.stripe) {
+    if (this.props.stripe && this.props.elements) {
       this.props.stripe
-        .handleCardSetup(this.state.clientSecret)
+        .confirmCardSetup(this.state.clientSecret, {
+          payment_method: {
+            card: this.props.elements.getElement('card'),
+          },
+        })
         .then((payload) => {
           if (payload.error) {
             this.setState({
@@ -252,9 +263,7 @@ class _HandleCardSetup extends React.Component<
           } else {
             this.setState({
               succeeded: true,
-              message: `Setup succeeded! SetupIntent is in state: ${
-                payload.setupIntent.status
-              }`,
+              message: `Setup succeeded! SetupIntent is in state: ${payload.setupIntent.status}`,
             });
             console.log('[SetupIntent]', payload.setupIntent);
           }
@@ -269,7 +278,7 @@ class _HandleCardSetup extends React.Component<
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
-          stripe.handleCardSetup
+          stripe.confirmCardSetup
           <CardElement
             onBlur={handleBlur}
             onChange={handleChange}
