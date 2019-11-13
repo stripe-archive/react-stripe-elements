@@ -3,7 +3,11 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v6.0.0 - 2019-11-05
+## v6.0.1 - 2019-11-13
+
+Version bump that fixes some typos, no changes.
+
+## v6.0.0 - 2019-11-13
 
 ### New Features
 
@@ -13,7 +17,7 @@
 The primary reason you would want an Elements instance is to use
 [`elements.getElement()`](https://stripe.com/docs/stripe-js/reference#elements-get-element).
 which provides an easy way to get a reference to an Element. You will need to
-get a refrence to an Element to use
+get a reference to an Element to use
 [`confirmCardPayment`](https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-payment),
 [`confirmCardSetup()`](https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-setup),
 or
