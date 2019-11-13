@@ -14,6 +14,7 @@ describe('injectStripe()', () => {
   let handleCardSetup;
   let elementMock;
   let rawElementMock;
+  let elementsMock;
 
   // Before ALL tests (sync or async)
   beforeEach(() => {
@@ -22,6 +23,7 @@ describe('injectStripe()', () => {
     createPaymentMethod = jest.fn();
     handleCardPayment = jest.fn();
     handleCardSetup = jest.fn();
+    elementsMock = {};
     rawElementMock = {
       _frame: {
         id: 'id',
@@ -53,6 +55,7 @@ describe('injectStripe()', () => {
           handleCardPayment,
           handleCardSetup,
         },
+        elements: elementsMock,
         getRegisteredElements: () => [elementMock],
       };
     });
@@ -114,6 +117,17 @@ describe('injectStripe()', () => {
       expect(props).toHaveProperty('stripe.createToken');
       expect(props).toHaveProperty('stripe.createPaymentMethod');
       expect(props).toHaveProperty('stripe.handleCardPayment');
+    });
+
+    it('renders <WrappedComponent> with `elements` prop', () => {
+      const Injected = injectStripe(WrappedComponent);
+
+      const wrapper = shallow(<Injected />, {
+        context,
+      });
+
+      const props = wrapper.props();
+      expect(props.elements).toBe(elementsMock);
     });
 
     it('props.stripe.createToken calls createToken with element and empty options when called with no arguments', () => {

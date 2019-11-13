@@ -22,11 +22,16 @@ type WrappedStripeShape = {
   createPaymentMethod: Function,
   handleCardPayment: Function,
   handleCardSetup: Function,
+  confirmCardPayment: Function,
+  confirmCardSetup: Function,
 };
 
 type State = {stripe: WrappedStripeShape | null};
 
-export type InjectedProps = {stripe: WrappedStripeShape | null};
+export type InjectedProps = {
+  stripe: WrappedStripeShape | null,
+  elements: ElementsShape | null,
+};
 
 // react-redux does a bunch of stuff with pure components / checking if it needs to re-render.
 // not sure if we need to do the same.
@@ -226,6 +231,10 @@ Please be sure the component that calls createSource or createToken is within an
       elementOrData?: mixed,
       maybeData?: mixed
     ) => {
+      if (paymentMethodType && typeof paymentMethodType === 'object') {
+        return stripe.createPaymentMethod(paymentMethodType);
+      }
+
       if (!paymentMethodType || typeof paymentMethodType !== 'string') {
         throw new Error(
           `Invalid PaymentMethod type passed to createPaymentMethod. Expected a string, got ${typeof paymentMethodType}.`
@@ -329,6 +338,7 @@ Please be sure the component that calls createSource or createToken is within an
         <WrappedComponent
           {...this.props}
           stripe={this.state.stripe}
+          elements={this.context.elements}
           ref={
             withRef
               ? (c) => {

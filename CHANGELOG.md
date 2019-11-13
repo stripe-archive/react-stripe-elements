@@ -3,6 +3,44 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v6.0.0 - 2019-11-05
+
+### New Features
+
+- `injectStripe` now injects a reference to the Elements instance created by
+  `<Elements>` as the prop `elements`.
+
+The primary reason you would want an Elements instance is to use
+[`elements.getElement()`](https://stripe.com/docs/stripe-js/reference#elements-get-element).
+which provides an easy way to get a reference to an Element. You will need to
+get a refrence to an Element to use
+[`confirmCardPayment`](https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-payment),
+[`confirmCardSetup()`](https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-setup),
+or
+[`createPaymentMethod()`](https://stripe.com/docs/stripe-js/reference#stripe-create-payment-method).
+
+Note that the old API for `createPaymentMethod` will continue to work and
+provide automatic element injection, but we are updating documentation and
+examples to use the new argument shape:
+
+```js
+// old shape with automatic element detection - still works
+this.props.stripe.createPaymentMethod('card').then(/* ... */);
+
+// new shape without automatic element detection - recommended and will work with new non-card PaymentMethods
+this.props.stripe
+  .createPaymentMethod({
+    type: 'card',
+    card: this.props.elements.getElement('card'),
+  })
+  .then(/* ... */);
+```
+
+### Breaking Changes
+
+- We have removed the `getElement` method on RSE components that we introduced
+  in v5.1.0 in favor of the above change. Sorry for the churn.
+
 ## v5.1.0 - 2019-10-22
 
 ### New Features
@@ -53,9 +91,11 @@
     ): Promise<{error?: Object, setupIntent?: Object}>
   ```
 
-  For more information, please review the Stripe Docs:
+````
 
-  - [`stripe.handleCardSetup`](https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup)
+For more information, please review the Stripe Docs:
+
+- [`stripe.handleCardSetup`](https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup)
 
 ### Deprecations
 
@@ -367,3 +407,4 @@ Initial release! Support for:
   - CardExpiryElement
   - CardCVCElement
   - PostalCodeElement
+````

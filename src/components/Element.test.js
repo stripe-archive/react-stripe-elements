@@ -171,15 +171,4 @@ describe('Element', () => {
     // listener should do nothing since it's unmounted
     expect(elementsMock.create).toHaveBeenCalledTimes(0);
   });
-
-  it('should expose the underlying element instance ', () => {
-    const CardElement = Element('card');
-    const element = mount(<CardElement />, {context});
-    const rawElement = element
-      .find(CardElement)
-      .instance()
-      .getElement();
-
-    expect(rawElement).toEqual(elementMock);
-  });
 });
