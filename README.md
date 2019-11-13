@@ -726,8 +726,9 @@ Within the wrapped component, the `stripe` and `elements` props have the type:
 type FactoryProps = {
   elements: null | {
     getElement: (type: string) => Element | null,
-    // and other functions available on the `elements` object,
-    // as officially documented here: https://stripe.com/docs/elements/reference#the-elements-object
+    // For more detail and documentation on other methods available on
+    // the `elements` object, please refer to our official documentation:
+    // https://stripe.com/docs/elements/reference#the-elements-object
   },
   stripe: null | {
     createToken: (tokenData: {type?: string}) => Promise<{
@@ -744,22 +745,23 @@ type FactoryProps = {
       paymentMethod?: Object,
       error?: Object,
     }>,
-    handleCardPayment: (
+    confirmCardPayment: (
       clientSecret: string,
-      paymentMethodData?: Object
+      paymentIntentData?: Object
     ) => Promise<{
       paymentIntent?: Object,
       error?: Object,
     }>,
-    handleCardSetup: (
+    confirmCardSetup: (
       clientSecret: string,
-      paymentMethodData?: Object
+      paymentIntentData?: Object
     ) => Promise<{
       setupIntent?: Object,
       error?: Object,
     }>,
-    // and other functions available on the `stripe` object,
-    // as officially documented here: https://stripe.com/docs/elements/reference#the-stripe-object
+    // For more detail and documentation on other methods available on
+    // the `stripe` object, please refer to our official documentation:
+    // https://stripe.com/docs/elements/reference#the-stripe-object
   },
 };
 ```
@@ -811,9 +813,14 @@ reach all components.
 2.  You can use the [`pure: false`][pure-false] option for redux-connect:
 
     ```jsx
-    const Component = connect(mapStateToProps, mapDispatchToProps, mergeProps, {
-      pure: false,
-    })(injectStripe(_CardForm));
+    const Component = connect(
+      mapStateToProps,
+      mapDispatchToProps,
+      mergeProps,
+      {
+        pure: false,
+      }
+    )(injectStripe(_CardForm));
     ```
 
 [pure-false]:

@@ -171,7 +171,9 @@ class _HandleCardPayment extends React.Component<
           } else {
             this.setState({
               succeeded: true,
-              message: `Charge succeeded! PaymentIntent is in state: ${payload.paymentIntent.status}`,
+              message: `Charge succeeded! PaymentIntent is in state: ${
+                payload.paymentIntent.status
+              }`,
             });
             console.log('[PaymentIntent]', payload.paymentIntent);
           }
@@ -263,7 +265,9 @@ class _HandleCardSetup extends React.Component<
           } else {
             this.setState({
               succeeded: true,
-              message: `Setup succeeded! SetupIntent is in state: ${payload.setupIntent.status}`,
+              message: `Setup succeeded! SetupIntent is in state: ${
+                payload.setupIntent.status
+              }`,
             });
             console.log('[SetupIntent]', payload.setupIntent);
           }
