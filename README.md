@@ -225,7 +225,7 @@ class CheckoutForm extends React.Component {
     // You can also use confirmCardSetup with the SetupIntents API.
     // See our confirmCardSetup documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-confirm-card-setup
-    this.props.stripe.confirmCardSetpu('{PAYMENT_INTENT_CLIENT_SECRET}', {
+    this.props.stripe.confirmCardSetup('{PAYMENT_INTENT_CLIENT_SECRET}', {
       payment_method: {
         card: cardElement,
       },
