@@ -584,7 +584,7 @@ These components display the UI for Elements, and must be used within
 - `CardElement`
 - `CardNumberElement`
 - `CardExpiryElement`
-- `CardCvcElement`
+- `CardCVCElement`
 - `PaymentRequestButtonElement`
 - `IbanElement`
 - `IdealBankElement`
