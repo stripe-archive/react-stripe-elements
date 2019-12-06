@@ -95,8 +95,6 @@ this.props.stripe
     ): Promise<{error?: Object, setupIntent?: Object}>
   ```
 
-````
-
 For more information, please review the Stripe Docs:
 
 - [`stripe.handleCardSetup`](https://stripe.com/docs/stripe-js/reference#stripe-handle-card-setup)
