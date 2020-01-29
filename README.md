@@ -21,8 +21,8 @@ styles, fonts).
 We're currently testing
 [React Stripe.js](https://github.com/stripe/react-stripe-js), a new library for
 integrating Stripe Elements with React. Email
-[stripejs-feedback@stripe.com](mailto:stripejs-feedback@stripe.com) with your Stripe
-account ID for access to beta docs.
+[stripejs-feedback@stripe.com](mailto:stripejs-feedback@stripe.com) with your
+Stripe account ID for access to beta docs.
 
 <!-- prettier-ignore-start -->
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
