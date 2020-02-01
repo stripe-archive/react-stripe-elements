@@ -203,12 +203,12 @@ class CheckoutForm extends React.Component {
 
     // Use Elements to get a reference to the Card Element mounted somewhere
     // in your <Elements> tree. Elements will know how to find your Card Element
-    // becase only one is allowed.
+    // because only one is allowed.
     // See our getElement documentation for more:
     // https://stripe.com/docs/stripe-js/reference#elements-get-element
     const cardElement = this.props.elements.getElement('card');
 
-    // From here we cal call createPaymentMethod to create a PaymentMethod
+    // From here we can call createPaymentMethod to create a PaymentMethod
     // See our createPaymentMethod documentation for more:
     // https://stripe.com/docs/stripe-js/reference#stripe-create-payment-method
     this.props.stripe
