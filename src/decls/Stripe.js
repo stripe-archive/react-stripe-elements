@@ -56,4 +56,6 @@ declare type StripeShape = {
   confirmIdealPayment: ConfirmPaymentFn,
   confirmSepaDebitPayment: ConfirmPaymentFn,
   confirmSepaDebitSetup: ConfirmSetupFn,
+  confirmAuBecsDebitPayment: ConfirmPaymentFn,
+  confirmAuBecsDebitSetup: ConfirmSetupFn,
 };

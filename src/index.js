@@ -36,6 +36,9 @@ const IbanElement = Element('iban', {
 // iDEAL Bank
 const IdealBankElement = Element('idealBank', {impliedSourceType: 'ideal'});
 
+// AU Bank Account
+const AuBankAccountElement = Element('auBankAccount', {impliedSourceType: 'au_becs_debit', impliedPaymentMethodType: 'au_becs_debit'});
+
 export {
   StripeProvider,
   injectStripe,
@@ -48,4 +51,5 @@ export {
   PaymentRequestButtonElement,
   IbanElement,
   IdealBankElement,
+  AuBankAccountElement,
 };
