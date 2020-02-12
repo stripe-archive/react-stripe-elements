@@ -37,7 +37,10 @@ const IbanElement = Element('iban', {
 const IdealBankElement = Element('idealBank', {impliedSourceType: 'ideal'});
 
 // AU Bank Account
-const AuBankAccountElement = Element('auBankAccount', {impliedSourceType: 'au_becs_debit', impliedPaymentMethodType: 'au_becs_debit'});
+const AuBankAccountElement = Element('auBankAccount', {
+  impliedSourceType: 'au_becs_debit',
+  impliedPaymentMethodType: 'au_becs_debit',
+});
 
 export {
   StripeProvider,
