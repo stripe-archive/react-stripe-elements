@@ -36,6 +36,14 @@ const IbanElement = Element('iban', {
 // iDEAL Bank
 const IdealBankElement = Element('idealBank', {impliedSourceType: 'ideal'});
 
+// fpx Bank
+const FpxBankElement = Element('fpxBank');
+
+// auBankAccount
+// Requires beta access. Contact Stripe support for more information:
+// https://support.stripe.com
+const AuBankAccountElement = Element('auBankAccount');
+
 export {
   StripeProvider,
   injectStripe,
@@ -48,4 +56,6 @@ export {
   PaymentRequestButtonElement,
   IbanElement,
   IdealBankElement,
+  FpxBankElement,
+  AuBankAccountElement,
 };
