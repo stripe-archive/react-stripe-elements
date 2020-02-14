@@ -3,6 +3,35 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v6.1.0 - 2020-02-14
+
+### New Features
+
+Added the `auBankAccount` and `fpxBank` elements. These elements will not have
+automatic Element detection/insertion. To use them you will need to use
+`elements.getElement` and pass them directly to other Stripe.js methods (e.g.
+`stripe.confirmFpxPayment`):
+
+```jsx
+const FpxForm = injectStripe(({stripe, elements}) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const {error} = await stripe.confirmFpxPayment('{{CLIENT_SECRET}}', {
+      payment_method: {
+        fpx: elements.getElement('fpxBank'),
+      },
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <FpxBankElement accountHolderType="individual" />
+      <button>Pay</button>
+    </form>
+  );
+});
+```
+
 ## v6.0.1 - 2019-11-13
 
 Version bump that fixes some typos, no changes.
