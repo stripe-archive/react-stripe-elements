@@ -3,6 +3,21 @@
 [![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
 [![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
 
+# We’ve moved to [@stripe/react-stripe-js](https://github.com/stripe/react-stripe-js)!
+
+We have decided to rename, rework, and move this project. While the new library
+still exists primarily as a thin React wrapper around Elements, we do not want
+the name to constrict the scope of the library. We are also making some fairly
+significant changes to the API and we wanted to make a clean break. We have no
+plans for any additional major releases of `react-stripe-elements`.
+
+If you are starting a new Stripe integration or are looking to update your
+existing integration, use the React Stripe.js. All future work will be released
+there and we think the new library is a much better experience.
+
+- [Learn to accept a payment (with React Stripe.js!)](https://stripe.com/docs/payments/accept-a-payment#web)
+- [Migrate from `react-stripe-elements` to React Stripe.js](https://github.com/stripe/react-stripe-js/blob/master/docs/migrating.md)
+
 > React components for Stripe.js and Stripe Elements
 
 This project is a thin React wrapper around
