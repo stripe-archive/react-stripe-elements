@@ -1,3 +1,17 @@
+## We’ve moved to [@stripe/react-stripe-js](https://github.com/stripe/react-stripe-js)!
+
+We have decided to rename, rework, and move this project. We have no plans for
+any additional major releases of `react-stripe-elements`.
+
+If you are starting a new Stripe integration or are looking to update your
+existing integration, use
+[React Stripe.js](https://github.com/stripe/react-stripe-js).
+
+- [Learn to accept a payment (with React Stripe.js!)](https://stripe.com/docs/payments/accept-a-payment#web)
+- [Migrate from `react-stripe-elements` to React Stripe.js](https://github.com/stripe/react-stripe-js/blob/master/docs/migrating.md)
+
+---
+
 # react-stripe-elements
 
 [![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
