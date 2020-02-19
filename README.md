@@ -1,9 +1,4 @@
-# react-stripe-elements
-
-[![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
-[![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
-
-# We’ve moved to [@stripe/react-stripe-js](https://github.com/stripe/react-stripe-js)!
+## We’ve moved to [@stripe/react-stripe-js](https://github.com/stripe/react-stripe-js)!
 
 We have decided to rename, rework, and move this project. While the new library
 still exists primarily as a thin React wrapper around Elements, we do not want
@@ -17,6 +12,13 @@ there and we think the new library is a much better experience.
 
 - [Learn to accept a payment (with React Stripe.js!)](https://stripe.com/docs/payments/accept-a-payment#web)
 - [Migrate from `react-stripe-elements` to React Stripe.js](https://github.com/stripe/react-stripe-js/blob/master/docs/migrating.md)
+
+---
+
+# react-stripe-elements
+
+[![build status](https://img.shields.io/travis/stripe/react-stripe-elements/master.svg?style=flat-square)](https://travis-ci.org/stripe/react-stripe-elements)
+[![npm version](https://img.shields.io/npm/v/react-stripe-elements.svg?style=flat-square)](https://www.npmjs.com/package/react-stripe-elements)
 
 > React components for Stripe.js and Stripe Elements
 
