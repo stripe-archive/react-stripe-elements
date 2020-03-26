@@ -30,14 +30,6 @@ The
 goes into more detail on the various customization options for Elements (e.g.
 styles, fonts).
 
-### Interested in beta-testing a new React library?
-
-We're currently testing
-[React Stripe.js](https://github.com/stripe/react-stripe-js), a new library for
-integrating Stripe Elements with React. Email
-[stripejs-feedback@stripe.com](mailto:stripejs-feedback@stripe.com) with your
-Stripe account ID for access to beta docs.
-
 <!-- prettier-ignore-start -->
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
