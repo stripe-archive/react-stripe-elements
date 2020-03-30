@@ -56,4 +56,8 @@ declare type StripeShape = {
   confirmIdealPayment: ConfirmPaymentFn,
   confirmSepaDebitPayment: ConfirmPaymentFn,
   confirmSepaDebitSetup: ConfirmSetupFn,
+  _registerWrapper: (wrapper: {|
+    name: string,
+    version: string | null,
+  |}) => void,
 };
