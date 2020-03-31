@@ -3,6 +3,7 @@
   "plugins": [
     "transform-class-properties",
     "transform-object-rest-spread",
-    [ "transform-es2015-classes", { "loose": true } ]
+    [ "transform-es2015-classes", { "loose": true } ],
+    "transform-inline-environment-variables"
   ]
 }

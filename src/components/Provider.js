@@ -97,18 +97,16 @@ export default class Provider extends React.Component<Props> {
           "Please load Stripe.js (https://js.stripe.com/v3/) on this page to use react-stripe-elements. If Stripe.js isn't available yet (it's loading asynchronously, or you're using server-side rendering), see https://github.com/stripe/react-stripe-elements#advanced-integrations"
         );
       } else {
-        const {apiKey, children, stripe, ...options} = this.props;
-        this._meta = {
-          tag: 'sync',
-          stripe: getOrCreateStripe(apiKey, options),
-        };
+        const {apiKey, children, ...options} = this.props;
+        const stripe = getOrCreateStripe(apiKey, options);
+        this._meta = {tag: 'sync', stripe};
+        this._register();
       }
     } else if (this.props.stripe) {
       // If we already have a stripe instance (in the constructor), we can behave synchronously.
-      this._meta = {
-        tag: 'sync',
-        stripe: ensureStripeShape(this.props.stripe),
-      };
+      const stripe = ensureStripeShape(this.props.stripe);
+      this._meta = {tag: 'sync', stripe};
+      this._register();
     } else if (this.props.stripe === null) {
       this._meta = {
         tag: 'async',
@@ -179,10 +177,24 @@ export default class Provider extends React.Component<Props> {
       this._didWakeUpListeners = true;
       const stripe = ensureStripeShape(this.props.stripe);
       this._meta.stripe = stripe;
+      this._register();
       this._listeners.forEach((fn) => {
         fn(stripe);
       });
     }
+  }
+
+  _register() {
+    const {stripe} = this._meta;
+
+    if (!stripe || !stripe._registerWrapper) {
+      return;
+    }
+
+    stripe._registerWrapper({
+      name: 'react-stripe-elements',
+      version: process.env.npm_package_version || null,
+    });
   }
 
   props: Props;
