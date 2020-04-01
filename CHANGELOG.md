@@ -3,6 +3,12 @@
 `react-stripe-elements` adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v6.1.1 - 2020-04-01
+
+### Changes
+
+- Register package version with Stripe instance (#512)
+
 ## v6.1.0 - 2020-02-14
 
 ### New Features
