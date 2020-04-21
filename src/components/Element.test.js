@@ -73,11 +73,17 @@ describe('Element', () => {
     expect(context.unregisterElement).toHaveBeenCalledWith(elementMock);
   });
 
-  it('should call the right hooks for a non-registered Element', () => {
+  it('should call the right hooks for a non-auto-detected Element', () => {
     const TestElement = Element('test');
     const element = mount(<TestElement onChange={jest.fn()} />, {context});
 
-    expect(context.registerElement).toHaveBeenCalledTimes(0);
+    expect(context.registerElement).toHaveBeenCalledTimes(1);
+    expect(context.registerElement).toHaveBeenCalledWith(
+      elementMock,
+      undefined,
+      undefined,
+      undefined
+    );
 
     element.unmount();
     expect(elementMock.destroy).toHaveBeenCalledTimes(1);

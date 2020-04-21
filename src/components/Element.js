@@ -79,18 +79,12 @@ const Element = (
         element.mount(this._ref);
 
         // Register Element for automatic token / source / paymentMethod creation
-        if (
-          hocOptions.impliedTokenType ||
-          hocOptions.impliedSourceType ||
+        this.context.registerElement(
+          element,
+          hocOptions.impliedTokenType,
+          hocOptions.impliedSourceType,
           hocOptions.impliedPaymentMethodType
-        ) {
-          this.context.registerElement(
-            element,
-            hocOptions.impliedTokenType,
-            hocOptions.impliedSourceType,
-            hocOptions.impliedPaymentMethodType
-          );
-        }
+        );
       });
     }
 
