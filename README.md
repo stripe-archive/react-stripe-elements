@@ -610,7 +610,7 @@ const elements = useElements();
 
 ...
 
-const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
   event.preventDefault();
 
   const cardData = elements.getElement(CardNumberElement);
