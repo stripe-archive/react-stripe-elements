@@ -1,7 +1,7 @@
 ## We’ve moved to [@stripe/react-stripe-js](https://github.com/stripe/react-stripe-js)!
 
 We have decided to rename, rework, and move this project. We have no plans for
-any additional major releases of `react-stripe-elements`.
+any additional major releases of `react-stripe-elements`. If you have an issue with this package, please open it on the [react-stripe-js repo](https://github.com/stripe/react-stripe-js).
 
 If you are starting a new Stripe integration or are looking to update your
 existing integration, use
