@@ -83,6 +83,7 @@ export default class Provider extends React.Component<Props> {
     stripe: undefined,
     children: null,
   };
+  static displayName = 'Stripe.Provider';
 
   constructor(props: Props) {
     super(props);
