@@ -603,6 +603,24 @@ These components display the UI for Elements, and must be used within
 - `IbanElement`
 - `IdealBankElement`
 
+If you are using `CardNumberElement` and other components instead of `CardElement`, then use the `CardNumberElement` component when fetching data from the form.
+```jsx
+const stripe = useStripe();
+const elements = useElements();
+
+...
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  const cardData = elements.getElement(CardNumberElement);
+  const { error, paymentMethod } = await stripe.createPaymentMethod({
+    type: 'card',
+    card: cardData
+  });
+}
+```
+
 #### Props shape
 
 These components accept all `options` that can be passed into
