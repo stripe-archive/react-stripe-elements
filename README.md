@@ -415,36 +415,32 @@ application in some way.
 </html>
 ```
 
-Initialize `this.state.stripe` to `null` in the `constructor`, then update it in
-`componentDidMount` when the script tag has loaded.
+Initialize `stripe` to `null`, then update it in
+`useEffect` when the script tag has loaded.
 
 ```jsx
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {stripe: null};
-  }
-  componentDidMount() {
+const App = () => {
+  const [stripe, setStripe] = useState(null);
+  useEffect(() => {
     if (window.Stripe) {
-      this.setState({stripe: window.Stripe('pk_test_12345')});
+      setStripe(window.Stripe('pk_test_12345'));
     } else {
       document.querySelector('#stripe-js').addEventListener('load', () => {
         // Create Stripe instance once Stripe.js loads
-        this.setState({stripe: window.Stripe('pk_test_12345')});
+        setStripe(window.Stripe('pk_test_12345'));
       });
     }
-  }
-  render() {
-    // this.state.stripe will either be null or a Stripe instance
-    // depending on whether Stripe.js has loaded.
-    return (
-      <StripeProvider stripe={this.state.stripe}>
-        <Elements>
-          <InjectedCheckoutForm />
-        </Elements>
-      </StripeProvider>
-    );
-  }
+  }, []);
+   
+  // stripe will either be null or a Stripe instance
+  // depending on whether Stripe.js has loaded.
+  return (
+    <StripeProvider stripe={stripe}>
+      <Elements>
+        <InjectedCheckoutForm />
+      </Elements>
+    </StripeProvider>
+  );
 }
 ```
 
